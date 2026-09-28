@@ -193,3 +193,26 @@ works → scale to full loop.
 ## 11. Open items
 - User mentioned "you can also use this GitHub repo" but no link was included — ask.
 - Confirm Modal GPU pricing vs $20 budget before scaling past MVP.
+
+## 12. Results (2026-09-28)
+
+Solver Qwen3.5-9B (SGLang, L40S), optimizer Claude Opus 4.8, 3 rounds, 15 train tasks/round, fixed 20-task dev set.
+
+| Round | Edit | Dev pass@1 | Decision |
+|---|---|---|---|
+| 0 | AppWorld ReAct baseline | 15% | start |
+| 1 | No `answer` on action tasks (complete_task rule) | 45% | kept |
+| 2 | Concrete pagination recipe | 45% (fewer unit tests) | rejected |
+| 3 | Exact-schema-key / filter sanity checks | 20% | rejected |
+
+Dev noise check (same 20 tasks, rerun): ReAct 15% / 5%, auto harness 45% / 35%.
+
+**test_normal (168 tasks, run once each):**
+
+| Harness | pass@1 | SGC | Unit tests | Input tok/task | Steps | Sec/task |
+|---|---|---|---|---|---|---|
+| AppWorld ReAct (baseline) | 19.6% (33/168) | 7.1% | 67.4% | 171k | 19.2 | 205 |
+| Auto harness (round 1) | **49.4% (83/168)** | 25.0% | 75.2% | 166k | 18.5 | 164 |
+
+Paired: 58 tasks solved only by auto, 8 only by ReAct, 25 by both; exact McNemar p ≈ 1.8e-10.
+Leaderboard context (test_normal TGC): GPT-4o + ReAct 48.8, Llama3-70B + ReAct 20.8 (2024 entries).
