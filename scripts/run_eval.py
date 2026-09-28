@@ -160,7 +160,13 @@ def main() -> None:
     parser.add_argument("--max-tokens", type=int, default=1500, help="cap per model reply")
     parser.add_argument("--model", default=DEFAULT_MODEL, choices=sorted(ENDPOINTS))
     parser.add_argument("--base-url", help="override the model's endpoint")
+    parser.add_argument("--backend", default="modal", choices=["modal", "local"],
+                        help="modal: one Modal CPU container per task; local: processes on this machine")
+    parser.add_argument("--harness-dir", type=Path,
+                        help="score a candidate copy of harness/ (modal backend only)")
     args = parser.parse_args()
+    if args.harness_dir and args.backend != "modal":
+        parser.error("--harness-dir requires --backend modal")
     args.base_url = args.base_url or ENDPOINTS[args.model]
 
     load_env_file()
@@ -180,16 +186,25 @@ def main() -> None:
 
     agent_config = build_agent_config(args)
     workers = min(args.workers, len(task_ids))
-    chunks = [task_ids[i::workers] for i in range(workers)]
-    print(f"Running {len(task_ids)} {args.dataset} tasks with {workers} workers: {task_ids}")
+    print(f"Running {len(task_ids)} {args.dataset} tasks ({args.backend}): {task_ids}")
 
     wait_for_server(args.base_url)
-    seconds: dict[str, float] = {}
     wall_start = time.time()
-    with ProcessPoolExecutor(max_workers=workers) as pool:
-        futures = [pool.submit(solve_chunk, agent_config, args.experiment, c) for c in chunks]
-        for future in futures:
-            seconds.update(future.result())
+    if args.backend == "modal":
+        import modal_eval
+
+        # Paths inside the project resolve to the same place in the container.
+        agent_config["prompt_file_path"] = agent_config["prompt_file_path"].replace(
+            str(PROJECT_ROOT), modal_eval.REMOTE_PROJECT)
+        seconds = modal_eval.run_tasks_remote(agent_config, args.experiment, task_ids, args.base_url,
+                                              harness_dir=args.harness_dir)
+    else:
+        chunks = [task_ids[i::workers] for i in range(workers)]
+        seconds = {}
+        with ProcessPoolExecutor(max_workers=workers) as pool:
+            futures = [pool.submit(solve_chunk, agent_config, args.experiment, c) for c in chunks]
+            for future in futures:
+                seconds.update(future.result())
     wall_seconds = round(time.time() - wall_start, 1)
 
     metrics = evaluate_tasks(task_ids, experiment_name=args.experiment, save_reports=True)
@@ -209,6 +224,8 @@ def main() -> None:
         "dataset": args.dataset,
         "agent_type": args.agent_type,
         "prompt_file": str(args.prompt_file),
+        "harness_dir": str(args.harness_dir) if args.harness_dir else None,
+        "backend": args.backend,
         "model": args.model,
         "num_tasks": n,
         "pass_at_1": round(100 * sum(r["passed"] for r in rows) / n, 1),

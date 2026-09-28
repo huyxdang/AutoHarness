@@ -36,7 +36,7 @@ MODEL_REVISION = SOLVERS[SOLVER]["revision"]
 SERVED_MODEL_NAME = SOLVER
 GPU = SOLVERS[SOLVER]["gpu"]
 CONTEXT_LENGTH = 32768  # AppWorld prompts are capped at ~50k chars; keeps KV cache small
-TARGET_INPUTS = 16  # concurrent AppWorld tasks per container
+TARGET_INPUTS = 32  # concurrent AppWorld tasks per container (L40S KV cache was only ~35% used at 16)
 PORT = 8000
 
 sglang_image = (

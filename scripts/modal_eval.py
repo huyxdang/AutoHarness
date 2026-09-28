@@ -15,7 +15,9 @@ import tarfile
 import time
 from pathlib import Path
 
-import modal
+# The globally active Modal profile is a different account; always bill this project's workspace.
+os.environ.setdefault("MODAL_PROFILE", "hellgod67")
+import modal  # noqa: E402
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 LOCAL_APPWORLD = PROJECT_ROOT / "appworld"
@@ -57,14 +59,21 @@ def solve_task(agent_config: dict, experiment: str, task_id: str, base_url: str,
     os.environ["MODEL_SERVER_URL"] = base_url
     if harness_files:
         # Candidate harness sent with the call, so several candidates can be scored at once.
-        # Must happen before run_eval imports the `harness` package.
-        harness_dir = Path(REMOTE_PROJECT) / "harness"
+        # Written to its own directory (mounts are read-only) that shadows the mounted package;
+        # must happen before run_eval imports `harness`.
+        override_root = Path("/root/candidate")
+        harness_dir = override_root / "harness"
+        harness_dir.mkdir(parents=True, exist_ok=True)
         for name, content in harness_files.items():
             (harness_dir / name).write_text(content)
+        sys.path.insert(0, str(override_root))
         agent_config = dict(agent_config, prompt_file_path=str(harness_dir / "prompt.txt"))
     sys.path.insert(0, f"{REMOTE_PROJECT}/scripts")
     import run_eval
 
+    import harness
+
+    print(f"{task_id}: harness from {Path(harness.__file__).parent}", flush=True)
     task_dir = Path(REMOTE_APPWORLD) / "experiments/outputs" / experiment / "tasks" / task_id
     shutil.rmtree(task_dir, ignore_errors=True)  # containers are reused across tasks
     seconds = run_eval.solve_chunk(agent_config, experiment, [task_id])[task_id]
