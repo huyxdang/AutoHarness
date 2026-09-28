@@ -216,3 +216,18 @@ Dev noise check (same 20 tasks, rerun): ReAct 15% / 5%, auto harness 45% / 35%.
 
 Paired: 58 tasks solved only by auto, 8 only by ReAct, 25 by both; exact McNemar p ≈ 1.8e-10.
 Leaderboard context (test_normal TGC): GPT-4o + ReAct 48.8, Llama3-70B + ReAct 20.8 (2024 entries).
+
+**External harness comparison (test_normal, 168 tasks, Qwen3.5-9B, 2026-09-29):**
+
+| Harness | pass@1 | SGC | Unit tests | Input tok/task | Steps |
+|---|---|---|---|---|---|
+| AppWorld ReAct | 19.6% | 7.1% | 67.4% | 171k | 19.2 |
+| OpenCode 1.18.33 | 22.6% (38/168) | 8.9% | 57.3% | 299k | 14.9 |
+| AutoHarness (round 1) | **49.4%** | **25.0%** | **75.2%** | **166k** | 18.5 |
+
+AutoHarness vs OpenCode: 59 only-auto vs 14 only-OpenCode, McNemar p ≈ 1e-7. OpenCode vs ReAct: p = 0.59.
+OpenCode setup: AppWorld MCP tools filtered to AppWorld's official API predictor output (≤20 APIs,
+`scripts/mcp_filter_proxy.py`), official function-calling prompt without demos, 64k-context server
+(`qwen3.5-9b-64k`), shell/edit/web tools disabled for safety, 20-min cap (1 timeout, enforced by hand
+after the in-process timer lagged). 23 tasks sent a >32k request; OpenCode solved 1 of them, so the
+larger context did not drive the comparison. Prime Agent dropped (unsandboxed REPL; out of scope).
