@@ -42,20 +42,10 @@ of the prompt:
 
 ## How it works
 
-```mermaid
-flowchart TD
-    A["current_best = baseline harness<br/>(scored on DEV)"] --> B
-    subgraph loop["Optimization loop (N rounds)"]
-        B["Run current_best on TRAIN tasks<br/>→ trajectories + pass/fail"] --> C
-        C["Optimizer LLM reads failed trajectories<br/>→ edits the harness"] --> D
-        D["Score the edited harness on DEV"] --> E{"Beats current_best?"}
-        E -- yes --> F["current_best = edited harness"]
-        E -- no --> G["discard the edit"]
-        F --> B
-        G --> B
-    end
-    loop --> H["Final: baseline vs. current_best on TEST<br/>(held out, run once)"]
-```
+<p align="center">
+  <img src="assets/autoharness-loop.svg" width="720"
+       alt="AutoHarness loop: set current_harness to the baseline; collect training-set trajectories; the optimizer LLM analyzes errors and edits the harness; if the new harness beats current_harness on the dev split it becomes current_harness, otherwise it is discarded; stop after N rounds or 2 rejections in a row; report benchmark results on the test split and output the best harness.">
+</p>
 
 - **Solver:** Qwen3.5-9B, served with SGLang on one Modal L40S (thinking disabled).
 - **Optimizer:** Claude Opus 4.8 via headless Claude Code (`claude -p`). It sees only failed *train*
