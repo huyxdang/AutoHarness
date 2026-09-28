@@ -1,0 +1,56 @@
+{
+  "experiment": "mvp_round1_dev",
+  "dataset": "dev",
+  "agent_type": "autoharness_react_code_agent",
+  "prompt_file": "harness/prompt.txt",
+  "model": "qwen3.5-4b",
+  "num_tasks": 5,
+  "pass_at_1": 0.0,
+  "avg_input_tokens": 214655,
+  "avg_output_tokens": 2744,
+  "avg_steps": 21.8,
+  "avg_seconds": 121.4,
+  "wall_seconds": 285.4,
+  "tasks": [
+    {
+      "task_id": "3ab5b8b_1",
+      "passed": false,
+      "seconds": 277.4,
+      "input_tokens": 650576,
+      "output_tokens": 7224,
+      "steps": 50
+    },
+    {
+      "task_id": "3ab5b8b_3",
+      "passed": false,
+      "seconds": 68.3,
+      "input_tokens": 106335,
+      "output_tokens": 1100,
+      "steps": 14
+    },
+    {
+      "task_id": "4fab96f_1",
+      "passed": false,
+      "seconds": 59.2,
+      "input_tokens": 61394,
+      "output_tokens": 1035,
+      "steps": 10
+    },
+    {
+      "task_id": "4fab96f_3",
+      "passed": false,
+      "seconds": 122.2,
+      "input_tokens": 179560,
+      "output_tokens": 2762,
+      "steps": 22
+    },
+    {
+      "task_id": "6c2c621_1",
+      "passed": false,
+      "seconds": 80.1,
+      "input_tokens": 75411,
+      "output_tokens": 1600,
+      "steps": 13
+    }
+  ]
+}
