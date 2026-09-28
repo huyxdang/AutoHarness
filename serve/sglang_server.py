@@ -3,8 +3,9 @@
 Adapted from modal-labs/modal-examples 06_gpu_and_ml/llm-serving/sglang_low_latency.py,
 trimmed down for a single small GPU and a tight budget.
 
-Deploy:  MODAL_PROFILE=hellgod67 modal deploy serve/sglang_server.py
-Test:    MODAL_PROFILE=hellgod67 modal run serve/sglang_server.py
+Deploy:  SOLVER=qwen3.5-4b MODAL_PROFILE=hellgod67 modal deploy serve/sglang_server.py
+         SOLVER=qwen3.5-9b MODAL_PROFILE=hellgod67 modal deploy serve/sglang_server.py
+Each solver is its own Modal app, so switching models never breaks the other endpoint.
 """
 
 import os
@@ -15,10 +16,25 @@ import modal
 
 MINUTES = 60
 
-MODEL_NAME = "Qwen/Qwen3.5-4B"
-MODEL_REVISION = "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a"
-SERVED_MODEL_NAME = "qwen3.5-4b"
-GPU = "A10"  # 24 GB, ~$1.10/h
+SOLVERS = {
+    "qwen3.5-4b": {  # app "autoharness-sglang" (original name kept so the endpoint URL is stable)
+        "model": "Qwen/Qwen3.5-4B",
+        "revision": "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a",
+        "gpu": "A10",  # 24 GB, ~$1.10/h
+        "app": "autoharness-sglang",
+    },
+    "qwen3.5-9b": {  # ~19 GB bf16 weights: needs the 48 GB L40S for KV-cache headroom
+        "model": "Qwen/Qwen3.5-9B",
+        "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+        "gpu": "L40S",  # 48 GB, ~$1.95/h
+        "app": "autoharness-sglang-9b",
+    },
+}
+SOLVER = os.environ.get("SOLVER", "qwen3.5-4b")
+MODEL_NAME = SOLVERS[SOLVER]["model"]
+MODEL_REVISION = SOLVERS[SOLVER]["revision"]
+SERVED_MODEL_NAME = SOLVER
+GPU = SOLVERS[SOLVER]["gpu"]
 CONTEXT_LENGTH = 32768  # AppWorld prompts are capped at ~50k chars; keeps KV cache small
 TARGET_INPUTS = 16  # concurrent AppWorld tasks per container
 PORT = 8000
@@ -31,12 +47,15 @@ sglang_image = (
 
 HF_CACHE_VOL = modal.Volume.from_name("autoharness-hf-cache", create_if_missing=True)
 HF_CACHE_PATH = "/root/.cache/huggingface"
-sglang_image = sglang_image.env({"HF_HUB_CACHE": HF_CACHE_PATH, "HF_XET_HIGH_PERFORMANCE": "1"})
+sglang_image = sglang_image.env(
+    # SOLVER is baked into the image so the container resolves the same model as the deploy.
+    {"HF_HUB_CACHE": HF_CACHE_PATH, "HF_XET_HIGH_PERFORMANCE": "1", "SOLVER": SOLVER}
+)
 
 # SGLANG_API_KEY: requests must send `Authorization: Bearer <key>`, so a leaked URL can't burn credits.
 API_KEY_SECRET = modal.Secret.from_name("autoharness-sglang")
 
-app = modal.App(name="autoharness-sglang")
+app = modal.App(name=SOLVERS[SOLVER]["app"])
 
 with sglang_image.imports():
     import requests

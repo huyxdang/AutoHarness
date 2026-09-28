@@ -21,8 +21,11 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 APPWORLD_ROOT = PROJECT_ROOT / "appworld"
 RESULTS_DIR = PROJECT_ROOT / "results"
 DEFAULT_PROMPT = APPWORLD_ROOT / "experiments/prompts/react_code_agent/instructions.txt"
-DEFAULT_BASE_URL = "https://hellgod67--autoharness-sglang-sglang.us-east.modal.direct/v1"
-DEFAULT_MODEL = "qwen3.5-4b"
+ENDPOINTS = {  # one Modal app per solver, see serve/sglang_server.py
+    "qwen3.5-4b": "https://hellgod67--autoharness-sglang-sglang.us-east.modal.direct/v1",
+    "qwen3.5-9b": "https://hellgod67--autoharness-sglang-9b-sglang.us-east.modal.direct/v1",
+}
+DEFAULT_MODEL = "qwen3.5-9b"
 
 os.environ["APPWORLD_ROOT"] = str(APPWORLD_ROOT)
 
@@ -137,9 +140,10 @@ def main() -> None:
     parser.add_argument("--prompt-file", type=Path, default=DEFAULT_PROMPT)
     parser.add_argument("--max-steps", type=int, default=50)
     parser.add_argument("--max-tokens", type=int, default=1500, help="cap per model reply")
-    parser.add_argument("--base-url", default=DEFAULT_BASE_URL)
-    parser.add_argument("--model", default=DEFAULT_MODEL)
+    parser.add_argument("--model", default=DEFAULT_MODEL, choices=sorted(ENDPOINTS))
+    parser.add_argument("--base-url", help="override the model's endpoint")
     args = parser.parse_args()
+    args.base_url = args.base_url or ENDPOINTS[args.model]
 
     load_env_file()
     # AppWorld templates base_url with this variable and fails if it is unset.
@@ -170,11 +174,14 @@ def main() -> None:
     wall_seconds = round(time.time() - wall_start, 1)
 
     metrics = evaluate_tasks(task_ids, experiment_name=args.experiment, save_reports=True)
-    passed = {tid: bool(d["success"]) for tid, d in metrics.get("individual", {}).items()}
+    individual = metrics.get("individual", {})
 
     rows = []
     for task_id in task_ids:
-        rows.append({"task_id": task_id, "passed": passed.get(task_id, False),
+        result = individual.get(task_id, {})
+        num_passes, num_failures = len(result.get("passes", [])), len(result.get("failures", []))
+        rows.append({"task_id": task_id, "passed": bool(result.get("success", False)),
+                     "tests_passed": num_passes, "tests_total": num_passes + num_failures,
                      "seconds": seconds.get(task_id), **read_task_stats(args.experiment, task_id)})
 
     n = len(rows)
@@ -186,6 +193,9 @@ def main() -> None:
         "model": args.model,
         "num_tasks": n,
         "pass_at_1": round(100 * sum(r["passed"] for r in rows) / n, 1),
+        # Secondary signal: share of AppWorld unit tests passed (partial credit, tiebreaker only).
+        "test_pass_rate": round(100 * sum(r["tests_passed"] for r in rows)
+                                / max(1, sum(r["tests_total"] for r in rows)), 1),
         "avg_input_tokens": round(sum(r["input_tokens"] for r in rows) / n),
         "avg_output_tokens": round(sum(r["output_tokens"] for r in rows) / n),
         "avg_steps": round(sum(r["steps"] for r in rows) / n, 1),
@@ -199,7 +209,8 @@ def main() -> None:
     for r in rows:
         print(f"{r['task_id']:<14}{'✓' if r['passed'] else '✗':>6}{r['input_tokens']:>11}"
               f"{r['output_tokens']:>9}{r['steps']:>7}{r['seconds']:>8}")
-    print(f"\npass@1 {summary['pass_at_1']}%  |  avg input tokens {summary['avg_input_tokens']}"
+    print(f"\npass@1 {summary['pass_at_1']}%  |  tests passed {summary['test_pass_rate']}%"
+          f"  |  avg input tokens {summary['avg_input_tokens']}"
           f"  |  avg steps {summary['avg_steps']}  |  avg sec/task {summary['avg_seconds']}"
           f"  |  wall {wall_seconds}s")
     print(f"Saved {out_dir / 'summary.json'}")

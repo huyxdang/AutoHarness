@@ -23,7 +23,7 @@ WORKSPACE = PROJECT_ROOT / "optimizer/workspace"
 MAX_TRAJECTORY_CHARS = 30_000  # keep each failure file readable for the optimizer
 
 OPTIMIZER_PROMPT = """\
-You are optimizing the harness of a small LLM agent (Qwen3.5-4B) on the AppWorld benchmark.
+You are optimizing the harness of a small LLM agent ({model}) on the AppWorld benchmark.
 The agent solves tasks by writing Python code that calls app APIs (ReAct style).
 
 Harness files you may edit (and ONLY these):
@@ -34,6 +34,8 @@ Evidence: {workspace} contains, for round {round}:
 - summary.json             pass/fail, tokens, steps per train task
 - failures/<task_id>.md    for each FAILED task: the task instruction, the agent's full trajectory
                            (code it ran + environment output), and the evaluation report
+- optimizer/history.md     earlier harness edits and whether held-out validation KEPT or REJECTED
+                           them (if present). Do not repeat a rejected idea; build on kept ones.
 
 Do this:
 1. Read the failures. Identify the 1-2 most common, harness-fixable failure patterns
@@ -81,16 +83,18 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--workers", type=int, default=5)
     parser.add_argument("--skip-run", action="store_true", help="reuse existing train outputs")
+    parser.add_argument("--model", default="qwen3.5-9b")
+    parser.add_argument("--tag", default="", help="prefix for experiment names, e.g. 9b_")
     args = parser.parse_args()
 
-    experiment = f"round{args.round}_train"
+    experiment = f"{args.tag}round{args.round}_train"
     python = sys.executable
 
     # 1. Run the current harness on train tasks.
     if not args.skip_run:
         run([python, "scripts/run_eval.py", "--experiment", experiment, "--dataset", "train",
              "--n", str(args.n), "--seed", str(args.seed), "--workers", str(args.workers),
-             "--agent-type", "autoharness_react_code_agent",
+             "--model", args.model, "--agent-type", "autoharness_react_code_agent",
              "--prompt-file", str(PROJECT_ROOT / "harness/prompt.txt")])
 
     # 2. Build the optimizer's workspace from failed train tasks only.
@@ -98,7 +102,7 @@ def main() -> None:
     import run_eval  # noqa: F401  sets APPWORLD_ROOT before appworld is imported
 
     summary = json.loads((PROJECT_ROOT / "results" / experiment / "summary.json").read_text())
-    workspace = WORKSPACE / f"round{args.round}"
+    workspace = WORKSPACE / f"{args.tag}round{args.round}"
     shutil.rmtree(workspace, ignore_errors=True)
     (workspace / "failures").mkdir(parents=True)
     (workspace / "summary.json").write_text(json.dumps(summary, indent=2))
@@ -112,7 +116,8 @@ def main() -> None:
 
     # 3. Let Claude Code edit the harness (headless, restricted tools).
     before = snapshot_files()
-    prompt = OPTIMIZER_PROMPT.format(workspace=workspace.relative_to(PROJECT_ROOT), round=args.round)
+    prompt = OPTIMIZER_PROMPT.format(workspace=workspace.relative_to(PROJECT_ROOT),
+                                     round=args.round, model=args.model)
     result = run(["claude", "-p", prompt,
                   "--output-format", "json",
                   "--allowedTools", "Read", "Grep", "Glob",
