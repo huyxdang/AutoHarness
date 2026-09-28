@@ -73,6 +73,19 @@ def claude(prompt: str, cwd: Path, tools: list[str], model: str, extra_dirs: lis
     return subprocess.Popen(cmd, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
 
+def first_json_list(text: str) -> list[dict]:
+    """First JSON array of objects in the reply (prose may contain other brackets)."""
+    decoder = json.JSONDecoder()
+    for match in re.finditer(r"\[", text):
+        try:
+            value, _ = decoder.raw_decode(text, match.start())
+        except json.JSONDecodeError:
+            continue
+        if isinstance(value, list) and value and all(isinstance(v, dict) for v in value):
+            return value
+    return []
+
+
 def result_text(proc: subprocess.Popen) -> str:
     stdout, stderr = proc.communicate()
     if proc.returncode != 0:
@@ -124,8 +137,8 @@ def main() -> None:
         DIAGNOSIS_PROMPT.format(model=args.model, workspace=workspace.relative_to(PROJECT_ROOT),
                                 history=history, k=args.k),
         cwd=PROJECT_ROOT, tools=["Read", "Grep", "Glob"], model=args.optimizer_model, extra_dirs=[]))
-    match = re.search(r"\[.*\]", diagnosis, re.DOTALL)
-    patterns = json.loads(match.group(0))[: args.k] if match else []
+    (workspace / "diagnosis_reply.md").write_text(diagnosis)
+    patterns = first_json_list(diagnosis)[: args.k]
     (workspace / "diagnosis.json").write_text(json.dumps(patterns, indent=2))
     print(f"Diagnosis: {[p['pattern'][:80] for p in patterns]}", flush=True)
 
