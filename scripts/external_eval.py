@@ -20,7 +20,9 @@ the model can only act through AppWorld's tools.
 import argparse
 import json
 import os
+import random
 import shutil
+import signal
 import socket
 import subprocess
 import sys
@@ -92,7 +94,7 @@ def predict_apis(task, args) -> tuple[list[str], dict]:
 
 
 def opencode_config(apis_url: str, app_names: list[str], allowed_tools: list[str], model: str,
-                    base_url: str, context: int) -> dict:
+                    base_url: str, context: int, ondemand: bool) -> dict:
     return {
         "$schema": "https://opencode.ai/config.json",
         "autoupdate": False,
@@ -110,14 +112,19 @@ def opencode_config(apis_url: str, app_names: list[str], allowed_tools: list[str
             "appworld": {
                 "type": "local",
                 "command": mcp_command(apis_url, app_names),
-                "environment": {"ALLOWED_TOOLS": ",".join(allowed_tools)},
+                "environment": {"ALLOWED_TOOLS": ",".join(allowed_tools), "ONDEMAND_APIS": "1" if ondemand else "0"},
                 "enabled": True,
                 "timeout": 60000,
             }
         },
-        # Safety: no shell, file edits, or web access on this machine.
-        "tools": {"bash": False, "edit": False, "write": False, "patch": False, "webfetch": False},
+        # Safety: no shell, file edits, or web access on this machine. The read-only filesystem tools
+        # are off too: they read the *host's* files, which the model mistook for AppWorld's file_system
+        # app (21 tasks in the first run, 0 solved).
+        "tools": {"bash": False, "edit": False, "write": False, "patch": False, "webfetch": False,
+                  "read": False, "glob": False, "grep": False, "list": False},
         "permission": {"bash": "deny", "edit": "deny", "webfetch": "deny"},
+        # Same sampling as the ReAct / AutoHarness runs.
+        "agent": {"build": {"temperature": 0}},
     }
 
 
@@ -126,22 +133,32 @@ def run_opencode(prompt: str, apis_url: str, app_names: list[str], allowed_tools
     work_dir = Path(tempfile.mkdtemp(prefix="ah_opencode_"))
     config_path = work_dir / "opencode.json"
     config_path.write_text(json.dumps(opencode_config(apis_url, app_names, allowed_tools, args.model,
-                                                      args.base_url, args.context), indent=2))
+                                                      args.base_url, args.context,
+                                                      args.api_access == "ondemand"), indent=2))
     # Own data dir per task: parallel runs otherwise race on OpenCode's local SQLite DB.
     env = dict(os.environ, OPENCODE_CONFIG=str(config_path), XDG_DATA_HOME=str(work_dir / "data"))
     cmd = ["opencode", "run", "--format", "json", "--auto", "--model", f"autoharness/{args.model}",
            "--dir", str(work_dir), prompt]
     with log_path.open("w") as log:
-        try:
-            subprocess.run(cmd, cwd=work_dir, env=env, stdout=log, stderr=subprocess.STDOUT,
-                           timeout=TASK_TIMEOUT)
-        except subprocess.TimeoutExpired:
-            log.write('\n{"type": "autoharness_timeout"}\n')
+        # Own process group, so the timeout also stops OpenCode's MCP children.
+        proc = subprocess.Popen(cmd, cwd=work_dir, env=env, stdout=log, stderr=subprocess.STDOUT,
+                                start_new_session=True)
+        deadline = time.time() + TASK_TIMEOUT  # wall clock
+        while proc.poll() is None:
+            if time.time() > deadline:
+                os.killpg(proc.pid, signal.SIGKILL)
+                proc.wait()
+                log.write('\n{"type": "autoharness_timeout"}\n')
+                break
+            time.sleep(2)
     shutil.rmtree(work_dir, ignore_errors=True)
 
 
-def solve(task_id: str, args) -> dict:
+def solve(task_id: str, args) -> dict | None:
     from appworld import AppWorld
+
+    if args.start_deadline and time.time() > args.start_deadline:
+        return None  # budget guard: don't start new tasks after the deadline
 
     port = free_port()
     server = subprocess.Popen([APPWORLD_BIN, "serve", "apis", "--port", str(port), "--root", str(APPWORLD_ROOT),
@@ -159,6 +176,11 @@ def solve(task_id: str, args) -> dict:
             prompt = render_prompt(world.task)
             allowed_tools, predictor_usage = predict_apis(world.task, args)
             app_names = sorted({tool.split("__")[0] for tool in allowed_tools})
+            if args.api_access == "ondemand":
+                # Every app the task allows is reachable; predicted APIs stay as direct tools.
+                app_names = [a for a in world.task.allowed_apps if a not in ("admin", "api_docs")]
+                prompt += ("\nIf an API you need is not in your tool list, look it up with "
+                           "api_docs__show_api_descriptions / api_docs__show_api_doc and call it with call_api.\n")
             log_path = Path(world.output_logs_directory) / f"{args.harness}_events.jsonl"
             log_path.parent.mkdir(parents=True, exist_ok=True)
             (log_path.parent / "prompt.txt").write_text(prompt)
@@ -194,8 +216,8 @@ def opencode_stats(log_path: str) -> dict:
             stats["steps"] += 1
         elif kind == "tool_use":
             stats["tool_calls"] += 1
-            # AppWorld tools are named <app>__<api>; anything else is a harness built-in or invalid.
-            if "__" in str(part.get("tool", "")) and part.get("state", {}).get("status") != "error":
+            # AppWorld tools come from the "appworld" MCP server; anything else is a built-in or invalid.
+            if str(part.get("tool", "")).startswith("appworld_") and part.get("state", {}).get("status") != "error":
                 stats["appworld_tool_calls"] += 1
         elif kind == "autoharness_timeout":
             stats["timeout"] = True
@@ -213,6 +235,12 @@ def main() -> None:
     parser.add_argument("--model", default="qwen3.5-9b-64k", choices=sorted(run_eval.ENDPOINTS),
                         help="external harnesses use the 64k-context server by default")
     parser.add_argument("--context", type=int, help="context window told to the harness (default: server's)")
+    parser.add_argument("--api-access", choices=["predicted", "ondemand"], default="ondemand",
+                        help="predicted: only AppWorld's predicted APIs (first run); "
+                             "ondemand: predicted APIs + doc lookup + call_api for any API")
+    parser.add_argument("--shuffle-seed", type=int, help="run tasks in a shuffled order")
+    parser.add_argument("--start-deadline-min", type=float,
+                        help="budget guard: start no new task after this many minutes")
     args = parser.parse_args()
     args.base_url = run_eval.ENDPOINTS[args.model]
     args.context = args.context or (65536 if args.model.endswith("-64k") else 32768)
@@ -221,6 +249,9 @@ def main() -> None:
     from appworld.evaluator import evaluate_tasks
 
     task_ids = args.task_ids_file.read_text().split()[: args.limit]
+    if args.shuffle_seed is not None:
+        # Shuffled order, so tasks skipped by the budget guard leave a random (fair) subset.
+        random.Random(args.shuffle_seed).shuffle(task_ids)
     out_dir = run_eval.RESULTS_DIR / args.experiment
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "task_ids.txt").write_text("\n".join(task_ids) + "\n")
@@ -228,12 +259,18 @@ def main() -> None:
 
     run_eval.wait_for_server(args.base_url)
     wall_start = time.time()
+    args.start_deadline = wall_start + 60 * args.start_deadline_min if args.start_deadline_min else None
     # First task alone warms shared caches (e.g. OpenCode's provider package), then the rest in parallel.
     # Separate processes: AppWorld keeps per-process global state (e.g. the frozen task clock).
     with ProcessPoolExecutor(max_workers=args.workers) as pool:
         runs = [pool.submit(solve, task_ids[0], args).result()]
         runs += list(pool.map(partial(solve, args=args), task_ids[1:]))
     wall_seconds = round(time.time() - wall_start, 1)
+    skipped = [t for t, r in zip(task_ids, runs) if r is None]
+    runs = [r for r in runs if r is not None]
+    if skipped:
+        print(f"Budget guard: {len(skipped)} tasks not started; results cover {len(runs)} tasks.", flush=True)
+    task_ids = [r["task_id"] for r in runs]
 
     individual = evaluate_tasks(task_ids, experiment_name=args.experiment, save_reports=True)["individual"]
     rows = []
@@ -249,7 +286,8 @@ def main() -> None:
     n = len(rows)
     summary = {
         "experiment": args.experiment, "dataset": args.dataset, "harness": args.harness,
-        "model": args.model, "context": args.context, "num_tasks": n,
+        "model": args.model, "context": args.context, "api_access": args.api_access, "num_tasks": n,
+        "skipped_by_budget_guard": skipped,
         "pass_at_1": round(100 * sum(r["passed"] for r in rows) / n, 1),
         "test_pass_rate": round(100 * sum(r["tests_passed"] for r in rows)
                                 / max(1, sum(r["tests_total"] for r in rows)), 1),
