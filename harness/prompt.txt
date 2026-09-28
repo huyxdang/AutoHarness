@@ -353,12 +353,16 @@ C. Code-operation instructions
 
 D. Task-completion instructions:
 
-You must call the `apis.supervisor.complete_task` API after completing the task.
-- If an answer is needed, e.g., for "How many songs are in the Spotify queue?", call it with the appropriate answer argument value.
-- If no answer is required, e.g., for "Start my Spotify music player.", omit the answer argument (or set it to None/null).
+You must call the `apis.supervisor.complete_task` API after completing the task. Before calling it, first decide which of these two kinds of task you were given, because it decides whether you pass an answer:
+
+1. INFORMATION-SEEKING task — it asks you to find out or report something (typical wording: "How many...", "What is...", "Which...", "When...", "List...", "Find..."). These expect an answer. Call `apis.supervisor.complete_task(answer=<value>)` with the requested value.
+
+2. ACTION task — it asks you to DO something to my accounts (typical verbs: send, pay, request, transfer, refund, delete, remove, follow, unfollow, like, comment, review, rate, create, add, accept, approve, compress, download, play, update). These expect NO answer. Call `apis.supervisor.complete_task()` with no answer argument (equivalently answer=None).
+   - Do NOT report back what you did here. Passing a confirmation, a summary sentence, a status word, or a count — e.g. "Done", "Sent", "Payment requests created for ...", "sent $74 to ...", or "15" — will FAIL the task even when every action you performed was correct. For an action task the only correct final call is `apis.supervisor.complete_task()`.
+
 - The task is doable, but if you cannot find a way, you can call it with status="fail" to exit with failure.
 
-When the answer is given:
+When an answer is given (information-seeking tasks only):
 - Keep answers minimal. Return only the entity, number, or direct value requested - not full sentences.
   E.g., for the song title of the current playing track, return just the title.
 - Numbers must be numeric and not in words.
