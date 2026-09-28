@@ -83,7 +83,9 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--workers", type=int, default=5)
     parser.add_argument("--skip-run", action="store_true", help="reuse existing train outputs")
-    parser.add_argument("--model", default="qwen3.5-9b")
+    parser.add_argument("--model", default="qwen3.5-9b", help="solver model")
+    # Pinned so a change to the global Claude Code default never silently changes the optimizer.
+    parser.add_argument("--optimizer-model", default="claude-opus-4-8[1m]")
     parser.add_argument("--tag", default="", help="prefix for experiment names, e.g. 9b_")
     args = parser.parse_args()
 
@@ -119,6 +121,7 @@ def main() -> None:
     prompt = OPTIMIZER_PROMPT.format(workspace=workspace.relative_to(PROJECT_ROOT),
                                      round=args.round, model=args.model)
     result = run(["claude", "-p", prompt,
+                  "--model", args.optimizer_model,
                   "--output-format", "json",
                   "--allowedTools", "Read", "Grep", "Glob",
                   "Edit(harness/**)", "Write(harness/**)",

@@ -58,8 +58,11 @@ AppWorld's rules also forbid tuning on test.
 |---|---|---|
 | Solver (MVP) | Qwen3.5-4B (thinking disabled) | SGLang on Modal, 1×A10 |
 | Solver (main) | Qwen3.5-9B | SGLang on Modal (L40S) — decide after MVP |
-| Optimizer | Claude Code headless | user's subscription |
+| Optimizer | Claude Code headless, **Claude Opus 4.8 (1M context), `claude-opus-4-8[1m]`** — one `claude -p` call per round does diagnosis + edit | user's subscription |
 | AppWorld + harness + grading | — | local Mac |
+
+The optimizer model is pinned in `optimizer/round.py` (`--optimizer-model`). Rounds run on 2026-09-28
+(4B MVP round 1, 9B rounds 1–3) used the same model via the global default `opus[1m]`.
 
 Qwen3.5 (Feb 2026) is the newest small Qwen family (0.8B/2B/4B/9B); Qwen3.6/3.8 only ship 27B+.
 
