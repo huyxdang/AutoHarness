@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+.env
+# AppWorld clone, data, and run outputs
+appworld/
+data/
+experiments/outputs/
+runs/
+results_*.log
