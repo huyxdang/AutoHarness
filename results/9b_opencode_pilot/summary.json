@@ -1,0 +1,60 @@
+{
+  "experiment": "9b_opencode_pilot",
+  "dataset": "dev",
+  "harness": "opencode",
+  "model": "qwen3.5-9b-64k",
+  "context": 65536,
+  "num_tasks": 3,
+  "pass_at_1": 66.7,
+  "test_pass_rate": 93.8,
+  "avg_input_tokens": 140002,
+  "avg_output_tokens": 1855,
+  "avg_steps": 9.3,
+  "avg_seconds": 67.9,
+  "timeouts": 0,
+  "wall_seconds": 150.7,
+  "tasks": [
+    {
+      "task_id": "0d8a4ee_1",
+      "passed": false,
+      "tests_passed": 4,
+      "tests_total": 5,
+      "seconds": 59.6,
+      "num_tools": 6,
+      "input_tokens": 112949,
+      "output_tokens": 1616,
+      "steps": 8,
+      "tool_calls": 13,
+      "appworld_tool_calls": 13,
+      "timeout": false
+    },
+    {
+      "task_id": "0d8a4ee_2",
+      "passed": true,
+      "tests_passed": 5,
+      "tests_total": 5,
+      "seconds": 80.3,
+      "num_tools": 8,
+      "input_tokens": 138456,
+      "output_tokens": 2344,
+      "steps": 9,
+      "tool_calls": 15,
+      "appworld_tool_calls": 15,
+      "timeout": false
+    },
+    {
+      "task_id": "37a8675_2",
+      "passed": true,
+      "tests_passed": 6,
+      "tests_total": 6,
+      "seconds": 63.8,
+      "num_tools": 8,
+      "input_tokens": 168601,
+      "output_tokens": 1606,
+      "steps": 11,
+      "tool_calls": 15,
+      "appworld_tool_calls": 13,
+      "timeout": false
+    }
+  ]
+}

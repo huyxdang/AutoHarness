@@ -61,7 +61,38 @@ def render_prompt(task) -> str:
     return "\n".join(lines).strip() + f"\n\n# Real Task Instruction\n{task.instruction}\n"
 
 
-def opencode_config(apis_url: str, app_names: list[str], model: str, base_url: str, context: int) -> dict:
+def mcp_command(apis_url: str, app_names: list[str]) -> list[str]:
+    """AppWorld's MCP server behind the allow-list proxy. content_only: results as plain text,
+    which every MCP client reads (the default puts them only in structuredContent)."""
+    return [sys.executable, str(PROJECT_ROOT / "scripts/mcp_filter_proxy.py"),
+            APPWORLD_BIN, "serve", "mcp", "stdio", "--remote-apis-url", apis_url,
+            "--app-names", ",".join(app_names), "--root", str(APPWORLD_ROOT), "--output-type", "content_only"]
+
+
+def predict_apis(task, args) -> tuple[list[str], dict]:
+    """AppWorld's official API predictor (as used by its tool-calling agents): the solver model
+    picks <= 20 APIs for the task, with AppWorld's prompt and 3 fixed train-split demos."""
+    from appworld_agents.code.simplified.api_predictor import APIPredictor
+
+    model_config = {
+        "client_name": "openai", "api_type": "chat_completions", "base_url": args.base_url,
+        "api_key_env_name": "SGLANG_API_KEY", "name": args.model, "temperature": 0.0,
+        "max_tokens": 1500, "seed": 100, "retry_after_n_seconds": 15, "use_cache": False,
+        "max_retries": 100,
+        "cost_per_token": {"input_cache_hit": 0.0, "input_cache_miss": 0.0, "input_cache_write": 0.0, "output": 0.0},
+    }
+    predictor = APIPredictor(
+        model_config=model_config,
+        prompt_file_path=str(APPWORLD_ROOT / "experiments/prompts/api_predictor.txt"),
+        demo_task_ids=["82e2fac_1", "29caf6f_1", "d0b1f43_1"],
+        max_predicted_apis=20, app_api_separator="__", mode="predicted")
+    apis, output = predictor.predict(task)
+    tokens = output["standardized_usage"].tokens
+    return apis, {"input_tokens": tokens.input_cache_miss + tokens.input_cache_hit, "output_tokens": tokens.output}
+
+
+def opencode_config(apis_url: str, app_names: list[str], allowed_tools: list[str], model: str,
+                    base_url: str, context: int) -> dict:
     return {
         "$schema": "https://opencode.ai/config.json",
         "autoupdate": False,
@@ -78,8 +109,8 @@ def opencode_config(apis_url: str, app_names: list[str], model: str, base_url: s
         "mcp": {
             "appworld": {
                 "type": "local",
-                "command": [APPWORLD_BIN, "serve", "mcp", "stdio", "--remote-apis-url", apis_url,
-                            "--app-names", ",".join(app_names), "--root", str(APPWORLD_ROOT)],
+                "command": mcp_command(apis_url, app_names),
+                "environment": {"ALLOWED_TOOLS": ",".join(allowed_tools)},
                 "enabled": True,
                 "timeout": 60000,
             }
@@ -90,11 +121,12 @@ def opencode_config(apis_url: str, app_names: list[str], model: str, base_url: s
     }
 
 
-def run_opencode(prompt: str, apis_url: str, app_names: list[str], args, log_path: Path) -> None:
+def run_opencode(prompt: str, apis_url: str, app_names: list[str], allowed_tools: list[str], args,
+                 log_path: Path) -> None:
     work_dir = Path(tempfile.mkdtemp(prefix="ah_opencode_"))
     config_path = work_dir / "opencode.json"
-    config_path.write_text(json.dumps(opencode_config(apis_url, app_names, args.model, args.base_url,
-                                                      args.context), indent=2))
+    config_path.write_text(json.dumps(opencode_config(apis_url, app_names, allowed_tools, args.model,
+                                                      args.base_url, args.context), indent=2))
     # Own data dir per task: parallel runs otherwise race on OpenCode's local SQLite DB.
     env = dict(os.environ, OPENCODE_CONFIG=str(config_path), XDG_DATA_HOME=str(work_dir / "data"))
     cmd = ["opencode", "run", "--format", "json", "--auto", "--model", f"autoharness/{args.model}",
@@ -125,20 +157,23 @@ def solve(task_id: str, args) -> dict:
         start = time.time()
         with AppWorld(task_id=task_id, experiment_name=args.experiment, remote_apis_url=apis_url) as world:
             prompt = render_prompt(world.task)
-            app_names = [a for a in world.task.allowed_apps if a not in ("admin", "api_docs")]
+            allowed_tools, predictor_usage = predict_apis(world.task, args)
+            app_names = sorted({tool.split("__")[0] for tool in allowed_tools})
             log_path = Path(world.output_logs_directory) / f"{args.harness}_events.jsonl"
             log_path.parent.mkdir(parents=True, exist_ok=True)
             (log_path.parent / "prompt.txt").write_text(prompt)
+            (log_path.parent / "predicted_apis.txt").write_text("\n".join(allowed_tools) + "\n")
             if args.harness == "opencode":
-                run_opencode(prompt, apis_url, app_names, args, log_path)
+                run_opencode(prompt, apis_url, app_names, allowed_tools, args, log_path)
             else:
                 raise NotImplementedError(args.harness)
             world.save()
         seconds = round(time.time() - start, 1)
     finally:
         server.terminate()
-    print(f"  done {task_id} in {seconds}s", flush=True)
-    return {"task_id": task_id, "seconds": seconds, "log": str(log_path)}
+    print(f"  done {task_id} in {seconds}s ({len(allowed_tools)} tools)", flush=True)
+    return {"task_id": task_id, "seconds": seconds, "log": str(log_path), "predictor": predictor_usage,
+            "num_tools": len(allowed_tools)}
 
 
 def opencode_stats(log_path: str) -> dict:
@@ -175,10 +210,12 @@ def main() -> None:
     parser.add_argument("--task-ids-file", type=Path, required=True)
     parser.add_argument("--limit", type=int, help="only the first N tasks (pilot)")
     parser.add_argument("--workers", type=int, default=6)
-    parser.add_argument("--model", default="qwen3.5-9b", choices=sorted(run_eval.ENDPOINTS))
-    parser.add_argument("--context", type=int, default=32768, help="context window told to the harness")
+    parser.add_argument("--model", default="qwen3.5-9b-64k", choices=sorted(run_eval.ENDPOINTS),
+                        help="external harnesses use the 64k-context server by default")
+    parser.add_argument("--context", type=int, help="context window told to the harness (default: server's)")
     args = parser.parse_args()
     args.base_url = run_eval.ENDPOINTS[args.model]
+    args.context = args.context or (65536 if args.model.endswith("-64k") else 32768)
 
     run_eval.load_env_file()
     from appworld.evaluator import evaluate_tasks
@@ -205,7 +242,10 @@ def main() -> None:
         passes, failures = len(result.get("passes", [])), len(result.get("failures", []))
         rows.append({"task_id": r["task_id"], "passed": bool(result.get("success", False)),
                      "tests_passed": passes, "tests_total": passes + failures,
-                     "seconds": r["seconds"], **opencode_stats(r["log"])})
+                     "seconds": r["seconds"], "num_tools": r["num_tools"], **opencode_stats(r["log"])})
+        # The API-prediction call is part of this harness's cost.
+        rows[-1]["input_tokens"] += r["predictor"]["input_tokens"]
+        rows[-1]["output_tokens"] += r["predictor"]["output_tokens"]
     n = len(rows)
     summary = {
         "experiment": args.experiment, "dataset": args.dataset, "harness": args.harness,

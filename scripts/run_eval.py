@@ -24,6 +24,7 @@ DEFAULT_PROMPT = APPWORLD_ROOT / "experiments/prompts/react_code_agent/instructi
 ENDPOINTS = {  # one Modal app per solver, see serve/sglang_server.py
     "qwen3.5-4b": "https://hellgod67--autoharness-sglang-sglang.us-east.modal.direct/v1",
     "qwen3.5-9b": "https://hellgod67--autoharness-sglang-9b-sglang.us-east.modal.direct/v1",
+    "qwen3.5-9b-64k": "https://hellgod67--autoharness-sglang-9b-64k-sglang.us-east.modal.direct/v1",
 }
 DEFAULT_MODEL = "qwen3.5-9b"
 

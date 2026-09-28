@@ -29,13 +29,23 @@ SOLVERS = {
         "gpu": "L40S",  # 48 GB, ~$1.95/h
         "app": "autoharness-sglang-9b",
     },
+    # Same model with a 64k context, for external harnesses (OpenCode, Prime Agent) whose own system
+    # prompts and tool schemas need more room. Separate app so the 32k setup behind our results is untouched.
+    "qwen3.5-9b-64k": {
+        "model": "Qwen/Qwen3.5-9B",
+        "revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+        "gpu": "L40S",
+        "app": "autoharness-sglang-9b-64k",
+        "context": 65536,
+    },
 }
 SOLVER = os.environ.get("SOLVER", "qwen3.5-4b")
 MODEL_NAME = SOLVERS[SOLVER]["model"]
 MODEL_REVISION = SOLVERS[SOLVER]["revision"]
 SERVED_MODEL_NAME = SOLVER
 GPU = SOLVERS[SOLVER]["gpu"]
-CONTEXT_LENGTH = 32768  # AppWorld prompts are capped at ~50k chars; keeps KV cache small
+# 32k by default: AppWorld prompts are capped at ~50k chars, and a small window keeps the KV cache roomy.
+CONTEXT_LENGTH = SOLVERS[SOLVER].get("context", 32768)
 TARGET_INPUTS = 32  # concurrent AppWorld tasks per container (L40S KV cache was only ~35% used at 16)
 PORT = 8000
 
