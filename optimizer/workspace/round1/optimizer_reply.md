@@ -1,0 +1,3 @@
+One focused prompt change made to `harness/prompt.txt`. It's general (no task IDs, answers, or user data), and it only governs which arguments go to `complete_task` inside the Python code block — the `python`-fence output format the parser in `react_agent.py` relies on is unchanged.
+
+RATIONALE: 7 of 8 failed train tasks failed the `test.answer(... == null)` requirement by passing a summary string or count to `complete_task` on action tasks that expect no answer (the sole blocker for task `07b42fd_3`), so I sharpened section D of `prompt.txt` to explicitly instruct: pass `answer` only for information-seeking tasks, and for action tasks call `complete_task()` with no answer, never a confirmation/summary/count.

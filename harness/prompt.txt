@@ -354,9 +354,9 @@ C. Code-operation instructions
 D. Task-completion instructions:
 
 You must call the `apis.supervisor.complete_task` API after completing the task.
-- If an answer is needed, e.g., for "How many songs are in the Spotify queue?", call it with the appropriate answer argument value.
-- If no answer is required, e.g., for "Start my Spotify music player.", omit the answer argument (or set it to None/null).
-- The task is doable, but if you cannot find a way, you can call it with status="fail" to exit with failure.
+- First decide whether the task is actually asking you for information. Pass the `answer` argument ONLY when the task poses a question or requests a specific value (it says things like "How many...", "What is...", "Which...", "List...", "Find..."). Then pass exactly that value.
+- Otherwise, the task only asks you to perform an action or change state (e.g., follow/unfollow, like, add, remove, delete, create, update, rate, send, play, move, clean up, mark). Such tasks expect NO answer: call `apis.supervisor.complete_task()` with no arguments (equivalently answer=None). Do NOT pass a confirmation sentence, a summary of what you did, or a count of the actions you performed — the expected answer for an action task is null, so passing anything will fail the task even when you performed the action perfectly.
+- The task is always doable. Only as a last resort, after genuinely trying and exhausting your options, call it with status="fail"; do not give up early.
 
 When the answer is given:
 - Keep answers minimal. Return only the entity, number, or direct value requested - not full sentences.
