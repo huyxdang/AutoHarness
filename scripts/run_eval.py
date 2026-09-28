@@ -115,6 +115,24 @@ def solve_chunk(agent_config: dict, experiment_name: str, task_ids: list[str]) -
     return seconds
 
 
+def wait_for_server(base_url: str, timeout: int = 20 * 60) -> None:
+    """Block until the Modal endpoint serves requests, so a cold start never counts toward
+    per-task time (Modal returns 503 while a container boots)."""
+    import httpx
+
+    headers = {"Authorization": f"Bearer {os.environ['SGLANG_API_KEY']}"}
+    start = time.time()
+    while time.time() - start < timeout:
+        try:
+            if httpx.get(f"{base_url}/models", headers=headers, timeout=30).status_code == 200:
+                print(f"Server ready ({time.time() - start:.0f}s)")
+                return
+        except httpx.HTTPError:
+            pass
+        time.sleep(5)
+    raise TimeoutError(f"{base_url} not ready after {timeout}s")
+
+
 def read_task_stats(experiment_name: str, task_id: str) -> dict:
     task_dir = APPWORLD_ROOT / "experiments/outputs" / experiment_name / "tasks" / task_id
     usage_path = task_dir / "misc/usage.json"
@@ -165,6 +183,7 @@ def main() -> None:
     chunks = [task_ids[i::workers] for i in range(workers)]
     print(f"Running {len(task_ids)} {args.dataset} tasks with {workers} workers: {task_ids}")
 
+    wait_for_server(args.base_url)
     seconds: dict[str, float] = {}
     wall_start = time.time()
     with ProcessPoolExecutor(max_workers=workers) as pool:
