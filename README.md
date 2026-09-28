@@ -62,6 +62,9 @@ flowchart TD
   trajectories and `optimizer/history.md` (earlier edits and their verdicts), and may edit only `harness/`.
 - **Keep rule:** dev pass@1 must go up (ties broken by unit-test pass rate), and input tokens may rise at most 20%.
 - **Splits:** train (fresh 15 tasks per round) → dev (fixed 20 tasks) → test (168 tasks, touched once).
+- **Limits:** the loop runs **N = 3 rounds** (`MAX_ROUNDS`, override with `--rounds`). The parallel
+  version also stops early after 2 rounds in a row without a kept edit. Each task gets one attempt
+  (pass@1) of at most 50 agent steps, with replies capped at 1,500 tokens and a 32k context.
 
 ### What the loop tried
 

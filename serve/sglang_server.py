@@ -117,6 +117,9 @@ class SGLang:
             "--context-length", str(CONTEXT_LENGTH),
             "--mem-fraction-static", "0.85",
             "--cuda-graph-max-bs", str(TARGET_INPUTS * 2),
+            # Parse Qwen's XML tool calls into OpenAI tool_calls. Only used when a request passes
+            # `tools` (OpenCode / Prime Agent); text-only harnesses (ReAct, ours) are unaffected.
+            "--tool-call-parser", "qwen3_coder",
         ]
         self.process = subprocess.Popen(cmd)
         wait_ready(self.process)

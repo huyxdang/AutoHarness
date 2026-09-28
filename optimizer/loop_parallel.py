@@ -24,6 +24,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 RESULTS = PROJECT_ROOT / "results"
 HISTORY = PROJECT_ROOT / "optimizer/history.md"
 TOKEN_TOLERANCE = 1.20
+MAX_ROUNDS = 3  # N: optimization rounds per run (override with --rounds)
 MARGIN_TASKS = 2
 PATIENCE = 2
 
@@ -63,7 +64,7 @@ def fmt(s: dict) -> str:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--start-round", type=int, required=True)
-    parser.add_argument("--rounds", type=int, default=3)
+    parser.add_argument("--rounds", type=int, default=MAX_ROUNDS)
     parser.add_argument("--tag", default="9b_")
     parser.add_argument("--model", default="qwen3.5-9b")
     parser.add_argument("--dev-ids", type=Path, default=RESULTS / "dev20_task_ids.txt")
