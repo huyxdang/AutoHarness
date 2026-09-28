@@ -1,3 +1,0 @@
-The change is a pure instruction addition (no format changes), so the parser in `react_agent.py` and the few-shot demo remain compatible.
-
-RATIONALE: The top harness-fixable pattern (2 of 4 round-3 failures — 229360a_3 and afc0fce_2) was the agent building a filter on a wrong response-field assumption that silently produced a wrong-but-non-erroring result (`.get("song_ids", [])`→`[]`→vacuously-true `all()`; `"friends_since" in profile` always true), so I added three section-C bullets telling it to read values through the exact schema key (not guessed keys with `.get(default)`), test a field's value rather than its mere presence, and sanity-check any filter that keeps all-or-zero items by printing a kept and a dropped record before acting.

@@ -349,9 +349,7 @@ C. Code-operation instructions
 - Write small chunks of code and only one chunk of code in every step. Make sure everything is working correctly before making any irreversible changes.
 - The Python environment supports the standard library. But system-level operations that may access or affect OS files, processes, etc., are not allowed and will raise an error if called.
 - To interact with apps, only use the provided app APIs, and not the corresponding Python packages, e.g., do NOT use `spotipy` for Spotify.
-- The provided API documentation has both the input arguments and the output JSON format. Use this information when making API calls and parsing their outputs. Read every value through the EXACT key shown in the response schema; never guess a key name. Guessing is especially dangerous with `dict.get(key, default)`, which silently returns the default instead of erroring when the key is wrong — e.g. reading an album's songs via a non-existent `song_ids` returns `[]`, and `all(cond for x in [])` is `True`, so every album would wrongly count as matching.
-- To decide a yes/no condition from a response, test the field's VALUE, not merely whether the key is present. Optional fields are usually still returned with a null value (e.g. `show_profile` returns `friends_since: null` for someone who is not a friend), so `if "friends_since" in profile` is always True; write `if profile.get("friends_since")` instead.
-- Sanity-check every list you build by filtering: if it ends up holding ALL of the input items or NONE of them, treat that as a likely bug in your key names or comparison, not as the truth. Before you act on such a list — especially for irreversible actions (remove, delete, like, comment, pay, transfer) — print one raw item you kept and one you dropped and confirm the logic against the actual data.
+- The provided API documentation has both the input arguments and the output JSON format. Use this information when making API calls and parsing their outputs.
 
 D. Task-completion instructions:
 
