@@ -75,6 +75,9 @@ Qwen3.5 (Feb 2026) is the newest small Qwen family (0.8B/2B/4B/9B); Qwen3.6/3.8 
   `appworld verify tasks` passes 147/147.
 - Runner: `scripts/run_eval.py` (parallel processes, timing, pass@1, tokens from `usage.json`, steps).
   It patches `reasoning_content: null` → `""` (SGLang vs AppWorld incompatibility) for all harnesses.
+- Model call settings for ALL harnesses: `max_tokens=1500`, `stop=["```\n"]` (as in AppWorld's CI ReAct
+  config). Without them Qwen3.5-4B sometimes rambles to the 32k context limit (~10 min/call), stalling runs.
+- Qwen3.5 has no 8B; upgrade path is Qwen3.5-9B (~18 GB bf16 → needs L40S, or FP8 on A10).
 - Harness: `harness/react_agent.py` (copy of AppWorld's simplified ReAct agent, registered as
   `autoharness_react_code_agent`) + `harness/prompt.txt`. Optimizer: `optimizer/round.py`.
 

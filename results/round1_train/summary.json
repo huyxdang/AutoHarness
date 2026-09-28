@@ -1,0 +1,96 @@
+{
+  "experiment": "round1_train",
+  "dataset": "train",
+  "agent_type": "autoharness_react_code_agent",
+  "prompt_file": "/Users/huydang/Desktop/autoharness/harness/prompt.txt",
+  "model": "qwen3.5-4b",
+  "num_tasks": 10,
+  "pass_at_1": 20.0,
+  "avg_input_tokens": 147343,
+  "avg_output_tokens": 1960,
+  "avg_steps": 17.0,
+  "avg_seconds": 94.9,
+  "wall_seconds": 271.0,
+  "tasks": [
+    {
+      "task_id": "07b42fd_3",
+      "passed": false,
+      "seconds": 99.6,
+      "input_tokens": 152451,
+      "output_tokens": 1711,
+      "steps": 19
+    },
+    {
+      "task_id": "229360a_1",
+      "passed": false,
+      "seconds": 203.5,
+      "input_tokens": 351794,
+      "output_tokens": 4508,
+      "steps": 27
+    },
+    {
+      "task_id": "34d9492_3",
+      "passed": true,
+      "seconds": 95.4,
+      "input_tokens": 127139,
+      "output_tokens": 1843,
+      "steps": 17
+    },
+    {
+      "task_id": "692c77d_3",
+      "passed": false,
+      "seconds": 99.5,
+      "input_tokens": 147020,
+      "output_tokens": 1728,
+      "steps": 17
+    },
+    {
+      "task_id": "76f2c72_1",
+      "passed": false,
+      "seconds": 59.0,
+      "input_tokens": 64084,
+      "output_tokens": 983,
+      "steps": 12
+    },
+    {
+      "task_id": "771d8fc_2",
+      "passed": false,
+      "seconds": 164.3,
+      "input_tokens": 248249,
+      "output_tokens": 4301,
+      "steps": 28
+    },
+    {
+      "task_id": "771d8fc_3",
+      "passed": false,
+      "seconds": 51.7,
+      "input_tokens": 63393,
+      "output_tokens": 1297,
+      "steps": 12
+    },
+    {
+      "task_id": "7d7fbf6_2",
+      "passed": true,
+      "seconds": 38.7,
+      "input_tokens": 47238,
+      "output_tokens": 683,
+      "steps": 9
+    },
+    {
+      "task_id": "e3d6c94_1",
+      "passed": false,
+      "seconds": 56.8,
+      "input_tokens": 94391,
+      "output_tokens": 1136,
+      "steps": 12
+    },
+    {
+      "task_id": "e3d6c94_3",
+      "passed": false,
+      "seconds": 80.2,
+      "input_tokens": 177674,
+      "output_tokens": 1410,
+      "steps": 17
+    }
+  ]
+}

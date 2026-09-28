@@ -52,6 +52,13 @@ def run(cmd: list[str], **kwargs) -> subprocess.CompletedProcess:
     return subprocess.run(cmd, cwd=PROJECT_ROOT, check=True, text=True, **kwargs)
 
 
+def snapshot_files() -> dict[str, bytes]:
+    """Contents of every tracked or untracked (non-ignored) file in the repo."""
+    listed = run(["git", "ls-files", "--cached", "--others", "--exclude-standard"],
+                 capture_output=True).stdout.splitlines()
+    return {p: (PROJECT_ROOT / p).read_bytes() for p in listed if (PROJECT_ROOT / p).is_file()}
+
+
 def build_failure_file(experiment: str, task_id: str) -> str:
     from appworld.task import Task
 
@@ -104,6 +111,7 @@ def main() -> None:
         return
 
     # 3. Let Claude Code edit the harness (headless, restricted tools).
+    before = snapshot_files()
     prompt = OPTIMIZER_PROMPT.format(workspace=workspace.relative_to(PROJECT_ROOT), round=args.round)
     result = run(["claude", "-p", prompt,
                   "--output-format", "json",
@@ -116,14 +124,17 @@ def main() -> None:
     rationale = next((line.split("RATIONALE:", 1)[1].strip() for line in reply.splitlines()
                       if "RATIONALE:" in line), "no rationale given")
 
-    # 4. Enforce the guardrail: only harness/ may change.
-    changed = run(["git", "status", "--porcelain"], capture_output=True).stdout.splitlines()
-    outside = [line[3:] for line in changed
-               if not line[3:].startswith(("harness/", "optimizer/workspace/", "results/"))]
-    tracked_outside = [p for p in outside if not p.startswith("??")]
-    if tracked_outside:
-        print(f"Reverting edits outside harness/: {tracked_outside}")
-        run(["git", "checkout", "--", *tracked_outside])
+    # 4. Enforce the guardrail: only harness/ may change. Compare against the snapshot taken just
+    #    before the optimizer ran, so uncommitted edits made by us are never touched.
+    after = snapshot_files()
+    touched = [p for p in set(before) | set(after)
+               if before.get(p) != after.get(p) and not p.startswith(("harness/", "optimizer/workspace/"))]
+    for path in touched:
+        print(f"Reverting optimizer edit outside harness/: {path}")
+        if path in before:
+            (PROJECT_ROOT / path).write_bytes(before[path])
+        else:
+            (PROJECT_ROOT / path).unlink(missing_ok=True)
 
     harness_diff = run(["git", "diff", "--stat", "--", "harness/"], capture_output=True).stdout
     if not harness_diff.strip():

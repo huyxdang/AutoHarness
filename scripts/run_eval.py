@@ -48,6 +48,11 @@ def build_agent_config(args: argparse.Namespace) -> dict:
             "api_key_env_name": "SGLANG_API_KEY",
             "name": args.model,
             "temperature": 0.0,
+            # Without a cap, the 4B model sometimes rambles until the context is full (~10 min
+            # per call). Same guard as AppWorld's own CI ReAct config: stop at the end of the
+            # code block, and bound the reply length.
+            "max_tokens": args.max_tokens,
+            "stop": ["```\n"],
             "seed": 100,
             "drop_reasoning_content": False,
             "cost_per_token": {
@@ -131,6 +136,7 @@ def main() -> None:
     parser.add_argument("--agent-type", default="simplified_react_code_agent")
     parser.add_argument("--prompt-file", type=Path, default=DEFAULT_PROMPT)
     parser.add_argument("--max-steps", type=int, default=50)
+    parser.add_argument("--max-tokens", type=int, default=1500, help="cap per model reply")
     parser.add_argument("--base-url", default=DEFAULT_BASE_URL)
     parser.add_argument("--model", default=DEFAULT_MODEL)
     args = parser.parse_args()
