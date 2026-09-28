@@ -43,7 +43,7 @@ of the prompt:
 ## How it works
 
 <p align="center">
-  <img src="assets/autoharness-loop.svg" width="720"
+  <img src="assets/autoharness-loop.svg" width="100%"
        alt="AutoHarness loop: set current_harness to the baseline; collect training-set trajectories; the optimizer LLM analyzes errors and edits the harness; if the new harness beats current_harness on the dev split it becomes current_harness, otherwise it is discarded; stop after N rounds or 2 rejections in a row; report benchmark results on the test split and output the best harness.">
 </p>
 
