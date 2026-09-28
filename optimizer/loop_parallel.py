@@ -9,7 +9,7 @@ Each round:
   3. Winner = best candidate by (pass@1, unit-test rate) among those within the token budget.
      KEEP it only if it beats the re-scored current best by >= MARGIN_TASKS dev tasks
      (picking the max of k noisy candidates overstates the winner).
-  4. Log every candidate to optimizer/history.md; commit. Stop early after PATIENCE rounds
+  4. Log every candidate to this run's history file (optimizer/history_<tag>.md); commit. Stop early after PATIENCE rounds
      without a keep.
 """
 
@@ -20,9 +20,11 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from round import history_path  # noqa: E402
+
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 RESULTS = PROJECT_ROOT / "results"
-HISTORY = PROJECT_ROOT / "optimizer/history.md"
 TOKEN_TOLERANCE = 1.20
 MAX_ROUNDS = 3  # N: optimization rounds per run (override with --rounds)
 MARGIN_TASKS = 2
@@ -71,6 +73,7 @@ def main() -> None:
     parser.add_argument("--train-n", type=int, default=15)
     parser.add_argument("--k", type=int, default=3)
     args = parser.parse_args()
+    HISTORY = history_path(args.tag)
 
     with HISTORY.open("a") as f:
         f.write(f"\n## Parallel candidates (k={args.k}, current best re-scored each round, "

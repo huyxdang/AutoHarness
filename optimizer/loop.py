@@ -7,7 +7,8 @@ Round 0 scores the current harness on dev (the "best so far"). Each round then:
   2. Score the edited harness on the same dev tasks.
   3. KEEP if pass@1 rises (or ties with a higher unit-test pass rate) and avg input tokens rise
      no more than TOKEN_TOLERANCE; otherwise REJECT and git-revert the edit.
-  4. Record the decision in optimizer/history.md, which the optimizer reads next round.
+  4. Record the decision in this run's history file (optimizer/history_<tag>.md), which the
+     optimizer reads next round.
 """
 
 import argparse
@@ -16,9 +17,11 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from round import history_path  # noqa: E402
+
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 RESULTS = PROJECT_ROOT / "results"
-HISTORY = PROJECT_ROOT / "optimizer/history.md"
 TOKEN_TOLERANCE = 1.20
 MAX_ROUNDS = 3  # N: optimization rounds per run (override with --rounds)
 
@@ -66,6 +69,7 @@ def main() -> None:
     parser.add_argument("--train-n", type=int, default=15)
     parser.add_argument("--workers", type=int, default=10)
     args = parser.parse_args()
+    HISTORY = history_path(args.tag)
 
     best_path = RESULTS / f"{args.tag}round0_dev" / "summary.json"
     if best_path.exists() and args.start_round > 1:

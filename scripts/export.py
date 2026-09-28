@@ -43,6 +43,8 @@ def main() -> None:
     parser.add_argument("--name", required=True)
     parser.add_argument("--baseline", type=Path, required=True, help="results dir of the baseline run")
     parser.add_argument("--optimized", type=Path, required=True, help="results dir of the optimized run")
+    parser.add_argument("--history", type=Path, default=Path("optimizer/history_9b.md"),
+                        help="the optimization run's history file (becomes CHANGELOG.md)")
     args = parser.parse_args()
 
     base = json.loads((PROJECT_ROOT / args.baseline / "summary.json").read_text())
@@ -75,7 +77,7 @@ Task by task: {only_opt} tasks solved only with the optimized harness, {only_bas
 See CHANGELOG.md for every harness edit that was tried and why it was kept or rejected.
 """
     (out / "report.md").write_text(report)
-    shutil.copy(PROJECT_ROOT / "optimizer/history.md", out / "CHANGELOG.md")
+    shutil.copy(PROJECT_ROOT / args.history, out / "CHANGELOG.md")
     print(f"Exported to {out}")
 
 

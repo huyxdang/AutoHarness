@@ -20,3 +20,5 @@ Dev: pass@1 15.0%, tests 59.6%, 154,523 input tok/task, 20.4 steps/task
 - Edit: The top harness-fixable pattern (2 of 4 round-3 failures — 229360a_3 and afc0fce_2) was the agent building a filter on a wrong response-field assumption that silently produced a wrong-but-non-erroring result (`.get("song_ids", [])`→`[]`→vacuously-true `all()`; `"friends_since" in profile` always true), so I added three section-C bullets telling it to read values through the exact schema key (not guessed keys with `.get(default)`), test a field's value rather than its mere presence, and sanity-check any filter that keeps all-or-zero items by printing a kept and a dropped record before acting.
 - Dev after edit: pass@1 20.0%, tests 67.5%, 149,303 input tok/task, 17.1 steps/task
 - Best dev so far: pass@1 45.0%, tests 78.9%, 150,510 input tok/task, 17.0 steps/task
+
+## Parallel candidates (k=3, current best re-scored each round, keep only if +2 dev tasks)

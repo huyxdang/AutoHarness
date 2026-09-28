@@ -22,6 +22,12 @@ APPWORLD_OUTPUTS = PROJECT_ROOT / "appworld/experiments/outputs"
 WORKSPACE = PROJECT_ROOT / "optimizer/workspace"
 MAX_TRAJECTORY_CHARS = 30_000  # keep each failure file readable for the optimizer
 
+
+def history_path(tag: str) -> Path:
+    """The optimizer's memory: one file per optimization run (keyed by its tag, e.g. 9b_ ->
+    optimizer/history_9b.md), so a new run never sees another run's edits and verdicts."""
+    return PROJECT_ROOT / "optimizer" / f"history_{tag.rstrip('_') or 'default'}.md"
+
 OPTIMIZER_PROMPT = """\
 You are optimizing the harness of a small LLM agent ({model}) on the AppWorld benchmark.
 The agent solves tasks by writing Python code that calls app APIs (ReAct style).
@@ -34,8 +40,8 @@ Evidence: {workspace} contains, for round {round}:
 - summary.json             pass/fail, tokens, steps per train task
 - failures/<task_id>.md    for each FAILED task: the task instruction, the agent's full trajectory
                            (code it ran + environment output), and the evaluation report
-- optimizer/history.md     earlier harness edits and whether held-out validation KEPT or REJECTED
-                           them (if present). Do not repeat a rejected idea; build on kept ones.
+- {history}  earlier harness edits in this run and whether held-out validation KEPT or
+                           REJECTED them (if present). Do not repeat a rejected idea; build on kept ones.
 
 Do this:
 1. Read the failures. Identify the 1-2 most common, harness-fixable failure patterns
@@ -118,7 +124,8 @@ def main() -> None:
 
     # 3. Let Claude Code edit the harness (headless, restricted tools).
     before = snapshot_files()
-    prompt = OPTIMIZER_PROMPT.format(workspace=workspace.relative_to(PROJECT_ROOT),
+    prompt = OPTIMIZER_PROMPT.format(history=history_path(args.tag).relative_to(PROJECT_ROOT),
+                                     workspace=workspace.relative_to(PROJECT_ROOT),
                                      round=args.round, model=args.model)
     result = run(["claude", "-p", prompt,
                   "--model", args.optimizer_model,

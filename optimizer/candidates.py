@@ -7,7 +7,7 @@ Output: optimizer/workspace/<tag>round<k>/candidates.json listing each candidate
 and rationale. Scoring and keep/reject happen in optimizer/loop_parallel.py.
 
 Guardrails (same as round.py):
-- The optimizer only sees TRAIN trajectories (plus history.md).
+- The optimizer only sees TRAIN trajectories (plus this run's history file).
 - Diagnosis is read-only. Each editor may edit only its own candidate copy of harness/.
 - Any change to the repo outside optimizer/workspace/ is reverted.
 """
@@ -21,11 +21,10 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from round import (PROJECT_ROOT, build_failure_file, run,  # noqa: E402
+from round import (PROJECT_ROOT, build_failure_file, history_path, run,  # noqa: E402
                    snapshot_files)
 
 WORKSPACE = PROJECT_ROOT / "optimizer/workspace"
-HISTORY = PROJECT_ROOT / "optimizer/history.md"
 
 DIAGNOSIS_PROMPT = """\
 You are diagnosing failures of a small LLM agent ({model}) on the AppWorld benchmark. The agent
@@ -132,7 +131,8 @@ def main() -> None:
     before = snapshot_files()
 
     # 2. One read-only diagnosis call ranks the top-k patterns.
-    history = HISTORY.relative_to(PROJECT_ROOT) if HISTORY.exists() else "(no history yet)"
+    history_file = history_path(args.tag)
+    history = history_file.relative_to(PROJECT_ROOT) if history_file.exists() else "(no history yet)"
     diagnosis = result_text(claude(
         DIAGNOSIS_PROMPT.format(model=args.model, workspace=workspace.relative_to(PROJECT_ROOT),
                                 history=history, k=args.k),

@@ -49,7 +49,8 @@ of the prompt:
 
 - **Solver:** Qwen3.5-9B, served with SGLang on one Modal L40S (thinking disabled).
 - **Optimizer:** Claude Opus 4.8 via headless Claude Code (`claude -p`). It sees only failed *train*
-  trajectories and `optimizer/history.md` (earlier edits and their verdicts), and may edit only `harness/`.
+  trajectories and its run's history file (`optimizer/history_<tag>.md`: earlier edits in this run and their
+  verdicts; each run starts fresh), and may edit only `harness/`.
 - **Keep rule:** dev pass@1 must go up (ties broken by unit-test pass rate), and input tokens may rise at most 20%.
 - **Splits:** train (fresh 15 tasks per round) → dev (fixed 20 tasks) → test (168 tasks, touched once).
 - **Limits:** the loop runs **N = 3 rounds** (`MAX_ROUNDS`, override with `--rounds`). The parallel
@@ -99,7 +100,7 @@ optimizer/round.py          one round: train run → claude -p edits harness/ �
 optimizer/loop.py           rounds with automatic keep/reject on dev
 optimizer/candidates.py     parallel version: one diagnosis call, k editors, k candidates
 optimizer/loop_parallel.py  scores current best + k candidates together, keeps winner by a margin
-optimizer/history.md        every edit and its verdict
+optimizer/history_9b.md     every edit and its verdict for the 9B run (one file per run)
 results/                    summary.json for every run
 ```
 
