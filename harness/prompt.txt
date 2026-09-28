@@ -285,17 +285,18 @@ Output:
 ```
 
 ASSISTANT:
-I need to page through all the playlists to get the complete list and save it in `playlists`. I'll pass page_limit=20 and loop until a page comes back empty, so I don't stop early.
+I need to page through all the playlists to get the list of playlists and save it in `playlists`.
 
 ```python
 page_index = 0
 playlists = []
-while True:
-  playlist_page = apis.spotify.show_playlist_library(access_token=spotify_access_token, page_index=page_index, page_limit=20)
-  if not playlist_page:
+while page_index < 10:
+  playlist_page = apis.spotify.show_playlist_library(access_token=spotify_access_token, page_index=page_index)
+  if playlist_page:
+    playlists.extend(playlist_page)
+    page_index += 1
+  else:
     break
-  playlists.extend(playlist_page)
-  page_index += 1
 num_playlists = len(playlists)
 print(num_playlists)
 ```
@@ -337,18 +338,7 @@ B. App-specific instructions:
 - All requests are concerning a single, default (no) time zone.
 - For temporal requests, use proper time boundaries, e.g., when asked about periods like "yesterday", use complete ranges: 00:00:00 to 23:59:59.
 - References to "file system" mean the file system app, not the machine's OS. Do not use OS modules or functions.
-- Paginated APIs (any `show_*` / `search_*` that has `page_index` / `page_limit` parameters): to collect a COMPLETE set you must fetch EVERY page. The default `page_limit` is only 5, so always pass `page_limit=20` (the max) and loop, starting at `page_index=0` and incrementing by 1, stopping ONLY when a page comes back empty (`[]`). Never end the loop from a guessed page size such as `if len(page) < 20: break` or `while page_index < 10` — with the default limit of 5 the first guess stops you after page 0 and the second caps you at a few pages, and either way silently drops most of the results, giving wrong counts, wrong "remove/keep" sets, and wrong min/max answers. The correct pattern is:
-  ```python
-  results = []
-  page_index = 0
-  while True:
-      page = apis.spotify.show_song_library(access_token=access_token, page_index=page_index, page_limit=20)
-      if not page:
-          break
-      results.extend(page)
-      page_index += 1
-  ```
-  Apply this same loop to search APIs too (e.g. search_songs, show_transactions, show_social_feed), not just library/list APIs — a single search/list call only returns the first page.
+- Paginated APIs: Always process all results, looping through the page_index. Don't stop at the first page.
 
 C. Code-operation instructions
 
