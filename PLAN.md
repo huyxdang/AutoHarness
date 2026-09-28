@@ -231,3 +231,14 @@ OpenCode setup: AppWorld MCP tools filtered to AppWorld's official API predictor
 (`qwen3.5-9b-64k`), shell/edit/web tools disabled for safety, 20-min cap (1 timeout, enforced by hand
 after the in-process timer lagged). 23 tasks sent a >32k request; OpenCode solved 1 of them, so the
 larger context did not drive the comparison. Prime Agent dropped (unsandboxed REPL; out of scope).
+
+**OpenCode audit + v2 re-run (2026-09-29):** the first OpenCode run (22.6%) was handicapped by the adapter:
+(1) predicted-APIs-only access left a needed API missing in ~half the tasks (162 unavailable-tool attempts);
+(2) OpenCode's read-only host filesystem tools stayed on and the model searched the Mac for AppWorld's
+file_system app in 21 tasks (0 solved). Checked and fine: tool-call parsing (0 raw tool-call leaks), task
+clock, grading. v2 adapter: predicted APIs as direct tools + `api_docs__show_api_descriptions`,
+`api_docs__show_api_doc`, `call_api` (any API on demand), host FS tools off, temperature 0, wall-clock
+20-min cap killing the process group, shuffled order + start deadline (budget guard).
+v2 on a random 99-task subset of test_normal: OpenCode 29.3% vs v1 22.2%, ReAct 17.2%, AutoHarness 48.5%
+on the same tasks. AutoHarness vs OpenCode v2: 28 vs 9 discordant, p = 0.0026; OpenCode v2 vs ReAct p = 0.029.
+Budget: after this run roughly $1–2 of Modal credit remains (estimate from GPU time; check the dashboard).

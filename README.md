@@ -16,36 +16,59 @@ On AppWorld's held-out `test_normal` split (168 tasks, one attempt each), with *
 | Harness | pass@1 | Scenarios fully solved | Unit tests passed | Input tokens / task | Steps / task |
 |---|---|---|---|---|---|
 | AppWorld ReAct (baseline) | 19.6% (33/168) | 7.1% | 67.4% | 171k | 19.2 |
-| [OpenCode](https://github.com/anomalyco/opencode) 1.18.33 | 22.6% (38/168) | 8.9% | 57.3% | 299k | 14.9 |
 | **AutoHarness** | **49.4% (83/168)** | **25.0%** | **75.2%** | **166k** | 18.5 |
 
 - Same model and tasks for every row, and the same AppWorld grader; only the harness differs.
 - **vs. the baseline:** 58 tasks solved only by AutoHarness, 8 only by ReAct (exact McNemar test, p ≈ 2×10⁻¹⁰),
   with 3% fewer input tokens.
-- **vs. OpenCode, an off-the-shelf agent harness:** 59 tasks solved only by AutoHarness, 14 only by
-  OpenCode (p ≈ 1×10⁻⁷), at 45% fewer input tokens per task. OpenCode was not significantly better
-  than plain ReAct (p = 0.59).
+
+### vs. an off-the-shelf agent harness: OpenCode
+
+[OpenCode](https://github.com/anomalyco/opencode) 1.18.33 with the same Qwen3.5-9B, on a random
+99-task subset of the same test split (the run stopped at a budget cap; tasks ran in shuffled order):
+
+| Same 99 test tasks | pass@1 | Unit tests passed | Input tokens / task | Steps / task |
+|---|---|---|---|---|
+| AppWorld ReAct (baseline) | 17.2% (17/99) | 67.6% | 171k | 19.1 |
+| OpenCode | 29.3% (29/99) | 61.3% | 399k | 18.5 |
+| **AutoHarness** | **48.5% (48/99)** | **76.2%** | **161k** | 17.9 |
+
+- **AutoHarness vs. OpenCode:** 28 tasks solved only by AutoHarness, 9 only by OpenCode (p ≈ 0.003),
+  with 2.5× fewer input tokens per task.
+- OpenCode does beat plain ReAct (19 vs. 7 tasks solved by only one of them, p ≈ 0.03).
+- The subset is representative: on it, ReAct and AutoHarness score within 2.4 points of their
+  full-168 numbers.
 - For context, the public [AppWorld leaderboard](https://appworld.dev/appworld/leaderboard) lists
   GPT-4o + ReAct at 48.8% and Llama3-70B + ReAct at 20.8% on the same split (2024 entries, so not
   identical conditions).
 
 <details>
-<summary>How OpenCode was run</summary>
+<summary>How OpenCode was run (and what an audit of the first run changed)</summary>
 
-- **Tools:** AppWorld's MCP server exposes each API as a tool, but every task allows all 9 apps
-  (~450 APIs, ~84k tokens of tool schemas). So, like AppWorld's own tool-calling agents, each task
-  first runs AppWorld's official API predictor (same model, AppWorld's prompt and 3 train-split
-  examples) to pick up to 20 APIs, and a small proxy (`scripts/mcp_filter_proxy.py`) exposes only
-  those.
-- **Prompt:** AppWorld's official function-calling instructions, without its worked examples; the same
-  task-completion rules the ReAct baseline gets.
+OpenCode's own agent loop, planning, and context compaction ran as shipped. The adapter
+(`scripts/external_eval.py`) only decides how OpenCode reaches AppWorld:
+
+- **API access:** AppWorld's MCP server exposes each API as a tool, but every task allows all 9 apps
+  (~450 APIs, ~84k tokens of tool schemas), too many for any small-context model. AppWorld's API
+  predictor (same model, AppWorld's prompt and 3 train-split examples) picks up to 20 APIs, which
+  OpenCode gets as direct tools. On top of that, a proxy (`scripts/mcp_filter_proxy.py`) gives it
+  `api_docs__show_api_descriptions`, `api_docs__show_api_doc`, and `call_api`, so it can look up and
+  call **any** API on demand, like ReAct and AutoHarness do through `apis.api_docs` in code.
+- **Prompt:** AppWorld's official function-calling instructions, with the same task-completion rules
+  the ReAct baseline gets. Its worked example is not included (it is written as Python code for ReAct).
+- **Sampling:** temperature 0, replies capped at 1,500 tokens, as for the other harnesses.
 - **Context:** 64k (vs. 32k for ReAct and AutoHarness), because OpenCode's own system prompt and tool
-  schemas take ~11k tokens per request. This gave it more room, not less: 23 tasks ever sent a
-  request over 32k, and OpenCode solved only 1 of them.
-- **Safety:** runs on the local machine, so OpenCode's shell, file-editing and web tools were turned
-  off; its agent loop, planning and context compaction ran as shipped. A 20-minute cap per task
-  applied (1 task hit it).
-- Adapter: `scripts/external_eval.py`.
+  schemas take ~11k tokens per request. In the first run, 23 tasks sent a request over 32k and
+  OpenCode solved 1 of them, so the extra room did not decide the comparison.
+- **Safety:** it runs on the local machine, so OpenCode's shell, file-editing, web, and filesystem
+  tools are off. A 20-minute wall-clock cap per task applied.
+
+**First run, before the audit:** 22.6% on all 168 tasks (38/168). An audit found two adapter
+problems, not OpenCode problems: (1) with only the predicted APIs, half the tasks were missing an
+API they needed (162 attempts to call unavailable tools); (2) OpenCode's read-only file tools were
+still on, and in 21 tasks the model searched the *host's* files for AppWorld's file-system app,
+solving none of them. Fixing both (and pinning temperature 0) moved OpenCode from 22.2% to 29.3% on
+the same 99 tasks. Tool-call parsing, the task clock, and grading were checked and were correct.
 
 </details>
 
@@ -119,7 +142,7 @@ scripts/run_eval.py         run an agent on tasks → pass@1, unit tests, tokens
 scripts/modal_eval.py       run each AppWorld task in its own Modal CPU container
 scripts/final_eval.sh       dev noise check + test_normal comparison
 scripts/external_eval.py    run an external harness (OpenCode) on AppWorld tasks, graded the same way
-scripts/mcp_filter_proxy.py MCP proxy exposing only the APIs AppWorld's predictor selected
+scripts/mcp_filter_proxy.py MCP proxy: predicted APIs as tools + on-demand api_docs / call_api
 scripts/export.py           package the optimized harness + report + change log
 harness/                    the harness being optimized (the only thing the optimizer may edit)
 optimizer/round.py          one round: train run → claude -p edits harness/ → commit
@@ -161,11 +184,10 @@ runaway generations) are in [PLAN.md](PLAN.md).
 - Test results are one run per harness. Sampling is temperature 0, but batched inference is not
   perfectly deterministic.
 - Leaderboard comparisons are context only: those entries used AppWorld's 2024 setup.
-- OpenCode is a tool-calling harness, so it depends on AppWorld's API predictor picking the right
-  ≤20 APIs up front; when it misses one (we saw it leave out Venmo on a Venmo task), OpenCode cannot
-  recover. ReAct and AutoHarness read API docs on demand instead. This is the standard AppWorld setup
-  for tool-calling agents, but it is part of why OpenCode scores lower here. Prime Agent was not
-  compared: its Python REPL runs unsandboxed on the host, and it was left out of scope.
+- The OpenCode comparison covers a random 99 of the 168 test tasks (budget cap), and its adapter is
+  ours: API access goes through AppWorld's predictor plus on-demand lookup, and its prompt lacks the
+  worked example the ReAct-style harnesses get. A different adapter could score differently. Prime
+  Agent was not compared: its Python REPL runs unsandboxed on the host, and it was left out of scope.
 - The harness is prompt + agent loop only. Tool wrappers, memory, and context compaction are not
   yet in the search space (two dev tasks still overflowed the 32k context).
 
