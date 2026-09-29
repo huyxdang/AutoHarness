@@ -21,10 +21,12 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 APPWORLD_ROOT = PROJECT_ROOT / "appworld"
 RESULTS_DIR = PROJECT_ROOT / "results"
 DEFAULT_PROMPT = APPWORLD_ROOT / "experiments/prompts/react_code_agent/instructions.txt"
+# Modal workspace that hosts the solver servers (switched from hellgod67 on 2026-09-29).
+MODAL_WORKSPACE = "dangxhwee2003"
 ENDPOINTS = {  # one Modal app per solver, see serve/sglang_server.py
-    "qwen3.5-4b": "https://hellgod67--autoharness-sglang-sglang.us-east.modal.direct/v1",
-    "qwen3.5-9b": "https://hellgod67--autoharness-sglang-9b-sglang.us-east.modal.direct/v1",
-    "qwen3.5-9b-64k": "https://hellgod67--autoharness-sglang-9b-64k-sglang.us-east.modal.direct/v1",
+    solver: f"https://{MODAL_WORKSPACE}--{app}-sglang.us-east.modal.direct/v1"
+    for solver, app in [("qwen3.5-4b", "autoharness-sglang"), ("qwen3.5-9b", "autoharness-sglang-9b"),
+                        ("qwen3.5-9b-64k", "autoharness-sglang-9b-64k")]
 }
 DEFAULT_MODEL = "qwen3.5-9b"
 

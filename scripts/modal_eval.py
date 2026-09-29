@@ -6,7 +6,7 @@ and the optimizer work unchanged. harness/ and scripts/ are mounted at launch, s
 the current harness.
 
 Used by scripts/run_eval.py --backend modal. Smoke test:
-    MODAL_PROFILE=hellgod67 python scripts/modal_eval.py --experiment modal_smoke --n 2
+    MODAL_PROFILE=dangxhwee2003 python scripts/modal_eval.py --experiment modal_smoke --n 2
 """
 
 import io
@@ -15,8 +15,8 @@ import tarfile
 import time
 from pathlib import Path
 
-# The globally active Modal profile is a different account; always bill this project's workspace.
-os.environ.setdefault("MODAL_PROFILE", "hellgod67")
+# Always bill this project's Modal workspace, whatever profile is globally active.
+os.environ.setdefault("MODAL_PROFILE", "dangxhwee2003")
 import modal  # noqa: E402
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent

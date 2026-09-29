@@ -246,3 +246,9 @@ Completion run (2026-09-29 morning): 45 more tasks before the user stopped it â†
 ReAct 18.8%, OpenCode v1 20.8%, OpenCode v2 29.2%, AutoHarness 49.3% on the same 144. AutoHarness vs OpenCode v2:
 42 vs 13 discordant, +20.1 pts (95% CI +11.1 to +29.9), p â‰ˆ 1e-4. 24 tasks not run
 (`results/9b_test_opencode_v2_not_run_ids.txt`); parts merged with `scripts/merge_summaries.py`.
+
+**Modal account switch (2026-09-29):** project moved from workspace `hellgod67` (credits used up) to
+`dangxhwee2003`. Pins: `MODAL_WORKSPACE` in `scripts/run_eval.py` (endpoint URLs are built from it),
+`MODAL_PROFILE` default in `scripts/modal_eval.py`, CLAUDE.md. Secret `autoharness-sglang` recreated with the
+same key. Deployed so far in the new workspace: `autoharness-sglang-9b-64k`. Same model revision, GPU type
+(L40S) and server settings, so results stay comparable across the two accounts.

@@ -3,8 +3,8 @@
 Adapted from modal-labs/modal-examples 06_gpu_and_ml/llm-serving/sglang_low_latency.py,
 trimmed down for a single small GPU and a tight budget.
 
-Deploy:  SOLVER=qwen3.5-4b MODAL_PROFILE=hellgod67 modal deploy serve/sglang_server.py
-         SOLVER=qwen3.5-9b MODAL_PROFILE=hellgod67 modal deploy serve/sglang_server.py
+Deploy:  SOLVER=qwen3.5-4b MODAL_PROFILE=dangxhwee2003 modal deploy serve/sglang_server.py
+         SOLVER=qwen3.5-9b MODAL_PROFILE=dangxhwee2003 modal deploy serve/sglang_server.py
 Each solver is its own Modal app, so switching models never breaks the other endpoint.
 """
 
