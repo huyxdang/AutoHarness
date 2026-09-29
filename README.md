@@ -7,22 +7,37 @@ loop), and keeps only the changes that hold up on tasks it never studied.
 Adaption Labs showed that a better harness can take a 27B open model from 67% to 86% on a legal
 agent benchmark with no weight changes, from harness fixes found by hand
 ([post](https://adaptionlabs.ai/blog/a-better-harness-can-unlock-smaller-models)).
-AutoHarness automates that loop and tests it on a public benchmark.
+AutoHarness automates that loop and tests it on a public benchmark: on AppWorld's held-out test
+split it takes Qwen3.5-9B from 19.6% to 49.4% and Qwen3.5-27B from 35.1% to 72.0%, with no weight changes.
 
 ## Result
 
-On AppWorld's held-out `test_normal` split (168 tasks, one attempt each), with **Qwen3.5-9B**:
+On AppWorld's held-out `test_normal` split (168 tasks, one attempt each), same tasks and grader for
+every row:
 
-| Harness | pass@1 | Scenarios fully solved | Unit tests passed | Input tokens / task | Steps / task |
-|---|---|---|---|---|---|
-| AppWorld ReAct (baseline) | 19.6% (33/168) | 7.1% | 67.4% | 171k | 19.2 |
-| **AutoHarness** | **49.4% (83/168)** | **25.0%** | **75.2%** | **166k** | 18.5 |
+| Model | Harness | pass@1 | Scenarios fully solved | Unit tests passed | Input tokens / task | Steps / task |
+|---|---|---|---|---|---|---|
+| Qwen3.5-9B | AppWorld ReAct (baseline) | 19.6% (33/168) | 7.1% | 67.4% | 171k | 19.2 |
+| Qwen3.5-9B | **AutoHarness** | **49.4% (83/168)** | **25.0%** | **75.2%** | **166k** | 18.5 |
+| Qwen3.5-27B | AppWorld ReAct (baseline) | 35.1% (59/168) | 26.8% | 80.4% | 139k | 16.4 |
+| Qwen3.5-27B | **AutoHarness** | **72.0% (121/168)** | **55.4%** | **87.3%** | 152k | 16.6 |
 
-- Same model and tasks for every row, and the same AppWorld grader; only the harness differs.
-- **vs. the baseline:** 58 tasks solved only by AutoHarness, 8 only by ReAct (exact McNemar test, p ≈ 2×10⁻¹⁰),
-  with 3% fewer input tokens.
+- **On this benchmark the harness matters more than model size.** AutoHarness adds 29.8 points on 9B
+  (58 tasks solved only with it, 8 only with ReAct; exact McNemar p ≈ 2×10⁻¹⁰) and 36.9 points on 27B
+  (70 vs. 8, p ≈ 2×10⁻¹³, 95% CI +28.0 to +45.8). Going from 9B to 27B under the same ReAct harness adds 15.5.
+- **A 3× smaller model with an optimized harness beats the bigger model without one:** 9B + AutoHarness
+  49.4% vs. 27B + ReAct 35.1% (39 vs. 15 tasks, p = 0.0015), though on scenarios fully solved the two
+  are level (25.0% vs. 26.8%). With both optimized, size still counts: 72.0% vs. 49.4% (p ≈ 6×10⁻⁶).
+- Each model gets its own harness, optimized separately from the same start (AppWorld's ReAct agent),
+  and both runs found the same top fix on their own (below). Input tokens: 3% fewer on 9B, 9% more on 27B.
+- **Most of the gain is one rule.** Most gained tasks are ones where ReAct did every action right, then
+  gave an answer on a task that expects none (36 of 58 gains on 9B, 52 of 70 on 27B). That rule is part
+  of the task spec, so these are real failures, but it is one fix. Counting only the other gains against
+  ReAct's wins: 9B 22 vs. 8 (p = 0.016), 27B 18 vs. 8 (p = 0.08, not significant).
+- Statistics: `python scripts/compare.py <baseline run> <new run>` (McNemar, bootstrap CIs over tasks
+  and over scenarios, answer-only breakdown).
 
-### vs. an off-the-shelf agent harness: OpenCode
+### vs. an off-the-shelf agent harness: OpenCode (9B)
 
 [OpenCode](https://github.com/anomalyco/opencode) 1.18.33 with the same Qwen3.5-9B, on the same
 168 test tasks:
@@ -79,10 +94,10 @@ final run was completed in three parts because of GPU budget; the parts are merg
 
 </details>
 
-The winning change was found automatically from training-set failures. The optimizer noticed that
-11 of 14 failed tasks were *action* tasks ("send…", "delete…") where the model reported back what it
-did (`"Done"`, `"15"`), while the grader expects no answer. It rewrote the task-completion section
-of the prompt:
+The winning change was found automatically from training-set failures. In the 9B run, the optimizer
+noticed that 11 of 14 failed tasks were *action* tasks ("send…", "delete…") where the model reported
+back what it did (`"Done"`, `"15"`), while the grader expects no answer. It rewrote the
+task-completion section of the prompt:
 
 ```diff
 -- If an answer is needed, e.g., for "How many songs are in the Spotify queue?", call it with the appropriate answer argument value.
@@ -94,6 +109,10 @@ of the prompt:
 +     (e.g. "Done", "Sent", "15") will FAIL the task even when every action you performed was correct.
 ```
 
+The 27B run started over from AppWorld's ReAct prompt and found the same failure in its own training
+tasks (8 of 10 failures, e.g. answering "Money sent back to Robert" after paying Robert back), then
+wrote its own version of the rule.
+
 ## How it works
 
 <p align="center">
@@ -101,10 +120,11 @@ of the prompt:
        alt="AutoHarness loop: set current_harness to the baseline; collect training-set trajectories; the optimizer LLM analyzes errors and edits the harness; if the new harness beats current_harness on the dev split it becomes current_harness, otherwise it is discarded; stop after N rounds or 2 rejections in a row; report benchmark results on the test split and output the best harness.">
 </p>
 
-- **Solver:** Qwen3.5-9B, served with SGLang on one Modal L40S (thinking disabled).
+- **Solver:** Qwen3.5-9B (one Modal L40S) or Qwen3.5-27B (one H100), served with SGLang, thinking disabled.
 - **Optimizer:** Claude Opus 4.8 via headless Claude Code (`claude -p`). It sees only failed *train*
   trajectories and its run's history file (`optimizer/history_<tag>.md`: earlier edits in this run and their
-  verdicts; each run starts fresh), and may edit only `harness/`.
+  verdicts; each run starts fresh), and may edit only that model's harness (`harness/` for 9B,
+  `harnesses/27b/` for 27B).
 - **Keep rule:** dev pass@1 must go up (ties broken by unit-test pass rate), and input tokens may rise at most 20%.
 - **Splits:** train (fresh 15 tasks per round) → dev (fixed 20 tasks) → test (168 tasks, touched once).
 - **Limits:** the loop runs **N = 3 rounds** (`MAX_ROUNDS`, override with `--rounds`). The parallel
@@ -112,6 +132,8 @@ of the prompt:
   (pass@1) of at most 50 agent steps, with replies capped at 1,500 tokens and a 32k context.
 
 ### What the loop tried
+
+**Qwen3.5-9B**
 
 | Round | Edit proposed from train failures | Dev pass@1 | Verdict |
 |---|---|---|---|
@@ -126,10 +148,28 @@ gate is what stopped it from shipping.
 Dev noise check: re-running both harnesses on the same 20 dev tasks gave ReAct 15% → 5% and
 AutoHarness 45% → 35%. Single runs move by about ±2 tasks; the ~30-point gap held.
 
+**Qwen3.5-27B**
+
+| Round | Edit proposed from train failures | Dev pass@1 | Verdict |
+|---|---|---|---|
+| 0 | AppWorld ReAct baseline | 20% | start |
+| 1 | Answer only explicit questions; never a confirmation or summary | **55%** | kept |
+| 2 | Loop guard in the agent code: warn on an identical repeated code block, stop after 3 repeats | 70% | kept (noise) |
+| 3 | Always page through search/list results (APIs return 5 items per call by default) | 80% | kept (within noise) |
+
+The 20-task dev set can't tell rounds 2 and 3 from noise. Round 2's guard never fired on any dev
+task, yet 3 tasks flipped to passing: run-to-run variation, not the edit. Round 3 flipped 4 tasks up
+and 2 down. The sequential loop has no noise margin, so it kept both (`optimizer/loop_parallel.py`
+requires a 2-task margin and re-scores the current best in the same batch). The guard only acts
+when the model repeats itself, so it is harmless either way. The 72.0% test score is for all three
+edits together, and the final dev score (80%) overstates it, as expected when keeping the best of
+noisy dev runs.
+
 ## What you get: the export
 
-`scripts/export.py` packages everything a user of the optimized harness needs into one folder
-([`export/appworld-qwen3.5-9b/`](export/appworld-qwen3.5-9b)):
+`scripts/export.py` packages everything a user of the optimized harness needs into one folder per
+model ([`export/appworld-qwen3.5-9b/`](export/appworld-qwen3.5-9b),
+[`export/appworld-qwen3.5-27b/`](export/appworld-qwen3.5-27b)):
 
 | File | What it's for |
 |---|---|
@@ -151,13 +191,16 @@ scripts/final_eval.sh       dev noise check + test_normal comparison
 scripts/external_eval.py    run an external harness (OpenCode) on AppWorld tasks, graded the same way
 scripts/mcp_filter_proxy.py MCP proxy: predicted APIs as tools + on-demand api_docs / call_api
 scripts/merge_summaries.py  combine partial runs of one experiment into one summary
+scripts/compare.py          paired comparison of two runs: McNemar, bootstrap CIs, answer-only breakdown
+scripts/run_27b.sh          the 27B experiment end to end: ReAct test, loop, final test (resumable)
 scripts/export.py           package the optimized harness + report + change log
-harness/                    the harness being optimized (the only thing the optimizer may edit)
+harness/                    the 9B harness being optimized (the only thing its optimizer may edit)
+harnesses/27b/              the 27B harness (its own copy, started from AppWorld's ReAct agent)
 optimizer/round.py          one round: train run → claude -p edits harness/ → commit
 optimizer/loop.py           rounds with automatic keep/reject on dev
 optimizer/candidates.py     parallel version: one diagnosis call, k editors, k candidates
 optimizer/loop_parallel.py  scores current best + k candidates together, keeps winner by a margin
-optimizer/history_9b.md     every edit and its verdict for the 9B run (one file per run)
+optimizer/history_*.md      every edit and its verdict, one file per run (9b, 27b)
 results/                    summary.json for every run
 ```
 
@@ -178,19 +221,27 @@ SOLVER=qwen3.5-9b modal deploy serve/sglang_server.py
 python optimizer/loop.py --rounds 3 --model qwen3.5-9b --tag 9b_
 bash scripts/final_eval.sh
 python scripts/export.py --name appworld-qwen3.5-9b --baseline results/9b_test_react --optimized results/9b_test_auto
+
+# Qwen3.5-27B on an H100: ReAct test, loop, and final test in one resumable script
+SOLVER=qwen3.5-27b modal deploy serve/sglang_server.py
+bash scripts/run_27b.sh
+python scripts/compare.py 27b_test_react 27b_test_auto
 ```
 
 Setup notes that cost time (AppWorld's Git LFS quota, SGLang vs. AppWorld response format,
-runaway generations) are in [PLAN.md](PLAN.md).
+runaway generations, AppWorld's frozen clock stalling Modal's container heartbeat) are in [PLAN.md](PLAN.md).
 
 ## Limitations
 
-- One benchmark (AppWorld), one solver (Qwen3.5-9B), 3 optimization rounds, and one kept edit.
-  The loop found one big win; more rounds have not yet shown whether gains keep compounding.
-- The dev set has 20 tasks, so each is worth 5 points and single runs move by about ±2 tasks. The
+- One benchmark (AppWorld) and two solvers from one family (Qwen3.5-9B and 27B), 3 optimization
+  rounds each. Both times the big win was one fix found in round 1; later rounds added nothing the
+  dev set could measure, so it is not yet shown whether gains keep compounding.
+- The dev set has 20 tasks, so each is worth 5 points and single runs move by about ±2–3 tasks. The
+  sequential loop has no noise margin: in the 27B run it kept an edit that never fired on dev. The
   test split (168 tasks) is the number to trust.
 - Test results are one run per harness. Sampling is temperature 0, but batched inference is not
   perfectly deterministic.
+- Time per task is not compared for 27B: its two test runs ran under different GPU load.
 - Leaderboard comparisons are context only: those entries used AppWorld's 2024 setup.
 - The OpenCode adapter is ours: API access goes through AppWorld's predictor plus on-demand lookup,
   and its prompt lacks the worked example the ReAct-style harnesses get. A different adapter could score differently. Prime

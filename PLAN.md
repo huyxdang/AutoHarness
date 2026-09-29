@@ -58,6 +58,7 @@ AppWorld's rules also forbid tuning on test.
 |---|---|---|
 | Solver (MVP) | Qwen3.5-4B (thinking disabled) | SGLang on Modal, 1×A10 |
 | Solver (main) | Qwen3.5-9B | SGLang on Modal (L40S) — decide after MVP |
+| Solver (size check) | Qwen3.5-27B (next dense size up, same family) | SGLang on Modal (H100 80 GB) |
 | Optimizer | Claude Code headless, **Claude Opus 4.8 (1M context), `claude-opus-4-8[1m]`** — one `claude -p` call per round does diagnosis + edit | user's subscription |
 | AppWorld + harness + grading | — | local Mac |
 
@@ -83,10 +84,25 @@ Qwen3.5 (Feb 2026) is the newest small Qwen family (0.8B/2B/4B/9B); Qwen3.6/3.8 
 - Qwen3.5 has no 8B; upgrade path is Qwen3.5-9B (~18 GB bf16 → needs L40S, or FP8 on A10).
 - Harness: `harness/react_agent.py` (copy of AppWorld's simplified ReAct agent, registered as
   `autoharness_react_code_agent`) + `harness/prompt.txt`. Optimizer: `optimizer/round.py`.
+- **Modal heartbeat vs. AppWorld's frozen clock (found 2026-09-29, 27B run):** AppWorld freezes time
+  with freezegun while a task runs. In a Modal container that also froze the Modal runtime's asyncio
+  heartbeat loop for good (local repro: 5 beats before freezing, 1 during, 0 after unfreezing), and
+  Modal kills a container 900 s after its last heartbeat ("Runner heartbeat timeout"), so every task
+  still running 15 min after its container's first task started was killed and retried forever. 9B
+  never hit it (all Modal tasks < 900 s). Fix: `scripts/modal_eval.py` runs each task in a child
+  Python process. Also added: resume (`AUTOHARNESS_RESUME=1` keeps tasks recorded in
+  `results/<exp>/seconds.json`), a per-run container cap (`AUTOHARNESS_MAX_CONTAINERS`), and the
+  optimizer guard now skips `results/` (a test run finishing during a Claude edit would have lost its summary).
+- 27B server capacity (H100, bf16, 32k context): ~16 requests run at once (KV cache ~88% full) and the
+  rest queue; SGLang's prefix cache barely hits on this hybrid (Gated DeltaNet) model (~313 cached
+  tokens per request), so every agent step re-prefills the conversation. 68 tasks in flight made tasks
+  2× slower than 32 with no throughput gain, and every waiting CPU container is billed.
+- Modal occasionally preempts CPU containers ("Container terminated due to preemption"); the task is
+  restarted automatically with the same input, so results are unaffected.
 
 ### Compute / budget
-- Modal profile to use: **`hellgod67`** (~$20 credits left as of 2026-09-28). The globally active
-  profile is a different one — run Modal commands with `MODAL_PROFILE=hellgod67`.
+- Modal profile to use: **`dangxhwee2003`** since 2026-09-29 (`hellgod67` before; its credits are
+  used up). The globally active profile may differ — run Modal commands with `MODAL_PROFILE=dangxhwee2003`.
 - Keep costs down: scale-to-zero when idle, cache weights in a Modal Volume, run 8–16 AppWorld
   tasks in parallel against one server.
 - Local machine: Apple M2, 16 GB RAM, Python 3.11/3.12 + uv installed, Ollama installed (local fallback).
@@ -256,3 +272,31 @@ Final batch (24 tasks, new workspace, after an OpenCode stdin hang fix): OpenCod
 **28.0% (47/168)**, SGC 8.9%, tests 61.9%, 446k input tok/task. AutoHarness vs OpenCode v2: 50 vs 14,
 +21.4 pts (95% CI +12.5 to +30.4), p ≈ 7e-6. OpenCode v2 vs ReAct: 32 vs 18, p ≈ 0.07 (not significant on the
 full set). 29 of OpenCode's 121 failures are answer-only (the mistake AutoHarness's edit fixes).
+
+**Qwen3.5-27B (2026-09-29):** same protocol as 9B, run by `scripts/run_27b.sh` (H100; its own harness
+copy `harnesses/27b/`, starting from AppWorld's ReAct agent; history `optimizer/history_27b.md`). The first
+attempt hit the Modal heartbeat bug (see Setup notes) and was restarted with resume, keeping 99 ReAct-test
+and 15 round-0 dev tasks.
+
+| Round | Edit | Dev pass@1 | Decision |
+|---|---|---|---|
+| 0 | AppWorld ReAct baseline | 20% | start |
+| 1 | Answer only explicit questions (no confirmation/summary answers) | 55% | kept |
+| 2 | Loop guard in react_agent.py (identical repeated code: warn, stop after 3) | 70% | kept (noise: the guard never fired on dev) |
+| 3 | Always paginate search/list APIs (default page_limit 5) | 80% | kept (net +2 tasks: 4 up, 2 down; within noise) |
+
+**test_normal (168 tasks, run once each):**
+
+| Harness | pass@1 | SGC | Unit tests | Input tok/task | Steps |
+|---|---|---|---|---|---|
+| AppWorld ReAct | 35.1% (59/168) | 26.8% | 80.4% | 139k | 16.4 |
+| AutoHarness (rounds 1–3) | **72.0% (121/168)** | 55.4% | 87.3% | 152k | 16.6 |
+
+Paired: 70 only-auto vs 8 only-ReAct, +36.9 pts (95% CI +28.0 to +45.8 over tasks, +25.0 to +48.8 over
+scenarios), McNemar p ≈ 1.7e-13. 52 of the 70 gains were answer-only fixes; the other 18 vs the 8 losses:
+p = 0.076. Answer-only failures: ReAct 67 of 109, AutoHarness 8 of 47.
+Cross-model (same 168 tasks): 27B vs 9B ReAct 34 vs 8 (p ≈ 7e-5); 9B AutoHarness vs 27B ReAct 39 vs 15
+(p = 0.0015); 27B vs 9B AutoHarness 54 vs 16 (p ≈ 6e-6).
+Sec/task is not comparable: 99 ReAct-test tasks ran with 68 tasks in flight, the rest with ~32.
+Cost ≈ $20 of Modal credit (≈3.3 H100-hours plus CPU containers; an estimate, check the dashboard);
+wall time ≈ 3 h 15 min. Export: `export/appworld-qwen3.5-27b/`. Stats: `scripts/compare.py`.

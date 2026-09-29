@@ -1,0 +1,14 @@
+# Run config for the exported harness. The harness was optimized for exactly this setup;
+# changing the model or sampling settings means re-validating it.
+solver:
+  model: Qwen/Qwen3.5-27B            # Hugging Face id
+  served_name: qwen3.5-27b
+  serving: SGLang, chat template forced to enable_thinking=false
+sampling:
+  temperature: 0.0
+  max_tokens: 1500              # per model reply
+  stop: ["```\n"]              # end of the code block
+agent:
+  type: autoharness_react_code_agent   # harness/react_agent.py
+  prompt: harness/prompt.txt
+  max_steps: 50

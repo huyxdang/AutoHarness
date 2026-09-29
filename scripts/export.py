@@ -3,6 +3,8 @@ and the change log, in one folder.
 
     python scripts/export.py --name appworld-qwen3.5-9b \
         --baseline results/9b_test_react --optimized results/9b_test_auto
+    python scripts/export.py --name appworld-qwen3.5-27b --history optimizer/history_27b.md \
+        --baseline results/27b_test_react --optimized results/27b_test_auto
 """
 
 import argparse
@@ -29,7 +31,7 @@ agent:
   max_steps: 50
 """
 
-HF_MODELS = {"qwen3.5-9b": "Qwen/Qwen3.5-9B", "qwen3.5-4b": "Qwen/Qwen3.5-4B"}
+HF_MODELS = {"qwen3.5-9b": "Qwen/Qwen3.5-9B", "qwen3.5-4b": "Qwen/Qwen3.5-4B", "qwen3.5-27b": "Qwen/Qwen3.5-27B"}
 
 
 def row(label: str, s: dict) -> str:
@@ -52,8 +54,9 @@ def main() -> None:
     out = PROJECT_ROOT / "export" / args.name
     shutil.rmtree(out, ignore_errors=True)
     (out / "harness").mkdir(parents=True)
+    harness_dir = PROJECT_ROOT / (opt.get("harness_dir") or "harness")  # the harness the optimized run used
     for name in ("prompt.txt", "react_agent.py"):
-        shutil.copy(PROJECT_ROOT / "harness" / name, out / "harness" / name)
+        shutil.copy(harness_dir / name, out / "harness" / name)
 
     model = opt["model"]
     (out / "config.yaml").write_text(CONFIG.format(hf_model=HF_MODELS.get(model, model), model=model))
