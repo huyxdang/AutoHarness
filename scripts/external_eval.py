@@ -141,8 +141,10 @@ def run_opencode(prompt: str, apis_url: str, app_names: list[str], allowed_tools
            "--dir", str(work_dir), prompt]
     with log_path.open("w") as log:
         # Own process group, so the timeout also stops OpenCode's MCP children.
-        proc = subprocess.Popen(cmd, cwd=work_dir, env=env, stdout=log, stderr=subprocess.STDOUT,
-                                start_new_session=True)
+        # stdin=DEVNULL: `opencode run` reads piped stdin as extra message text and would wait forever
+        # on an open stdin inherited from the launching shell.
+        proc = subprocess.Popen(cmd, cwd=work_dir, env=env, stdin=subprocess.DEVNULL, stdout=log,
+                                stderr=subprocess.STDOUT, start_new_session=True)
         deadline = time.time() + TASK_TIMEOUT  # wall clock
         while proc.poll() is None:
             if time.time() > deadline:
