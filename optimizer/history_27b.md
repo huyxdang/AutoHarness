@@ -11,3 +11,8 @@ Dev: pass@1 20.0%, tests 74.6%, 92,739 input tok/task, 13.6 steps/task
 - Edit: 1 of the 5 failed train tasks (d0b1f43_1) showed the repeated-failing-call pattern — it re-ran a byte-identical failing code block 11 times to the 50-step cap, burning 827k input tokens (5× average) and never calling complete_task — so I added a loop guard in react_agent.py that detects consecutive identical code submissions, injects a course-correction notice urging a different approach, and terminates the episode after 3 repeats.
 - Dev after edit: pass@1 70.0%, tests 88.6%, 100,576 input tok/task, 14.1 steps/task
 - Best dev so far: pass@1 70.0%, tests 88.6%, 100,576 input tok/task, 14.1 steps/task
+
+### Round 3 — KEPT (better on dev and within token budget)
+- Edit: 1 of the 3 failed train tasks (afc0fce_2) failed because the agent called a search/list API (`search_friends`) once and relied on the default `page_limit=5`, silently truncating the friends list and producing the wrong set of records to modify — a latent bug in the broader completeness/pagination failure class — so I rewrote the pagination bullet in section B to forcefully state that every search/list API (friends/contacts, users, transactions, library, notes, etc.) defaults to only 5 items per call and must always be fully paginated with `page_limit=20` looping `page_index` until an empty page before counting, filtering, or acting.
+- Dev after edit: pass@1 80.0%, tests 91.2%, 107,747 input tok/task, 14.1 steps/task
+- Best dev so far: pass@1 80.0%, tests 91.2%, 107,747 input tok/task, 14.1 steps/task
