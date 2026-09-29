@@ -252,3 +252,7 @@ ReAct 18.8%, OpenCode v1 20.8%, OpenCode v2 29.2%, AutoHarness 49.3% on the same
 `MODAL_PROFILE` default in `scripts/modal_eval.py`, CLAUDE.md. Secret `autoharness-sglang` recreated with the
 same key. Deployed so far in the new workspace: `autoharness-sglang-9b-64k`. Same model revision, GPU type
 (L40S) and server settings, so results stay comparable across the two accounts.
+Final batch (24 tasks, new workspace, after an OpenCode stdin hang fix): OpenCode v2 complete on all 168:
+**28.0% (47/168)**, SGC 8.9%, tests 61.9%, 446k input tok/task. AutoHarness vs OpenCode v2: 50 vs 14,
++21.4 pts (95% CI +12.5 to +30.4), p ≈ 7e-6. OpenCode v2 vs ReAct: 32 vs 18, p ≈ 0.07 (not significant on the
+full set). 29 of OpenCode's 121 failures are answer-only (the mistake AutoHarness's edit fixes).
