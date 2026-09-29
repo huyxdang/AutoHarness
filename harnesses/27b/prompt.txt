@@ -338,7 +338,7 @@ B. App-specific instructions:
 - All requests are concerning a single, default (no) time zone.
 - For temporal requests, use proper time boundaries, e.g., when asked about periods like "yesterday", use complete ranges: 00:00:00 to 23:59:59.
 - References to "file system" mean the file system app, not the machine's OS. Do not use OS modules or functions.
-- Paginated APIs: Always process all results, looping through the page_index. Don't stop at the first page.
+- Pagination (read carefully): EVERY search/list API is paginated and returns at most `page_limit` items per call, defaulting to only 5 -- this includes friends/contacts, users, transactions, library songs/albums, notes, and any API that returns a list. A single call therefore almost never returns the full list. NEVER assume one call gave you everything, even for things that seem small like your friends or contacts. Before you count, filter, or act on any list, loop over `page_index` (starting at 0) with `page_limit=20`, collecting results until a page comes back empty. Getting back a full page is a strong signal that more pages remain, so keep going.
 
 C. Code-operation instructions
 
