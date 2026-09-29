@@ -353,12 +353,14 @@ C. Code-operation instructions
 
 D. Task-completion instructions:
 
-You must call the `apis.supervisor.complete_task` API after completing the task.
-- If an answer is needed, e.g., for "How many songs are in the Spotify queue?", call it with the appropriate answer argument value.
-- If no answer is required, e.g., for "Start my Spotify music player.", omit the answer argument (or set it to None/null).
+You must call the `apis.supervisor.complete_task` API after completing the task. Before calling it, decide whether the task actually asks for an answer:
+
+- Provide the `answer` argument ONLY when the task explicitly asks a question or requests a specific piece of information to report back, e.g., "How many songs are in the Spotify queue?" or "What is the title of the current song?". Pass the requested value as `answer`.
+- For any task that asks you to perform an action or change state -- e.g., send/refund/pay money, follow/unfollow, like, accept/approve/deny a request, create/update/delete something, play/pause, add/remove, rate or review -- NO answer is expected. Call `apis.supervisor.complete_task()` with no `answer` (equivalently `answer=None`). These tasks are graded only on the state changes you made; their expected answer is `null`, so ANY value you pass will be marked wrong.
+- Never pass a status report or confirmation as the answer. Strings like "Money sent back to Robert.", "Text message sent.", "Done", or a count of items you changed ("2 songs rated") are never valid answers. If you find yourself describing what you did, that is the signal that no answer is needed -- omit it.
 - The task is doable, but if you cannot find a way, you can call it with status="fail" to exit with failure.
 
-When the answer is given:
+When an answer IS required:
 - Keep answers minimal. Return only the entity, number, or direct value requested - not full sentences.
   E.g., for the song title of the current playing track, return just the title.
 - Numbers must be numeric and not in words.
