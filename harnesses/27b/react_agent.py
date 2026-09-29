@@ -30,6 +30,16 @@ class AutoHarnessReActCodeAgent(Agent):  # type: ignore[misc]
         self.ignore_multiple_calls = ignore_multiple_calls
         self.partial_code_regex = r".*```python\n(.*)"
         self.full_code_regex = r"```python\n(.*?)```"
+        # Loop guard: small models sometimes re-submit the exact same failing code
+        # block over and over (e.g. a bad login/API call caught in try/except) until
+        # they hit the step cap, wasting huge amounts of tokens and never completing.
+        # Detect consecutive identical code, warn the model to change approach, then
+        # terminate the episode if it keeps repeating.
+        self._last_executed_code: str | None = None
+        self._consecutive_repeat_count = 0
+        self._warn_repeat = False
+        self.loop_warn_after = 1  # inject a course-correction notice at this many repeats
+        self.loop_stop_after = 3  # give up (fail) after this many identical repeats
 
     def initialize(self, world: AppWorld) -> None:
         super().initialize(world)
@@ -65,6 +75,18 @@ class AutoHarnessReActCodeAgent(Agent):  # type: ignore[misc]
             last_execution_output_content = (
                 "Output:\n```\n" + last_execution_output_content + maybe_new_line + "```\n\n"
             )
+            if self._warn_repeat:
+                notice = (
+                    "[HARNESS NOTICE] You just executed the exact same code you already "
+                    "ran and it produced the same result again. Repeating it will not "
+                    "make progress. Do NOT run that code block again. Instead: read the "
+                    "error/output above carefully, check the relevant API doc "
+                    "(apis.api_docs.show_api_doc) or inspect your intermediate variables "
+                    "to find the real cause, and then try a genuinely DIFFERENT approach. "
+                    "If the task truly cannot be completed, call "
+                    "apis.supervisor.complete_task(status='fail').\n\n"
+                )
+                last_execution_output_content = notice + last_execution_output_content
             self.messages.append({"role": "user", "content": last_execution_output_content})
         messages = self.trimmed_messages
         output = self.language_model.generate(messages=messages, cache_control_at=-1)
@@ -86,6 +108,23 @@ class AutoHarnessReActCodeAgent(Agent):  # type: ignore[misc]
             raw_message=raw_message,
             step_number=self.step_number,
         )
+        # Loop guard: track consecutive identical code submissions.
+        normalized_code = code.strip()
+        if normalized_code and normalized_code == self._last_executed_code:
+            self._consecutive_repeat_count += 1
+        else:
+            self._consecutive_repeat_count = 0
+        self._last_executed_code = normalized_code
+        self._warn_repeat = bool(normalized_code) and (
+            self._consecutive_repeat_count >= self.loop_warn_after
+        )
+        if normalized_code and self._consecutive_repeat_count >= self.loop_stop_after:
+            stop_message = (
+                "Terminated by harness: the same code block was executed "
+                f"{self._consecutive_repeat_count + 1} times in a row without making "
+                "progress (repeated-failure loop)."
+            )
+            return [], standardized_usage, Status(failed=True, message=stop_message)
         return [ExecutionIO(content=code)], standardized_usage, Status(failed=False)
 
     def extract_code_and_fix_content(self, text: str) -> tuple[str, str]:
