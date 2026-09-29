@@ -188,22 +188,33 @@ def main() -> None:
     (out_dir / "task_ids.txt").write_text("\n".join(task_ids) + "\n")
 
     agent_config = build_agent_config(args)
-    workers = min(args.workers, len(task_ids))
-    print(f"Running {len(task_ids)} {args.dataset} tasks ({args.backend}): {task_ids}")
+    # AUTOHARNESS_RESUME=1 resumes an interrupted run: tasks already finished under this experiment
+    # name (recorded in seconds.json as each one finishes) are kept instead of rerun.
+    seconds_path = out_dir / "seconds.json"
+    done = {}
+    if os.environ.get("AUTOHARNESS_RESUME") == "1" and seconds_path.exists():
+        tasks_dir = APPWORLD_ROOT / "experiments/outputs" / args.experiment / "tasks"
+        done = {t: s for t, s in json.loads(seconds_path.read_text()).items()
+                if t in task_ids and (tasks_dir / t).is_dir()}
+    todo = [t for t in task_ids if t not in done]
+    workers = min(args.workers, len(todo))
+    print(f"Running {len(todo)} {args.dataset} tasks ({args.backend}, {len(done)} already done): {todo}")
 
-    wait_for_server(args.base_url)
+    if todo:
+        wait_for_server(args.base_url)
     wall_start = time.time()
-    if args.backend == "modal":
+    seconds = dict(done)
+    if todo and args.backend == "modal":
         import modal_eval
 
         # Paths inside the project resolve to the same place in the container.
         agent_config["prompt_file_path"] = agent_config["prompt_file_path"].replace(
             str(PROJECT_ROOT), modal_eval.REMOTE_PROJECT)
-        seconds = modal_eval.run_tasks_remote(agent_config, args.experiment, task_ids, args.base_url,
-                                              harness_dir=args.harness_dir)
-    else:
-        chunks = [task_ids[i::workers] for i in range(workers)]
-        seconds = {}
+        seconds = modal_eval.run_tasks_remote(agent_config, args.experiment, todo, args.base_url,
+                                              harness_dir=args.harness_dir, seconds_path=seconds_path,
+                                              seconds=done)
+    elif todo:
+        chunks = [todo[i::workers] for i in range(workers)]
         with ProcessPoolExecutor(max_workers=workers) as pool:
             futures = [pool.submit(solve_chunk, agent_config, args.experiment, c) for c in chunks]
             for future in futures:
@@ -239,7 +250,8 @@ def main() -> None:
         "avg_output_tokens": round(sum(r["output_tokens"] for r in rows) / n),
         "avg_steps": round(sum(r["steps"] for r in rows) / n, 1),
         "avg_seconds": round(sum(r["seconds"] or 0 for r in rows) / n, 1),
-        "wall_seconds": wall_seconds,
+        "wall_seconds": wall_seconds,  # this invocation only: excludes tasks resumed from an earlier one
+        "resumed_tasks": len(done),
         "tasks": rows,
     }
     (out_dir / "summary.json").write_text(json.dumps(summary, indent=2))
