@@ -300,3 +300,22 @@ Cross-model (same 168 tasks): 27B vs 9B ReAct 34 vs 8 (p ≈ 7e-5); 9B AutoHarne
 Sec/task is not comparable: 99 ReAct-test tasks ran with 68 tasks in flight, the rest with ~32.
 Cost ≈ $20 of Modal credit (≈3.3 H100-hours plus CPU containers; an estimate, check the dashboard);
 wall time ≈ 3 h 15 min. Export: `export/appworld-qwen3.5-27b/`. Stats: `scripts/compare.py`.
+
+**OpenCode on Qwen3.5-27B (2026-09-29):** same v2 adapter (`scripts/external_eval.py`) on a separate
+64k-context H100 app `autoharness-sglang-27b-64k` (same model revision), 8 workers, shuffle seed 0, 20-min
+per-task cap (never hit, 0 timeouts). Budget guard: start window extended 60 → 100 → 120 min across three
+parts (104 + 56 + 8 tasks; experiments `27b_test_opencode` / `_part2` / `_part3`), merged into
+`results/27b_test_opencode` with `scripts/merge_summaries.py`. GPU cost ≈ $7.8 (estimate).
+
+| Harness (27B) | pass@1 | SGC | Unit tests | Input tok/task | Steps |
+|---|---|---|---|---|---|
+| AppWorld ReAct | 35.1% (59/168) | 26.8% | 80.4% | 139k | 16.4 |
+| AutoHarness (rounds 1–3) | 72.0% (121/168) | 55.4% | 87.3% | 152k | 16.6 |
+| OpenCode 1.18.33 | **76.8% (129/168)** | **62.5%** | **89.0%** | 268k | 12.6 |
+
+OpenCode vs AutoHarness: 26 vs 18 discordant, +4.8 pts (95% CI −3.0 to +12.5 over tasks, −6.0 to +14.9 over
+scenarios), McNemar p = 0.29 (not significant). OpenCode vs ReAct: 80 vs 10, +41.7 pts, p ≈ 1e-14.
+OpenCode 27B vs 9B: 83 vs 1, +48.8 pts, p ≈ 9e-24. Answer-only failures: OpenCode 27B 1 of 39 (vs 29 of 121
+on 9B, AutoHarness 27B 8 of 47): the 27B follows OpenCode's one-line no-answer rule, the 9B does not.
+Takeaway: a tailored harness matters most for small models; at 27B the off-the-shelf harness matches or
+beats AutoHarness at 1.8× the input tokens.

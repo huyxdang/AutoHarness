@@ -9,6 +9,8 @@ agent benchmark with no weight changes, from harness fixes found by hand
 ([post](https://adaptionlabs.ai/blog/a-better-harness-can-unlock-smaller-models)).
 AutoHarness automates that loop and tests it on a public benchmark: on AppWorld's held-out test
 split it takes Qwen3.5-9B from 19.6% to 49.4% and Qwen3.5-27B from 35.1% to 72.0%, with no weight changes.
+Against a strong off-the-shelf agent (OpenCode), it wins clearly on 9B (49.4% vs. 28.0%) and is
+level on 27B (72.0% vs. 76.8%, not significant), where OpenCode uses 1.8× the input tokens.
 
 ## Result
 
@@ -37,27 +39,35 @@ every row:
 - Statistics: `python scripts/compare.py <baseline run> <new run>` (McNemar, bootstrap CIs over tasks
   and over scenarios, answer-only breakdown).
 
-### vs. an off-the-shelf agent harness: OpenCode (9B)
+### vs. an off-the-shelf agent harness: OpenCode
 
-[OpenCode](https://github.com/anomalyco/opencode) 1.18.33 with the same Qwen3.5-9B, on the same
+[OpenCode](https://github.com/anomalyco/opencode) 1.18.33 with the same models, on the same
 168 test tasks:
 
-| All 168 test tasks | pass@1 | Scenarios fully solved | Unit tests passed | Input tokens / task | Steps / task |
-|---|---|---|---|---|---|
-| AppWorld ReAct (baseline) | 19.6% (33/168) | 7.1% | 67.4% | 171k | 19.2 |
-| OpenCode | 28.0% (47/168) | 8.9% | 61.9% | 446k | 20.3 |
-| **AutoHarness** | **49.4% (83/168)** | **25.0%** | **75.2%** | **166k** | 18.5 |
+| Model | Harness | pass@1 | Scenarios fully solved | Unit tests passed | Input tokens / task | Steps / task |
+|---|---|---|---|---|---|---|
+| Qwen3.5-9B | AppWorld ReAct (baseline) | 19.6% (33/168) | 7.1% | 67.4% | 171k | 19.2 |
+| Qwen3.5-9B | OpenCode | 28.0% (47/168) | 8.9% | 61.9% | 446k | 20.3 |
+| Qwen3.5-9B | **AutoHarness** | **49.4% (83/168)** | **25.0%** | **75.2%** | **166k** | 18.5 |
+| Qwen3.5-27B | AppWorld ReAct (baseline) | 35.1% (59/168) | 26.8% | 80.4% | 139k | 16.4 |
+| Qwen3.5-27B | AutoHarness | 72.0% (121/168) | 55.4% | 87.3% | **152k** | 16.6 |
+| Qwen3.5-27B | **OpenCode** | **76.8% (129/168)** | **62.5%** | **89.0%** | 268k | 12.6 |
 
-- **AutoHarness vs. OpenCode:** 50 tasks solved only by AutoHarness, 14 only by OpenCode
+- **On 9B, AutoHarness wins clearly:** 50 tasks solved only by AutoHarness, 14 only by OpenCode
   (+21.4 points, 95% CI +12.5 to +30.4, p ≈ 7×10⁻⁶), with 2.7× fewer input tokens per task.
-- OpenCode is ahead of plain ReAct (32 vs. 18 tasks solved by only one of them), but that difference
-  is not statistically significant (p ≈ 0.07).
-- Why a strong general harness loses here: 29 of OpenCode's 121 failures are the same mistake
-  AutoHarness's edit fixes (every action done, then an answer given where none is expected). The rule
-  is in OpenCode's prompt too, in its original one-line form; the 9B model does not follow it
-  reliably. Crediting those 29 would put OpenCode at 45.2%. OpenCode also sends ~11k tokens of system
-  prompt and tool schemas with every request vs. ~3.6k for AutoHarness. It is built for frontier
-  models and coding; this is a 9B model on app APIs.
+  OpenCode is ahead of plain ReAct (32 vs. 18), but that difference is not significant (p ≈ 0.07).
+- **On 27B, OpenCode is level or slightly ahead:** 26 tasks solved only by OpenCode, 18 only by
+  AutoHarness (+4.8 points for OpenCode, 95% CI −3.0 to +12.5, p = 0.29, not significant), while
+  sending 1.8× the input tokens per task. Both are far ahead of ReAct (OpenCode vs. ReAct: 80 vs. 10).
+- **Why the gap closes with size:** the main failure AutoHarness fixes (every action done, then an
+  answer given where none is expected) is covered by a one-line rule in OpenCode's prompt too. The
+  9B model does not follow it reliably (29 of OpenCode's 121 failures are this mistake; crediting
+  them would put it at 45.2%); the 27B model does (1 of 39 failures). OpenCode is built for frontier
+  models: ~11k tokens of system prompt and tool schemas with every request (vs. ~3.6k for
+  AutoHarness) and a 64k context. The bigger the model, the more of that general-purpose design it
+  can use; a harness tailored to the model matters most for small models.
+- OpenCode's own scaling: 9B → 27B is 28.0% → 76.8% (83 vs. 1 tasks), far steeper than ReAct's
+  19.6% → 35.1% or AutoHarness's 49.4% → 72.0%.
 - For context, the public [AppWorld leaderboard](https://appworld.dev/appworld/leaderboard) lists
   GPT-4o + ReAct at 48.8% and Llama3-70B + ReAct at 20.8% on the same split (2024 entries, so not
   identical conditions).
@@ -81,15 +91,16 @@ OpenCode's own agent loop, planning, and context compaction ran as shipped. The 
   schemas take ~11k tokens per request. In the first run, 23 tasks sent a request over 32k and
   OpenCode solved 1 of them, so the extra room did not decide the comparison.
 - **Safety:** it runs on the local machine, so OpenCode's shell, file-editing, web, and filesystem
-  tools are off. A 20-minute wall-clock cap per task applied.
+  tools are off. A 20-minute wall-clock cap per task applied (never hit in the final runs).
+- **27B:** the same adapter, on a separate 64k-context H100 server with the same model revision.
 
 **First run, before the audit:** 22.6% on all 168 tasks (38/168). An audit found two adapter
 problems, not OpenCode problems: (1) with only the predicted APIs, half the tasks were missing an
 API they needed (162 attempts to call unavailable tools); (2) OpenCode's read-only file tools were
 still on, and in 21 tasks the model searched the *host's* files for AppWorld's file-system app,
 solving none of them. Fixing both (and pinning temperature 0) moved OpenCode from 22.6% to 28.0% on
-all 168 tasks. Tool-call parsing, the task clock, and grading were checked and were correct. (This
-final run was completed in three parts because of GPU budget; the parts are merged with
+all 168 tasks. Tool-call parsing, the task clock, and grading were checked and were correct. (The
+final 9B and 27B runs were each completed in parts because of GPU budget; the parts are merged with
 `scripts/merge_summaries.py`.)
 
 </details>
@@ -243,8 +254,12 @@ runaway generations, AppWorld's frozen clock stalling Modal's container heartbea
   perfectly deterministic.
 - Time per task is not compared for 27B: its two test runs ran under different GPU load.
 - Leaderboard comparisons are context only: those entries used AppWorld's 2024 setup.
+- AutoHarness does not beat a strong off-the-shelf harness at every size: on 27B, OpenCode scores
+  4.8 points higher (not significant) at 1.8× the tokens. The loop started from AppWorld's ReAct
+  agent, not from OpenCode; starting it from a stronger harness is untested.
 - The OpenCode adapter is ours: API access goes through AppWorld's predictor plus on-demand lookup,
-  and its prompt lacks the worked example the ReAct-style harnesses get. A different adapter could score differently. Prime
+  its prompt lacks the worked example the ReAct-style harnesses get, and it runs with a 64k context
+  (vs. 32k). A different adapter could score differently. Prime
   Agent was not compared: its Python REPL runs unsandboxed on the host, and it was left out of scope.
 - The harness is prompt + agent loop only. Tool wrappers, memory, and context compaction are not
   yet in the search space (two dev tasks still overflowed the 32k context).
