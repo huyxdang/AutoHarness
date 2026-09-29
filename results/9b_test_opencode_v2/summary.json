@@ -32,7 +32,8 @@
       "steps": 8,
       "tool_calls": 7,
       "appworld_tool_calls": 6,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "f3f60f0_2",
@@ -46,7 +47,10 @@
       "steps": 8,
       "tool_calls": 27,
       "appworld_tool_calls": 26,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "9016950_3",
@@ -60,7 +64,10 @@
       "steps": 15,
       "tool_calls": 20,
       "appworld_tool_calls": 17,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert receiver_ids of added global text messages match"
+      ]
     },
     {
       "task_id": "552869a_3",
@@ -74,7 +81,8 @@
       "steps": 7,
       "tool_calls": 9,
       "appworld_tool_calls": 9,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "2c544f9_3",
@@ -88,7 +96,14 @@
       "steps": 7,
       "tool_calls": 8,
       "appworld_tool_calls": 7,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match venmo.Transaction, venmo.Notification,",
+        "obtain added, updated, removed venmo.Transaction records using",
+        "assert the added transaction's receiver_id is private_data.person_venmo_user_id.",
+        "assert the added transaction has amount public_data.amount."
+      ]
     },
     {
       "task_id": "90adc3f_3",
@@ -102,7 +117,10 @@
       "steps": 20,
       "tool_calls": 32,
       "appworld_tool_calls": 26,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "0d01c76_3",
@@ -116,7 +134,11 @@
       "steps": 24,
       "tool_calls": 64,
       "appworld_tool_calls": 61,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert the added notes' contents match values of",
+        "assert the added notes' title to content mapping match"
+      ]
     },
     {
       "task_id": "32616b5_3",
@@ -130,7 +152,14 @@
       "steps": 14,
       "tool_calls": 39,
       "appworld_tool_calls": 36,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert the group_id_to_expense_amounts from added expenses match",
+        "assert the group_id_to_payer_ids from added expenses match",
+        "assert the group_id_to_debtor_ids from the added expense shares match",
+        "assert the group_id_to_payer_to_debtor_ids from the added expense shares match",
+        "assert the group_id_to_debtor_id_to_amounts from the added expense shares match"
+      ]
     },
     {
       "task_id": "270f1ff_3",
@@ -144,7 +173,13 @@
       "steps": 8,
       "tool_calls": 18,
       "appworld_tool_calls": 17,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "obtain added, updated, deleted venmo.Transactions using models.changed_records",
+        "assert the added transaction is from main_user to",
+        "assert the added transaction has amount private_data.this_year_gift_amount",
+        "assert the added global_text_message is from main_user to"
+      ]
     },
     {
       "task_id": "b6d1104_3",
@@ -158,7 +193,19 @@
       "steps": 82,
       "tool_calls": 87,
       "appworld_tool_calls": 83,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match simple_note.Note.",
+        "obtain added, updated, deleted simple_note.Note records using",
+        "parse the updated note content to obtain month_to_expense, and",
+        "assert there one of the key-value entry in month_to_expense",
+        "assert set of months in month_to_expense match set of keys in",
+        "assert full month_to_expense dict matches private_data.month_to_expense",
+        "assert the months in month_to_expense are in private_data.month_order order.",
+        "assert The note's content starts with \"# Venmo Expenses\".",
+        "assert updated_note has not changed in title, pinned"
+      ]
     },
     {
       "task_id": "8ce6779_1",
@@ -172,7 +219,16 @@
       "steps": 16,
       "tool_calls": 23,
       "appworld_tool_calls": 21,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match todoist.Task, todoist.TaskComment.",
+        "assert the keys of the updated_tasks match the set of task_ids in",
+        "assert updated_task_ids have only updated in assigner_id, assignee_id",
+        "assert the task_id_to_assignee_id obtained from the updated_tasks matches the",
+        "assert the set of added task comment task_ids matches the",
+        "assert the task_id_to_comment_text obtained from the added_task_comments matches"
+      ]
     },
     {
       "task_id": "afc4005_1",
@@ -186,7 +242,8 @@
       "steps": 10,
       "tool_calls": 11,
       "appworld_tool_calls": 11,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "042a9fc_2",
@@ -200,7 +257,8 @@
       "steps": 15,
       "tool_calls": 35,
       "appworld_tool_calls": 29,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "c77c005_1",
@@ -214,7 +272,11 @@
       "steps": 7,
       "tool_calls": 14,
       "appworld_tool_calls": 14,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert friend_ids from added friendships match exactly to",
+        "assert friend_ids from removed friendships match exactly to"
+      ]
     },
     {
       "task_id": "09b0ee6_1",
@@ -228,7 +290,10 @@
       "steps": 13,
       "tool_calls": 91,
       "appworld_tool_calls": 91,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert \",\"-split ground_truth_answer and predicted_answer are the same,"
+      ]
     },
     {
       "task_id": "522e5e5_2",
@@ -242,7 +307,8 @@
       "steps": 13,
       "tool_calls": 28,
       "appworld_tool_calls": 27,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "cef9191_1",
@@ -256,7 +322,8 @@
       "steps": 6,
       "tool_calls": 6,
       "appworld_tool_calls": 6,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "9dabbc9_1",
@@ -270,7 +337,8 @@
       "steps": 8,
       "tool_calls": 8,
       "appworld_tool_calls": 6,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "d6ac34d_3",
@@ -284,7 +352,17 @@
       "steps": 25,
       "tool_calls": 29,
       "appworld_tool_calls": 27,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match simple_note.Note.",
+        "assert exactly 1 simple_note.Note was added.",
+        "assert the added note's title matches private_data.expected_title.",
+        "assert the added note's pinned status matches private_data.expected_pinned.",
+        "assert the first line of the added note's content matches",
+        "assert the load_yaml on the rest of the lines match private_data.expected_data",
+        "assert the note has tags private_data.expected_tags"
+      ]
     },
     {
       "task_id": "bde252e_2",
@@ -298,7 +376,15 @@
       "steps": 17,
       "tool_calls": 65,
       "appworld_tool_calls": 58,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "obtain added, updated, removed todoist.Task records using",
+        "assert the removed tasks' IDs match",
+        "assert the added tasks' project_id matches private_data.goal_project_id.",
+        "assert the task_title_to_descriptions obtained from the added tasks match",
+        "assert the task_title_to_minutes obtained from the added tasks match",
+        "assert all added tasks have the same priority as private_data.priority"
+      ]
     },
     {
       "task_id": "ff58e36_2",
@@ -312,7 +398,10 @@
       "steps": 21,
       "tool_calls": 33,
       "appworld_tool_calls": 31,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "024c982_3",
@@ -326,7 +415,8 @@
       "steps": 6,
       "tool_calls": 9,
       "appworld_tool_calls": 7,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "d194965_3",
@@ -340,7 +430,8 @@
       "steps": 15,
       "tool_calls": 46,
       "appworld_tool_calls": 32,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "3aa1a22_3",
@@ -354,7 +445,10 @@
       "steps": 8,
       "tool_calls": 21,
       "appworld_tool_calls": 21,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert set of group_ids from the added records matches"
+      ]
     },
     {
       "task_id": "2c544f9_2",
@@ -368,7 +462,10 @@
       "steps": 12,
       "tool_calls": 15,
       "appworld_tool_calls": 10,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "3b8fb7a_1",
@@ -382,7 +479,14 @@
       "steps": 56,
       "tool_calls": 68,
       "appworld_tool_calls": 62,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match venmo.Transaction, venmo.PaymentRequest, venmo.User,",
+        "assert receiver_id_to_amount obtained from added_transactions matches the",
+        "assert all transactions have",
+        "assert receiver_id_to_amount obtained from added_payment_requests"
+      ]
     },
     {
       "task_id": "0de03ea_3",
@@ -396,7 +500,12 @@
       "steps": 11,
       "tool_calls": 14,
       "appworld_tool_calls": 11,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert all song_ids in private_data.downloaded_song_ids are in",
+        "assert no song_id outside of private_data.collection_song_ids are in"
+      ]
     },
     {
       "task_id": "425a494_2",
@@ -410,7 +519,10 @@
       "steps": 6,
       "tool_calls": 10,
       "appworld_tool_calls": 9,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "dac78d9_1",
@@ -424,7 +536,10 @@
       "steps": 21,
       "tool_calls": 37,
       "appworld_tool_calls": 36,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "1150ed6_1",
@@ -438,7 +553,10 @@
       "steps": 9,
       "tool_calls": 10,
       "appworld_tool_calls": 10,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "9ef798c_1",
@@ -452,7 +570,15 @@
       "steps": 19,
       "tool_calls": 19,
       "appworld_tool_calls": 18,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match file_system.Directory, file_system.File,",
+        "obtain added, updated, deleted PaymentRequests using models.changed_records",
+        "assert the updated payment request is sender private_data.coworker_email",
+        "assert this payment request has been approved and not denied.",
+        "assert this payment request is of private_data.carpooling_cost amount"
+      ]
     },
     {
       "task_id": "3d9a636_3",
@@ -466,7 +592,12 @@
       "steps": 10,
       "tool_calls": 19,
       "appworld_tool_calls": 19,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "obtain added, deleted friendships using models.changed_records",
+        "assert friend_ids of the deleted ones match",
+        "assert all main_user's friends on venmo match"
+      ]
     },
     {
       "task_id": "cef9191_3",
@@ -480,7 +611,8 @@
       "steps": 6,
       "tool_calls": 6,
       "appworld_tool_calls": 6,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "29a7b7e_1",
@@ -494,7 +626,8 @@
       "steps": 13,
       "tool_calls": 35,
       "appworld_tool_calls": 32,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "325d6ec_1",
@@ -508,7 +641,8 @@
       "steps": 11,
       "tool_calls": 13,
       "appworld_tool_calls": 13,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "166f4ff_1",
@@ -522,7 +656,8 @@
       "steps": 6,
       "tool_calls": 6,
       "appworld_tool_calls": 6,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "83a7951_1",
@@ -536,7 +671,15 @@
       "steps": 50,
       "tool_calls": 62,
       "appworld_tool_calls": 56,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert model changes match splitwise.Payment, splitwise.Notification,",
+        "assert group_id_to_amounts from added payments matches",
+        "assert group_id_to_receipt_contents from added payments matches the",
+        "assert receipt_content_to_amount from added payments matches the",
+        "assert all added payments have description public_data.note",
+        "assert only receipt_download_count of venmo transactions were updated"
+      ]
     },
     {
       "task_id": "cef9191_2",
@@ -550,7 +693,8 @@
       "steps": 8,
       "tool_calls": 7,
       "appworld_tool_calls": 6,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "7847649_3",
@@ -564,7 +708,10 @@
       "steps": 38,
       "tool_calls": 38,
       "appworld_tool_calls": 36,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "522e5e5_1",
@@ -578,7 +725,10 @@
       "steps": 9,
       "tool_calls": 17,
       "appworld_tool_calls": 17,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "obtain all new records in venmo.Friendship (obtained via"
+      ]
     },
     {
       "task_id": "21abae1_3",
@@ -592,7 +742,10 @@
       "steps": 5,
       "tool_calls": 5,
       "appworld_tool_calls": 5,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "32616b5_1",
@@ -606,7 +759,16 @@
       "steps": 4,
       "tool_calls": 8,
       "appworld_tool_calls": 7,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match splitwise.Expense, splitwise.ExpenseShare,",
+        "assert the group_id_to_expense_amounts from added expenses match",
+        "assert the group_id_to_payer_ids from added expenses match",
+        "assert the group_id_to_debtor_ids from the added expense shares match",
+        "assert the group_id_to_payer_to_debtor_ids from the added expense shares match",
+        "assert the group_id_to_debtor_id_to_amounts from the added expense shares match"
+      ]
     },
     {
       "task_id": "a30375d_2",
@@ -620,7 +782,11 @@
       "steps": 36,
       "tool_calls": 35,
       "appworld_tool_calls": 35,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert any one of the private_data.quotes is substring in the predicted_answer",
+        "assert the predicted answer is substring in any one of the private_data.quotes"
+      ]
     },
     {
       "task_id": "3d9a636_2",
@@ -634,7 +800,12 @@
       "steps": 10,
       "tool_calls": 27,
       "appworld_tool_calls": 24,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "obtain added, deleted friendships using models.changed_records",
+        "assert friend_ids of the deleted ones match",
+        "assert all main_user's friends on venmo match"
+      ]
     },
     {
       "task_id": "b9c5c9a_2",
@@ -648,7 +819,10 @@
       "steps": 13,
       "tool_calls": 33,
       "appworld_tool_calls": 29,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert the updated file's first line matches the private_data.csv_header"
+      ]
     },
     {
       "task_id": "21abae1_1",
@@ -662,7 +836,8 @@
       "steps": 6,
       "tool_calls": 6,
       "appworld_tool_calls": 6,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "2d9f728_1",
@@ -676,7 +851,8 @@
       "steps": 15,
       "tool_calls": 22,
       "appworld_tool_calls": 16,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "2c544f9_1",
@@ -690,7 +866,14 @@
       "steps": 11,
       "tool_calls": 13,
       "appworld_tool_calls": 11,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match venmo.Transaction, venmo.Notification,",
+        "obtain added, updated, removed venmo.Transaction records using",
+        "assert the added transaction's receiver_id is private_data.person_venmo_user_id.",
+        "assert the added transaction has amount public_data.amount."
+      ]
     },
     {
       "task_id": "c77c005_2",
@@ -704,7 +887,13 @@
       "steps": 10,
       "tool_calls": 10,
       "appworld_tool_calls": 9,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match venmo.Friendship.",
+        "assert friend_ids from added friendships match exactly to",
+        "assert friend_ids from removed friendships match exactly to"
+      ]
     },
     {
       "task_id": "425a494_3",
@@ -718,7 +907,10 @@
       "steps": 10,
       "tool_calls": 33,
       "appworld_tool_calls": 33,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "325d6ec_2",
@@ -732,7 +924,8 @@
       "steps": 10,
       "tool_calls": 10,
       "appworld_tool_calls": 10,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "5a83b05_1",
@@ -746,7 +939,12 @@
       "steps": 10,
       "tool_calls": 27,
       "appworld_tool_calls": 27,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match file_system.File.",
+        "obtain deleted file_system.File records using models.changed_records."
+      ]
     },
     {
       "task_id": "8749218_3",
@@ -760,7 +958,11 @@
       "steps": 9,
       "tool_calls": 28,
       "appworld_tool_calls": 27,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert set of song_ids in the queue of the updated music player"
+      ]
     },
     {
       "task_id": "fd1f8fa_3",
@@ -774,7 +976,10 @@
       "steps": 10,
       "tool_calls": 15,
       "appworld_tool_calls": 14,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert song_ids in the end state of the music player's queue match"
+      ]
     },
     {
       "task_id": "2d9f728_2",
@@ -788,7 +993,18 @@
       "steps": 41,
       "tool_calls": 51,
       "appworld_tool_calls": 46,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match venmo.Transaction, venmo.PaymentRequest",
+        "obtain added, updated, removed venmo.Transactions using models.changed_records,",
+        "assert the added transaction's receiver_id is",
+        "assert the added transaction has description",
+        "assert the added transaction has amount",
+        "assert set of receiver ids from added payment requests match set of",
+        "assert all added payment requests have description",
+        "assert all added payment requests have amount"
+      ]
     },
     {
       "task_id": "024c982_2",
@@ -802,7 +1018,8 @@
       "steps": 8,
       "tool_calls": 7,
       "appworld_tool_calls": 6,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "042a9fc_3",
@@ -816,7 +1033,11 @@
       "steps": 25,
       "tool_calls": 32,
       "appworld_tool_calls": 28,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "obtain added spotify.PlaylistSong records using models.changed_records,",
+        "assert song_ids of the removed playlist songs match"
+      ]
     },
     {
       "task_id": "6b6ca61_1",
@@ -830,7 +1051,18 @@
       "steps": 48,
       "tool_calls": 72,
       "appworld_tool_calls": 66,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match venmo.Transaction, venmo.Notification,",
+        "assert all the added expenses have a None group_id",
+        "assert the debtor_ids of the added expense shares match the",
+        "assert the splitwise_user_id_to_amount (expense.amount) from expenses match",
+        "assert the splitwise_user_id_to_amount (share_amount) from expense shares match",
+        "assert the splitwise_user_id_to_description from expenses match",
+        "assert the attached files of these expenses match the",
+        "assert the splitwise_user_id_to_amount from added splitwise expenses match"
+      ]
     },
     {
       "task_id": "bde252e_3",
@@ -844,7 +1076,17 @@
       "steps": 10,
       "tool_calls": 28,
       "appworld_tool_calls": 28,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "obtain added, updated, removed todoist.Task records using",
+        "assert the removed tasks' project_id are",
+        "assert the removed tasks' IDs match",
+        "assert the added tasks' project_id matches private_data.goal_project_id.",
+        "assert the task_title_to_descriptions obtained from the added tasks match",
+        "assert the task_title_to_minutes obtained from the added tasks match",
+        "assert all added tasks have the same priority as private_data.priority"
+      ]
     },
     {
       "task_id": "f861c32_3",
@@ -858,7 +1100,14 @@
       "steps": 35,
       "tool_calls": 45,
       "appworld_tool_calls": 43,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert model changes match venmo.User, venmo.BankTransfer,",
+        "assert there are same number of added transactions as",
+        "assert the set of receiver_ids of these transactions match set of",
+        "assert all these transactions have amount public_data.payment_amount",
+        "assert all these transactions have note public_data.note."
+      ]
     },
     {
       "task_id": "31dc501_3",
@@ -872,7 +1121,8 @@
       "steps": 6,
       "tool_calls": 6,
       "appworld_tool_calls": 6,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "634f342_3",
@@ -886,7 +1136,13 @@
       "steps": 12,
       "tool_calls": 34,
       "appworld_tool_calls": 33,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "obtain added, deleted spotify.PlaylistSong records using models.changed_records,",
+        "assert set of deleted song ids also match to set of",
+        "assert playlist_id_to_song_ids of deleted_playlist_songs match"
+      ]
     },
     {
       "task_id": "ffe6d5e_1",
@@ -900,7 +1156,8 @@
       "steps": 20,
       "tool_calls": 21,
       "appworld_tool_calls": 21,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "afc4005_3",
@@ -914,7 +1171,10 @@
       "steps": 58,
       "tool_calls": 66,
       "appworld_tool_calls": 61,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "d6ac34d_1",
@@ -928,7 +1188,16 @@
       "steps": 8,
       "tool_calls": 8,
       "appworld_tool_calls": 8,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "obtain added, updated, removed simple_note.Note records using",
+        "assert exactly 1 simple_note.Note was added.",
+        "assert the added note's title matches private_data.expected_title.",
+        "assert the added note's pinned status matches private_data.expected_pinned.",
+        "assert the first line of the added note's content matches",
+        "assert the load_yaml on the rest of the lines match private_data.expected_data",
+        "assert the note has tags private_data.expected_tags"
+      ]
     },
     {
       "task_id": "f861c32_2",
@@ -942,7 +1211,13 @@
       "steps": 24,
       "tool_calls": 41,
       "appworld_tool_calls": 37,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match venmo.User, venmo.BankTransfer,",
+        "assert there are same number of added transactions as",
+        "assert the set of receiver_ids of these transactions match set of"
+      ]
     },
     {
       "task_id": "166f4ff_3",
@@ -956,7 +1231,10 @@
       "steps": 5,
       "tool_calls": 5,
       "appworld_tool_calls": 5,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "83a7951_3",
@@ -970,7 +1248,16 @@
       "steps": 38,
       "tool_calls": 63,
       "appworld_tool_calls": 42,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match splitwise.Payment, splitwise.Notification,",
+        "assert group_id_to_amounts from added payments matches",
+        "assert group_id_to_receipt_contents from added payments matches the",
+        "assert receipt_content_to_amount from added payments matches the",
+        "assert all added payments have description public_data.note",
+        "assert only receipt_download_count of venmo transactions were updated"
+      ]
     },
     {
       "task_id": "d194965_2",
@@ -984,7 +1271,10 @@
       "steps": 35,
       "tool_calls": 62,
       "appworld_tool_calls": 56,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "3b8fb7a_3",
@@ -998,7 +1288,14 @@
       "steps": 15,
       "tool_calls": 16,
       "appworld_tool_calls": 15,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match venmo.Transaction, venmo.PaymentRequest, venmo.User,",
+        "assert receiver_id_to_amount obtained from added_transactions matches the",
+        "assert all transactions have",
+        "assert receiver_id_to_amount obtained from added_payment_requests"
+      ]
     },
     {
       "task_id": "9ef798c_2",
@@ -1012,7 +1309,15 @@
       "steps": 23,
       "tool_calls": 25,
       "appworld_tool_calls": 22,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match file_system.Directory, file_system.File,",
+        "obtain added, updated, deleted PaymentRequests using models.changed_records",
+        "assert the updated payment request is sender private_data.coworker_email",
+        "assert this payment request has been approved and not denied.",
+        "assert this payment request is of private_data.carpooling_cost amount"
+      ]
     },
     {
       "task_id": "f323bae_2",
@@ -1026,7 +1331,10 @@
       "steps": 10,
       "tool_calls": 25,
       "appworld_tool_calls": 25,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "dac78d9_2",
@@ -1040,7 +1348,8 @@
       "steps": 16,
       "tool_calls": 19,
       "appworld_tool_calls": 15,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "8749218_2",
@@ -1054,7 +1363,10 @@
       "steps": 10,
       "tool_calls": 19,
       "appworld_tool_calls": 19,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert set of song_ids in the queue of the updated music player"
+      ]
     },
     {
       "task_id": "634f342_2",
@@ -1068,7 +1380,11 @@
       "steps": 17,
       "tool_calls": 75,
       "appworld_tool_calls": 75,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert playlist_id_to_song_ids of deleted_playlist_songs match"
+      ]
     },
     {
       "task_id": "b9c5c9a_3",
@@ -1082,7 +1398,10 @@
       "steps": 48,
       "tool_calls": 63,
       "appworld_tool_calls": 62,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "59fae45_2",
@@ -1096,7 +1415,11 @@
       "steps": 14,
       "tool_calls": 52,
       "appworld_tool_calls": 51,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert updated playlists' IDs match the keys of",
+        "assert playlist_id_to_title obtained from updated playlist records"
+      ]
     },
     {
       "task_id": "a30375d_1",
@@ -1110,7 +1433,11 @@
       "steps": 6,
       "tool_calls": 5,
       "appworld_tool_calls": 5,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert any one of the private_data.quotes is substring in the predicted_answer",
+        "assert the predicted answer is substring in any one of the private_data.quotes"
+      ]
     },
     {
       "task_id": "ff58e36_1",
@@ -1124,7 +1451,13 @@
       "steps": 89,
       "tool_calls": 94,
       "appworld_tool_calls": 87,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert all of added friend ids are in private_data.to_befriend_venmo_user_ids.",
+        "assert all of private_data.to_befriend_venmo_user_ids_1 are in",
+        "assert all of private_data.to_befriend_venmo_user_ids_2 are in"
+      ]
     },
     {
       "task_id": "ccf4b82_1",
@@ -1138,7 +1471,15 @@
       "steps": 32,
       "tool_calls": 51,
       "appworld_tool_calls": 47,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match venmo.Notification, venmo.PaymentRequest,",
+        "assert main_user's venmo balance is 0 in the end state.",
+        "assert 1 admin.PaymentCard record has been updated using models.changed_records,",
+        "assert the last 4 digits of this updated payment_card match exactly to",
+        "assert the total balance of main_user's updated payment card in the end state"
+      ]
     },
     {
       "task_id": "fd1f8fa_2",
@@ -1152,7 +1493,11 @@
       "steps": 29,
       "tool_calls": 33,
       "appworld_tool_calls": 32,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert song_ids in the end state of the music player's queue match"
+      ]
     },
     {
       "task_id": "522e5e5_3",
@@ -1166,7 +1511,10 @@
       "steps": 12,
       "tool_calls": 15,
       "appworld_tool_calls": 14,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "obtain all new records in venmo.Friendship (obtained via"
+      ]
     },
     {
       "task_id": "f3f60f0_3",
@@ -1180,7 +1528,10 @@
       "steps": 10,
       "tool_calls": 33,
       "appworld_tool_calls": 32,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "0a9d82a_3",
@@ -1194,7 +1545,8 @@
       "steps": 14,
       "tool_calls": 29,
       "appworld_tool_calls": 28,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "32616b5_2",
@@ -1208,7 +1560,16 @@
       "steps": 18,
       "tool_calls": 22,
       "appworld_tool_calls": 21,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match splitwise.Expense, splitwise.ExpenseShare,",
+        "assert the group_id_to_expense_amounts from added expenses match",
+        "assert the group_id_to_payer_ids from added expenses match",
+        "assert the group_id_to_debtor_ids from the added expense shares match",
+        "assert the group_id_to_payer_to_debtor_ids from the added expense shares match",
+        "assert the group_id_to_debtor_id_to_amounts from the added expense shares match"
+      ]
     },
     {
       "task_id": "1150ed6_3",
@@ -1222,7 +1583,10 @@
       "steps": 7,
       "tool_calls": 13,
       "appworld_tool_calls": 13,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "552869a_2",
@@ -1236,7 +1600,8 @@
       "steps": 6,
       "tool_calls": 6,
       "appworld_tool_calls": 5,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "f323bae_1",
@@ -1250,7 +1615,18 @@
       "steps": 75,
       "tool_calls": 84,
       "appworld_tool_calls": 73,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match file_system.File, file_system.Directory.",
+        "obtain added, updated, removed file_system.File records using",
+        "assert the added file's tilde_path is public_data.exported_file_path.",
+        "parse the contents of the added file to obtain header and body rows, replacing _",
+        "assert the header matches data.private.header_row (NOT ignoring order).",
+        "assert the body rows match data.private.body_rows (ignoring row and column",
+        "assert the body rows match data.private.body_rows (ignoring row but not column",
+        "assert the body rows match data.private.body_rows (not ignoring row or column"
+      ]
     },
     {
       "task_id": "3b8fb7a_2",
@@ -1264,7 +1640,8 @@
       "steps": 18,
       "tool_calls": 37,
       "appworld_tool_calls": 24,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "652485c_2",
@@ -1278,7 +1655,11 @@
       "steps": 24,
       "tool_calls": 78,
       "appworld_tool_calls": 76,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert song_ids of the added playlist match private_data.new_playlist_song_ids"
+      ]
     },
     {
       "task_id": "f323bae_3",
@@ -1292,7 +1673,17 @@
       "steps": 47,
       "tool_calls": 68,
       "appworld_tool_calls": 68,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert model changes match file_system.File, file_system.Directory.",
+        "obtain added, updated, removed file_system.File records using",
+        "assert the added file's tilde_path is public_data.exported_file_path.",
+        "parse the contents of the added file to obtain header and body rows, replacing _",
+        "assert the header matches data.private.header_row (NOT ignoring order).",
+        "assert the body rows match data.private.body_rows (ignoring row and column",
+        "assert the body rows match data.private.body_rows (ignoring row but not column",
+        "assert the body rows match data.private.body_rows (not ignoring row or column"
+      ]
     },
     {
       "task_id": "9dabbc9_3",
@@ -1306,7 +1697,8 @@
       "steps": 14,
       "tool_calls": 16,
       "appworld_tool_calls": 16,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "d18139b_1",
@@ -1320,7 +1712,11 @@
       "steps": 12,
       "tool_calls": 19,
       "appworld_tool_calls": 16,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert set of updated payment request ids match exactly to"
+      ]
     },
     {
       "task_id": "652485c_1",
@@ -1334,7 +1730,8 @@
       "steps": 13,
       "tool_calls": 26,
       "appworld_tool_calls": 24,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "b9c5c9a_1",
@@ -1348,7 +1745,10 @@
       "steps": 15,
       "tool_calls": 32,
       "appworld_tool_calls": 31,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert the updated file's rest of the lines matches the private_data.csv_lines"
+      ]
     },
     {
       "task_id": "986aa4e_2",
@@ -1362,7 +1762,8 @@
       "steps": 18,
       "tool_calls": 41,
       "appworld_tool_calls": 37,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "6f4b9a5_3",
@@ -1376,7 +1777,8 @@
       "steps": 9,
       "tool_calls": 44,
       "appworld_tool_calls": 44,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "13547f5_2",
@@ -1390,7 +1792,8 @@
       "steps": 7,
       "tool_calls": 7,
       "appworld_tool_calls": 6,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "042a9fc_1",
@@ -1404,7 +1807,12 @@
       "steps": 16,
       "tool_calls": 37,
       "appworld_tool_calls": 36,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "obtain added spotify.PlaylistSong records using models.changed_records,",
+        "assert added and removed song ids have playlist_id = private_data.playlist_id"
+      ]
     },
     {
       "task_id": "986aa4e_3",
@@ -1418,7 +1826,14 @@
       "steps": 20,
       "tool_calls": 34,
       "appworld_tool_calls": 31,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert model changes match spotify.PlaylistSong, todoist.Task,",
+        "obtain added, removed spotify.PlaylistSong records using models.changed_records,",
+        "assert all added playlist_songs' song_ids match",
+        "assert all the removed playlist_songs' song_ids match",
+        "assert the only field the task has been updated is is_completed, using"
+      ]
     },
     {
       "task_id": "21abae1_2",
@@ -1432,7 +1847,10 @@
       "steps": 5,
       "tool_calls": 5,
       "appworld_tool_calls": 5,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "9016950_1",
@@ -1446,7 +1864,10 @@
       "steps": 12,
       "tool_calls": 15,
       "appworld_tool_calls": 15,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert receiver_ids of added global text messages match"
+      ]
     },
     {
       "task_id": "a30375d_3",
@@ -1460,7 +1881,8 @@
       "steps": 7,
       "tool_calls": 6,
       "appworld_tool_calls": 6,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "8ce6779_2",
@@ -1474,7 +1896,15 @@
       "steps": 10,
       "tool_calls": 15,
       "appworld_tool_calls": 11,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert model changes match todoist.Task, todoist.TaskComment.",
+        "assert the keys of the updated_tasks match the set of task_ids in",
+        "assert updated_task_ids have only updated in assigner_id, assignee_id",
+        "assert the task_id_to_assignee_id obtained from the updated_tasks matches the",
+        "assert the set of added task comment task_ids matches the",
+        "assert the task_id_to_comment_text obtained from the added_task_comments matches"
+      ]
     },
     {
       "task_id": "b6d1104_1",
@@ -1488,7 +1918,12 @@
       "steps": 13,
       "tool_calls": 16,
       "appworld_tool_calls": 15,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert there one of the key-value entry in month_to_expense",
+        "assert full month_to_expense dict matches private_data.month_to_expense",
+        "assert the months in month_to_expense are in private_data.month_order order."
+      ]
     },
     {
       "task_id": "d18139b_3",
@@ -1502,7 +1937,11 @@
       "steps": 16,
       "tool_calls": 28,
       "appworld_tool_calls": 28,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert set of updated payment request ids match exactly to"
+      ]
     },
     {
       "task_id": "09b0ee6_3",
@@ -1516,7 +1955,10 @@
       "steps": 13,
       "tool_calls": 67,
       "appworld_tool_calls": 67,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert \",\"-split ground_truth_answer and predicted_answer are the same,"
+      ]
     },
     {
       "task_id": "7847649_2",
@@ -1530,7 +1972,10 @@
       "steps": 72,
       "tool_calls": 75,
       "appworld_tool_calls": 63,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "1150ed6_2",
@@ -1544,7 +1989,8 @@
       "steps": 7,
       "tool_calls": 6,
       "appworld_tool_calls": 6,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "7847649_1",
@@ -1558,7 +2004,10 @@
       "steps": 50,
       "tool_calls": 49,
       "appworld_tool_calls": 45,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "ffe6d5e_2",
@@ -1572,7 +2021,8 @@
       "steps": 8,
       "tool_calls": 10,
       "appworld_tool_calls": 10,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "425a494_1",
@@ -1586,7 +2036,8 @@
       "steps": 22,
       "tool_calls": 64,
       "appworld_tool_calls": 59,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "bde252e_1",
@@ -1600,7 +2051,12 @@
       "steps": 21,
       "tool_calls": 67,
       "appworld_tool_calls": 60,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert the removed tasks' IDs match",
+        "assert the task_title_to_descriptions obtained from the added tasks match",
+        "assert the task_title_to_minutes obtained from the added tasks match"
+      ]
     },
     {
       "task_id": "3aa1a22_1",
@@ -1614,7 +2070,13 @@
       "steps": 16,
       "tool_calls": 25,
       "appworld_tool_calls": 23,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match splitwise.GroupMember, splitwise.Notification,",
+        "assert set of group_ids from the added records matches",
+        "assert the set of message_ids from removed phone.UserTextMessage or"
+      ]
     },
     {
       "task_id": "31dc501_1",
@@ -1628,7 +2090,8 @@
       "steps": 6,
       "tool_calls": 6,
       "appworld_tool_calls": 6,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "29a7b7e_3",
@@ -1642,7 +2105,10 @@
       "steps": 25,
       "tool_calls": 77,
       "appworld_tool_calls": 74,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "prepare start_file_path_to_content and end_file_path_to_content from start and"
+      ]
     },
     {
       "task_id": "325d6ec_3",
@@ -1656,7 +2122,8 @@
       "steps": 10,
       "tool_calls": 12,
       "appworld_tool_calls": 12,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "5a83b05_2",
@@ -1670,7 +2137,12 @@
       "steps": 26,
       "tool_calls": 132,
       "appworld_tool_calls": 107,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match file_system.File.",
+        "obtain deleted file_system.File records using models.changed_records."
+      ]
     },
     {
       "task_id": "d6ac34d_2",
@@ -1684,7 +2156,17 @@
       "steps": 58,
       "tool_calls": 60,
       "appworld_tool_calls": 54,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match simple_note.Note.",
+        "assert exactly 1 simple_note.Note was added.",
+        "assert the added note's title matches private_data.expected_title.",
+        "assert the added note's pinned status matches private_data.expected_pinned.",
+        "assert the first line of the added note's content matches",
+        "assert the load_yaml on the rest of the lines match private_data.expected_data",
+        "assert the note has tags private_data.expected_tags"
+      ]
     },
     {
       "task_id": "dac78d9_3",
@@ -1698,7 +2180,10 @@
       "steps": 16,
       "tool_calls": 16,
       "appworld_tool_calls": 15,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "024c982_1",
@@ -1712,7 +2197,8 @@
       "steps": 8,
       "tool_calls": 8,
       "appworld_tool_calls": 7,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "f3f60f0_1",
@@ -1726,7 +2212,8 @@
       "steps": 14,
       "tool_calls": 34,
       "appworld_tool_calls": 31,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "6b6ca61_2",
@@ -1740,7 +2227,21 @@
       "steps": 137,
       "tool_calls": 146,
       "appworld_tool_calls": 52,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match venmo.Transaction, venmo.Notification,",
+        "assert all the added_transactions are private/public based on",
+        "assert the venmo_user_id_to_amount from these transactions match",
+        "assert the venmo_user_id_to_description from these transactions match",
+        "assert all the added expenses have a None group_id",
+        "assert the debtor_ids of the added expense shares match the",
+        "assert the splitwise_user_id_to_amount (expense.amount) from expenses match",
+        "assert the splitwise_user_id_to_amount (share_amount) from expense shares match",
+        "assert the splitwise_user_id_to_description from expenses match",
+        "assert the attached files of these expenses match the",
+        "assert the splitwise_user_id_to_amount from added splitwise expenses match"
+      ]
     },
     {
       "task_id": "0de03ea_2",
@@ -1754,7 +2255,11 @@
       "steps": 10,
       "tool_calls": 10,
       "appworld_tool_calls": 8,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert all song_ids in private_data.downloaded_song_ids are in",
+        "assert no song_id outside of private_data.collection_song_ids are in"
+      ]
     },
     {
       "task_id": "0d01c76_1",
@@ -1768,7 +2273,8 @@
       "steps": 31,
       "tool_calls": 83,
       "appworld_tool_calls": 64,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "3d9a636_1",
@@ -1782,7 +2288,13 @@
       "steps": 13,
       "tool_calls": 28,
       "appworld_tool_calls": 28,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "obtain added, deleted friendships using models.changed_records",
+        "assert friend_ids of the deleted ones match",
+        "assert all main_user's friends on venmo match"
+      ]
     },
     {
       "task_id": "2d9f728_3",
@@ -1796,7 +2308,12 @@
       "steps": 9,
       "tool_calls": 16,
       "appworld_tool_calls": 14,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert the added transaction has amount",
+        "assert set of receiver ids from added payment requests match set of",
+        "assert all added payment requests have amount"
+      ]
     },
     {
       "task_id": "5a83b05_3",
@@ -1810,7 +2327,11 @@
       "steps": 38,
       "tool_calls": 97,
       "appworld_tool_calls": 96,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "obtain deleted file_system.File records using models.changed_records."
+      ]
     },
     {
       "task_id": "90adc3f_1",
@@ -1824,7 +2345,13 @@
       "steps": 11,
       "tool_calls": 27,
       "appworld_tool_calls": 25,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert receiver_ids from added payment requests match exactly to",
+        "assert added_payment_requests have amount",
+        "assert added_payment_requests have description",
+        "assert removed_payment_requests have ids"
+      ]
     },
     {
       "task_id": "83a7951_2",
@@ -1838,7 +2365,15 @@
       "steps": 121,
       "tool_calls": 154,
       "appworld_tool_calls": 151,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match splitwise.Payment, splitwise.Notification,",
+        "assert group_id_to_receipt_contents from added payments matches the",
+        "assert receipt_content_to_amount from added payments matches the",
+        "assert all added payments have description public_data.note",
+        "assert only receipt_download_count of venmo transactions were updated"
+      ]
     },
     {
       "task_id": "634f342_1",
@@ -1852,7 +2387,16 @@
       "steps": 28,
       "tool_calls": 30,
       "appworld_tool_calls": 29,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match spotify.Playlist, spotify.PlaylistSong.",
+        "obtain added, updated, deleted spotify.Playlist records using",
+        "assert the added playlist's title is public_data.playlist_title.",
+        "obtain added, deleted spotify.PlaylistSong records using models.changed_records,",
+        "assert set of deleted song ids also match to set of",
+        "assert playlist_id_to_song_ids of deleted_playlist_songs match"
+      ]
     },
     {
       "task_id": "0d01c76_2",
@@ -1866,7 +2410,12 @@
       "steps": 21,
       "tool_calls": 67,
       "appworld_tool_calls": 65,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert the added notes' titles match keys of",
+        "assert the added notes' contents match values of",
+        "assert the added notes' title to content mapping match"
+      ]
     },
     {
       "task_id": "f861c32_1",
@@ -1880,7 +2429,13 @@
       "steps": 36,
       "tool_calls": 89,
       "appworld_tool_calls": 88,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert model changes match venmo.User, venmo.BankTransfer,",
+        "assert there are same number of added transactions as",
+        "assert the set of receiver_ids of these transactions match set of",
+        "assert all these transactions have amount public_data.payment_amount"
+      ]
     },
     {
       "task_id": "fd1f8fa_1",
@@ -1894,7 +2449,11 @@
       "steps": 18,
       "tool_calls": 43,
       "appworld_tool_calls": 42,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert song_ids in the end state of the music player's queue match"
+      ]
     },
     {
       "task_id": "13547f5_3",
@@ -1908,7 +2467,10 @@
       "steps": 8,
       "tool_calls": 10,
       "appworld_tool_calls": 9,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "13547f5_1",
@@ -1922,7 +2484,8 @@
       "steps": 8,
       "tool_calls": 9,
       "appworld_tool_calls": 8,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "6b6ca61_3",
@@ -1936,7 +2499,15 @@
       "steps": 22,
       "tool_calls": 51,
       "appworld_tool_calls": 48,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert the debtor_ids of the added expense shares match the",
+        "assert the splitwise_user_id_to_amount (expense.amount) from expenses match",
+        "assert the splitwise_user_id_to_amount (share_amount) from expense shares match",
+        "assert the splitwise_user_id_to_description from expenses match",
+        "assert the attached files of these expenses match the",
+        "assert the splitwise_user_id_to_amount from added splitwise expenses match"
+      ]
     },
     {
       "task_id": "986aa4e_1",
@@ -1950,7 +2521,8 @@
       "steps": 15,
       "tool_calls": 34,
       "appworld_tool_calls": 27,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "270f1ff_1",
@@ -1964,7 +2536,12 @@
       "steps": 11,
       "tool_calls": 18,
       "appworld_tool_calls": 17,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "obtain added, updated, deleted phone.GlobalTextMessage using",
+        "assert the added global_text_message is from main_user to",
+        "obtain added, updated, deleted phone.UserTextMessage using"
+      ]
     },
     {
       "task_id": "0de03ea_1",
@@ -1978,7 +2555,11 @@
       "steps": 9,
       "tool_calls": 14,
       "appworld_tool_calls": 14,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert all song_ids in private_data.downloaded_song_ids are in",
+        "assert no song_id outside of private_data.collection_song_ids are in"
+      ]
     },
     {
       "task_id": "ffe6d5e_3",
@@ -1992,7 +2573,8 @@
       "steps": 11,
       "tool_calls": 13,
       "appworld_tool_calls": 12,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "59fae45_1",
@@ -2006,7 +2588,8 @@
       "steps": 7,
       "tool_calls": 29,
       "appworld_tool_calls": 29,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "166f4ff_2",
@@ -2020,7 +2603,10 @@
       "steps": 60,
       "tool_calls": 67,
       "appworld_tool_calls": 63,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "ccf4b82_3",
@@ -2034,7 +2620,15 @@
       "steps": 29,
       "tool_calls": 50,
       "appworld_tool_calls": 49,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match venmo.Notification, venmo.PaymentRequest,",
+        "assert main_user's venmo balance is 0 in the end state.",
+        "assert 1 admin.PaymentCard record has been updated using models.changed_records,",
+        "assert the last 4 digits of this updated payment_card match exactly to",
+        "assert the total balance of main_user's updated payment card in the end state"
+      ]
     },
     {
       "task_id": "29a7b7e_2",
@@ -2048,7 +2642,10 @@
       "steps": 17,
       "tool_calls": 36,
       "appworld_tool_calls": 36,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "8749218_1",
@@ -2062,7 +2659,10 @@
       "steps": 11,
       "tool_calls": 30,
       "appworld_tool_calls": 30,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert set of song_ids in the queue of the updated music player"
+      ]
     },
     {
       "task_id": "6f4b9a5_1",
@@ -2076,7 +2676,10 @@
       "steps": 11,
       "tool_calls": 27,
       "appworld_tool_calls": 27,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "6f4b9a5_2",
@@ -2090,7 +2693,16 @@
       "steps": 40,
       "tool_calls": 50,
       "appworld_tool_calls": 45,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match simple_note.Note.",
+        "assert exactly 1 simple_note.Note was updated.",
+        "assert the updated note has ID private_data.note_id.",
+        "parse the contents of the updated note to obtain song_name_to_artist_names,",
+        "assert the song_name_to_release_month_str match",
+        "assert the udpated note has not changed in any other field ignoring content,"
+      ]
     },
     {
       "task_id": "ff58e36_3",
@@ -2104,7 +2716,11 @@
       "steps": 22,
       "tool_calls": 31,
       "appworld_tool_calls": 26,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert all of private_data.to_befriend_venmo_user_ids_1 are in",
+        "assert all of private_data.to_befriend_venmo_user_ids_2 are in"
+      ]
     },
     {
       "task_id": "d18139b_2",
@@ -2118,7 +2734,11 @@
       "steps": 11,
       "tool_calls": 26,
       "appworld_tool_calls": 25,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert set of updated payment request ids match exactly to"
+      ]
     },
     {
       "task_id": "afc4005_2",
@@ -2132,7 +2752,10 @@
       "steps": 34,
       "tool_calls": 36,
       "appworld_tool_calls": 35,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "9dabbc9_2",
@@ -2146,7 +2769,17 @@
       "steps": 39,
       "tool_calls": 41,
       "appworld_tool_calls": 39,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert model changes match venmo.PaymentRequest, venmo.Transaction,",
+        "obtain added, updated, removed venmo.PaymentRequest records using",
+        "assert the updated payment_request has ID",
+        "assert the only changed_field_names in the updated payment request is",
+        "obtain added, updated, removed venmo.Transaction records using",
+        "assert the added transaction's receiver_id is",
+        "assert the added transaction has description public_data.expected_note (ignore",
+        "assert the added transaction has amount"
+      ]
     },
     {
       "task_id": "09b0ee6_2",
@@ -2160,7 +2793,10 @@
       "steps": 10,
       "tool_calls": 87,
       "appworld_tool_calls": 87,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert \",\"-split ground_truth_answer and predicted_answer are the same,"
+      ]
     },
     {
       "task_id": "d194965_1",
@@ -2174,7 +2810,8 @@
       "steps": 14,
       "tool_calls": 50,
       "appworld_tool_calls": 39,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "552869a_1",
@@ -2188,7 +2825,10 @@
       "steps": 14,
       "tool_calls": 14,
       "appworld_tool_calls": 14,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "652485c_3",
@@ -2202,7 +2842,10 @@
       "steps": 13,
       "tool_calls": 24,
       "appworld_tool_calls": 22,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert song_ids of the added playlist match private_data.new_playlist_song_ids"
+      ]
     },
     {
       "task_id": "ccf4b82_2",
@@ -2216,7 +2859,16 @@
       "steps": 24,
       "tool_calls": 31,
       "appworld_tool_calls": 31,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match venmo.Notification, venmo.PaymentRequest,",
+        "assert the updated payment requests have ids",
+        "assert main_user's venmo balance is 0 in the end state.",
+        "assert 1 admin.PaymentCard record has been updated using models.changed_records,",
+        "assert the last 4 digits of this updated payment_card match exactly to",
+        "assert the total balance of main_user's updated payment card in the end state"
+      ]
     },
     {
       "task_id": "270f1ff_2",
@@ -2230,7 +2882,8 @@
       "steps": 10,
       "tool_calls": 14,
       "appworld_tool_calls": 14,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "9ef798c_3",
@@ -2244,7 +2897,15 @@
       "steps": 19,
       "tool_calls": 18,
       "appworld_tool_calls": 16,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match file_system.Directory, file_system.File,",
+        "obtain added, updated, deleted PaymentRequests using models.changed_records",
+        "assert the updated payment request is sender private_data.coworker_email",
+        "assert this payment request has been approved and not denied.",
+        "assert this payment request is of private_data.carpooling_cost amount"
+      ]
     },
     {
       "task_id": "90adc3f_2",
@@ -2258,7 +2919,10 @@
       "steps": 23,
       "tool_calls": 31,
       "appworld_tool_calls": 28,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "c77c005_3",
@@ -2272,7 +2936,10 @@
       "steps": 11,
       "tool_calls": 31,
       "appworld_tool_calls": 30,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert friend_ids from added friendships match exactly to"
+      ]
     },
     {
       "task_id": "59fae45_3",
@@ -2286,7 +2953,8 @@
       "steps": 9,
       "tool_calls": 55,
       "appworld_tool_calls": 54,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "b6d1104_2",
@@ -2300,7 +2968,19 @@
       "steps": 33,
       "tool_calls": 37,
       "appworld_tool_calls": 35,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match simple_note.Note.",
+        "obtain added, updated, deleted simple_note.Note records using",
+        "parse the updated note content to obtain month_to_expense, and",
+        "assert there one of the key-value entry in month_to_expense",
+        "assert set of months in month_to_expense match set of keys in",
+        "assert full month_to_expense dict matches private_data.month_to_expense",
+        "assert the months in month_to_expense are in private_data.month_order order.",
+        "assert The note's content starts with \"# Venmo Expenses\".",
+        "assert updated_note has not changed in title, pinned"
+      ]
     },
     {
       "task_id": "0a9d82a_1",
@@ -2314,7 +2994,8 @@
       "steps": 12,
       "tool_calls": 39,
       "appworld_tool_calls": 38,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     },
     {
       "task_id": "0a9d82a_2",
@@ -2328,7 +3009,10 @@
       "steps": 53,
       "tool_calls": 53,
       "appworld_tool_calls": 45,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "9016950_2",
@@ -2342,7 +3026,12 @@
       "steps": 10,
       "tool_calls": 33,
       "appworld_tool_calls": 32,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert model changes match {public_data.app_name}.User, phone.GlobalTextMessage,",
+        "obtain admin.MainUser records for private_data.no_account_admin_user_ids in the",
+        "assert receiver_ids of added global text messages match"
+      ]
     },
     {
       "task_id": "8ce6779_3",
@@ -2356,7 +3045,16 @@
       "steps": 22,
       "tool_calls": 30,
       "appworld_tool_calls": 28,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match todoist.Task, todoist.TaskComment.",
+        "assert the keys of the updated_tasks match the set of task_ids in",
+        "assert updated_task_ids have only updated in assigner_id, assignee_id",
+        "assert the task_id_to_assignee_id obtained from the updated_tasks matches the",
+        "assert the set of added task comment task_ids matches the",
+        "assert the task_id_to_comment_text obtained from the added_task_comments matches"
+      ]
     },
     {
       "task_id": "3aa1a22_2",
@@ -2370,7 +3068,8 @@
       "steps": 11,
       "tool_calls": 15,
       "appworld_tool_calls": 14,
-      "timeout": false
+      "timeout": false,
+      "failed_checks": []
     }
   ]
 }

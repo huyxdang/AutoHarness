@@ -21,7 +21,13 @@
       "seconds": 281.1,
       "input_tokens": 185226,
       "output_tokens": 2882,
-      "steps": 21
+      "steps": 21,
+      "failed_checks": [
+        "assert answers match.",
+        "obtain added, deleted friendships using models.changed_records",
+        "assert friend_ids of the deleted ones match",
+        "assert all main_user's friends on venmo match"
+      ]
     },
     {
       "task_id": "3d9a636_2",
@@ -31,7 +37,13 @@
       "seconds": 180.9,
       "input_tokens": 138487,
       "output_tokens": 1526,
-      "steps": 19
+      "steps": 19,
+      "failed_checks": [
+        "assert answers match.",
+        "obtain added, deleted friendships using models.changed_records",
+        "assert friend_ids of the deleted ones match",
+        "assert all main_user's friends on venmo match"
+      ]
     },
     {
       "task_id": "3d9a636_3",
@@ -41,7 +53,13 @@
       "seconds": 216.3,
       "input_tokens": 124636,
       "output_tokens": 2008,
-      "steps": 16
+      "steps": 16,
+      "failed_checks": [
+        "assert answers match.",
+        "obtain added, deleted friendships using models.changed_records",
+        "assert friend_ids of the deleted ones match",
+        "assert all main_user's friends on venmo match"
+      ]
     },
     {
       "task_id": "fd1f8fa_1",
@@ -51,7 +69,10 @@
       "seconds": 170.8,
       "input_tokens": 120650,
       "output_tokens": 1474,
-      "steps": 14
+      "steps": 14,
+      "failed_checks": [
+        "assert song_ids in the end state of the music player's queue match"
+      ]
     },
     {
       "task_id": "fd1f8fa_2",
@@ -61,7 +82,10 @@
       "seconds": 142.6,
       "input_tokens": 96393,
       "output_tokens": 1116,
-      "steps": 12
+      "steps": 12,
+      "failed_checks": [
+        "assert song_ids in the end state of the music player's queue match"
+      ]
     },
     {
       "task_id": "fd1f8fa_3",
@@ -71,7 +95,10 @@
       "seconds": 174.3,
       "input_tokens": 105822,
       "output_tokens": 1472,
-      "steps": 12
+      "steps": 12,
+      "failed_checks": [
+        "assert song_ids in the end state of the music player's queue match"
+      ]
     },
     {
       "task_id": "325d6ec_1",
@@ -81,7 +108,10 @@
       "seconds": 127.9,
       "input_tokens": 61475,
       "output_tokens": 892,
-      "steps": 10
+      "steps": 10,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "325d6ec_2",
@@ -91,7 +121,10 @@
       "seconds": 96.9,
       "input_tokens": 29144,
       "output_tokens": 658,
-      "steps": 5
+      "steps": 5,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "325d6ec_3",
@@ -101,7 +134,10 @@
       "seconds": 121.4,
       "input_tokens": 61204,
       "output_tokens": 852,
-      "steps": 10
+      "steps": 10,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "29a7b7e_1",
@@ -111,7 +147,12 @@
       "seconds": 690.4,
       "input_tokens": 404407,
       "output_tokens": 7650,
-      "steps": 50
+      "steps": 50,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match file_system.File.",
+        "prepare start_file_path_to_content and end_file_path_to_content from start and"
+      ]
     },
     {
       "task_id": "29a7b7e_2",
@@ -121,7 +162,8 @@
       "seconds": 648.7,
       "input_tokens": 418196,
       "output_tokens": 7393,
-      "steps": 37
+      "steps": 37,
+      "failed_checks": []
     },
     {
       "task_id": "29a7b7e_3",
@@ -131,7 +173,8 @@
       "seconds": 323.6,
       "input_tokens": 97061,
       "output_tokens": 3632,
-      "steps": 15
+      "steps": 15,
+      "failed_checks": []
     },
     {
       "task_id": "21abae1_1",
@@ -141,7 +184,8 @@
       "seconds": 106.2,
       "input_tokens": 41742,
       "output_tokens": 728,
-      "steps": 7
+      "steps": 7,
+      "failed_checks": []
     },
     {
       "task_id": "21abae1_2",
@@ -151,7 +195,8 @@
       "seconds": 115.8,
       "input_tokens": 46616,
       "output_tokens": 790,
-      "steps": 8
+      "steps": 8,
+      "failed_checks": []
     },
     {
       "task_id": "21abae1_3",
@@ -161,7 +206,10 @@
       "seconds": 147.5,
       "input_tokens": 80794,
       "output_tokens": 1189,
-      "steps": 12
+      "steps": 12,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "634f342_1",
@@ -171,7 +219,10 @@
       "seconds": 437.1,
       "input_tokens": 237889,
       "output_tokens": 4895,
-      "steps": 27
+      "steps": 27,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "634f342_2",
@@ -181,7 +232,11 @@
       "seconds": 280.0,
       "input_tokens": 271202,
       "output_tokens": 3023,
-      "steps": 30
+      "steps": 30,
+      "failed_checks": [
+        "assert answers match.",
+        "assert playlist_id_to_song_ids of deleted_playlist_songs match"
+      ]
     },
     {
       "task_id": "634f342_3",
@@ -191,7 +246,10 @@
       "seconds": 525.5,
       "input_tokens": 536679,
       "output_tokens": 5940,
-      "steps": 44
+      "steps": 44,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "8749218_1",
@@ -201,7 +259,8 @@
       "seconds": 86.7,
       "input_tokens": 96367,
       "output_tokens": 976,
-      "steps": 14
+      "steps": 14,
+      "failed_checks": []
     },
     {
       "task_id": "8749218_2",
@@ -211,7 +270,11 @@
       "seconds": 139.5,
       "input_tokens": 130269,
       "output_tokens": 1663,
-      "steps": 18
+      "steps": 18,
+      "failed_checks": [
+        "assert answers match.",
+        "assert set of song_ids in the queue of the updated music player"
+      ]
     },
     {
       "task_id": "8749218_3",
@@ -221,7 +284,8 @@
       "seconds": 97.3,
       "input_tokens": 96586,
       "output_tokens": 1018,
-      "steps": 14
+      "steps": 14,
+      "failed_checks": []
     },
     {
       "task_id": "2d9f728_1",
@@ -231,7 +295,8 @@
       "seconds": 251.4,
       "input_tokens": 207869,
       "output_tokens": 3013,
-      "steps": 23
+      "steps": 23,
+      "failed_checks": []
     },
     {
       "task_id": "2d9f728_2",
@@ -241,7 +306,13 @@
       "seconds": 234.9,
       "input_tokens": 168001,
       "output_tokens": 2833,
-      "steps": 21
+      "steps": 21,
+      "failed_checks": [
+        "assert answers match.",
+        "assert set of receiver ids from added payment requests match set of",
+        "assert all added payment requests have description",
+        "assert all added payment requests have amount"
+      ]
     },
     {
       "task_id": "2d9f728_3",
@@ -251,7 +322,13 @@
       "seconds": 432.1,
       "input_tokens": 184674,
       "output_tokens": 5641,
-      "steps": 20
+      "steps": 20,
+      "failed_checks": [
+        "assert answers match.",
+        "assert the added transaction has amount",
+        "assert set of receiver ids from added payment requests match set of",
+        "assert all added payment requests have amount"
+      ]
     },
     {
       "task_id": "6f4b9a5_1",
@@ -261,7 +338,11 @@
       "seconds": 227.1,
       "input_tokens": 211401,
       "output_tokens": 2748,
-      "steps": 23
+      "steps": 23,
+      "failed_checks": [
+        "assert answers match.",
+        "assert the song_name_to_release_month_str match"
+      ]
     },
     {
       "task_id": "6f4b9a5_2",
@@ -271,7 +352,16 @@
       "seconds": 198.0,
       "input_tokens": 190881,
       "output_tokens": 2032,
-      "steps": 20
+      "steps": 20,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match simple_note.Note.",
+        "assert exactly 1 simple_note.Note was updated.",
+        "assert the updated note has ID private_data.note_id.",
+        "parse the contents of the updated note to obtain song_name_to_artist_names,",
+        "assert the song_name_to_release_month_str match",
+        "assert the udpated note has not changed in any other field ignoring content,"
+      ]
     },
     {
       "task_id": "6f4b9a5_3",
@@ -281,7 +371,10 @@
       "seconds": 282.4,
       "input_tokens": 330139,
       "output_tokens": 3000,
-      "steps": 27
+      "steps": 27,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "d6ac34d_1",
@@ -291,7 +384,10 @@
       "seconds": 82.7,
       "input_tokens": 64266,
       "output_tokens": 905,
-      "steps": 10
+      "steps": 10,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "d6ac34d_2",
@@ -301,7 +397,11 @@
       "seconds": 115.8,
       "input_tokens": 55688,
       "output_tokens": 1421,
-      "steps": 11
+      "steps": 11,
+      "failed_checks": [
+        "assert answers match.",
+        "assert the added note's pinned status matches private_data.expected_pinned."
+      ]
     },
     {
       "task_id": "d6ac34d_3",
@@ -311,7 +411,11 @@
       "seconds": 151.9,
       "input_tokens": 56981,
       "output_tokens": 1922,
-      "steps": 11
+      "steps": 11,
+      "failed_checks": [
+        "assert answers match.",
+        "assert the load_yaml on the rest of the lines match private_data.expected_data"
+      ]
     },
     {
       "task_id": "0d01c76_1",
@@ -321,7 +425,10 @@
       "seconds": 186.2,
       "input_tokens": 63470,
       "output_tokens": 2435,
-      "steps": 11
+      "steps": 11,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "0d01c76_2",
@@ -331,7 +438,10 @@
       "seconds": 96.6,
       "input_tokens": 72912,
       "output_tokens": 959,
-      "steps": 13
+      "steps": 13,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "0d01c76_3",
@@ -341,7 +451,10 @@
       "seconds": 74.5,
       "input_tokens": 57302,
       "output_tokens": 772,
-      "steps": 10
+      "steps": 10,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "ff58e36_1",
@@ -351,7 +464,10 @@
       "seconds": 148.8,
       "input_tokens": 165067,
       "output_tokens": 1427,
-      "steps": 19
+      "steps": 19,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "ff58e36_2",
@@ -361,7 +477,12 @@
       "seconds": 178.5,
       "input_tokens": 133709,
       "output_tokens": 1909,
-      "steps": 20
+      "steps": 20,
+      "failed_checks": [
+        "assert answers match.",
+        "assert all of private_data.to_befriend_venmo_user_ids_1 are in",
+        "assert all of private_data.to_befriend_venmo_user_ids_2 are in"
+      ]
     },
     {
       "task_id": "ff58e36_3",
@@ -371,7 +492,14 @@
       "seconds": 168.0,
       "input_tokens": 106150,
       "output_tokens": 1873,
-      "steps": 17
+      "steps": 17,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match venmo.Friendship",
+        "assert all of added friend ids are in private_data.to_befriend_venmo_user_ids.",
+        "assert all of private_data.to_befriend_venmo_user_ids_1 are in",
+        "assert all of private_data.to_befriend_venmo_user_ids_2 are in"
+      ]
     },
     {
       "task_id": "d18139b_1",
@@ -381,7 +509,10 @@
       "seconds": 210.9,
       "input_tokens": 233203,
       "output_tokens": 2383,
-      "steps": 27
+      "steps": 27,
+      "failed_checks": [
+        "assert set of updated payment request ids match exactly to"
+      ]
     },
     {
       "task_id": "d18139b_2",
@@ -391,7 +522,11 @@
       "seconds": 323.3,
       "input_tokens": 363767,
       "output_tokens": 3561,
-      "steps": 26
+      "steps": 26,
+      "failed_checks": [
+        "assert answers match.",
+        "assert set of updated payment request ids match exactly to"
+      ]
     },
     {
       "task_id": "d18139b_3",
@@ -401,7 +536,12 @@
       "seconds": 246.4,
       "input_tokens": 279511,
       "output_tokens": 2534,
-      "steps": 28
+      "steps": 28,
+      "failed_checks": [
+        "assert answers match.",
+        "assert set of sender ids of updated payment requests are all in",
+        "assert set of updated payment request ids match exactly to"
+      ]
     },
     {
       "task_id": "5a83b05_1",
@@ -411,7 +551,10 @@
       "seconds": 114.2,
       "input_tokens": 101258,
       "output_tokens": 971,
-      "steps": 18
+      "steps": 18,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "5a83b05_2",
@@ -421,7 +564,8 @@
       "seconds": 90.0,
       "input_tokens": 85173,
       "output_tokens": 851,
-      "steps": 16
+      "steps": 16,
+      "failed_checks": []
     },
     {
       "task_id": "5a83b05_3",
@@ -431,7 +575,10 @@
       "seconds": 86.4,
       "input_tokens": 85981,
       "output_tokens": 886,
-      "steps": 16
+      "steps": 16,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "042a9fc_1",
@@ -441,7 +588,12 @@
       "seconds": 168.1,
       "input_tokens": 183577,
       "output_tokens": 1797,
-      "steps": 21
+      "steps": 21,
+      "failed_checks": [
+        "assert answers match.",
+        "obtain added spotify.PlaylistSong records using models.changed_records,",
+        "assert song_ids of the removed playlist songs match"
+      ]
     },
     {
       "task_id": "042a9fc_2",
@@ -451,7 +603,14 @@
       "seconds": 220.7,
       "input_tokens": 123963,
       "output_tokens": 2309,
-      "steps": 20
+      "steps": 20,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match spotify.PlaylistSong.",
+        "obtain added spotify.PlaylistSong records using models.changed_records,",
+        "assert song_ids of the removed playlist songs match",
+        "assert added and removed song ids have playlist_id = private_data.playlist_id"
+      ]
     },
     {
       "task_id": "042a9fc_3",
@@ -461,7 +620,13 @@
       "seconds": 153.4,
       "input_tokens": 87416,
       "output_tokens": 1849,
-      "steps": 16
+      "steps": 16,
+      "failed_checks": [
+        "assert model changes match spotify.PlaylistSong.",
+        "obtain added spotify.PlaylistSong records using models.changed_records,",
+        "assert song_ids of the removed playlist songs match",
+        "assert added and removed song ids have playlist_id = private_data.playlist_id"
+      ]
     },
     {
       "task_id": "cef9191_1",
@@ -471,7 +636,8 @@
       "seconds": 35.2,
       "input_tokens": 27403,
       "output_tokens": 389,
-      "steps": 5
+      "steps": 5,
+      "failed_checks": []
     },
     {
       "task_id": "cef9191_2",
@@ -481,7 +647,8 @@
       "seconds": 37.9,
       "input_tokens": 30650,
       "output_tokens": 459,
-      "steps": 5
+      "steps": 5,
+      "failed_checks": []
     },
     {
       "task_id": "cef9191_3",
@@ -491,7 +658,8 @@
       "seconds": 43.8,
       "input_tokens": 34559,
       "output_tokens": 433,
-      "steps": 6
+      "steps": 6,
+      "failed_checks": []
     },
     {
       "task_id": "3b8fb7a_1",
@@ -501,7 +669,10 @@
       "seconds": 267.7,
       "input_tokens": 139519,
       "output_tokens": 3043,
-      "steps": 19
+      "steps": 19,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "3b8fb7a_2",
@@ -511,7 +682,10 @@
       "seconds": 220.8,
       "input_tokens": 218433,
       "output_tokens": 2481,
-      "steps": 23
+      "steps": 23,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "3b8fb7a_3",
@@ -521,7 +695,10 @@
       "seconds": 167.3,
       "input_tokens": 154322,
       "output_tokens": 1773,
-      "steps": 19
+      "steps": 19,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "afc4005_1",
@@ -531,7 +708,8 @@
       "seconds": 44.2,
       "input_tokens": 37935,
       "output_tokens": 438,
-      "steps": 8
+      "steps": 8,
+      "failed_checks": []
     },
     {
       "task_id": "afc4005_2",
@@ -541,7 +719,8 @@
       "seconds": 84.8,
       "input_tokens": 49374,
       "output_tokens": 889,
-      "steps": 10
+      "steps": 10,
+      "failed_checks": []
     },
     {
       "task_id": "afc4005_3",
@@ -551,7 +730,8 @@
       "seconds": 48.7,
       "input_tokens": 36434,
       "output_tokens": 417,
-      "steps": 8
+      "steps": 8,
+      "failed_checks": []
     },
     {
       "task_id": "9dabbc9_1",
@@ -561,7 +741,16 @@
       "seconds": 278.8,
       "input_tokens": 198240,
       "output_tokens": 3066,
-      "steps": 19
+      "steps": 19,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match venmo.PaymentRequest, venmo.Transaction,",
+        "obtain added, updated, removed venmo.PaymentRequest records using",
+        "obtain added, updated, removed venmo.Transaction records using",
+        "assert the added transaction's receiver_id is",
+        "assert the added transaction has description public_data.expected_note (ignore",
+        "assert the added transaction has amount"
+      ]
     },
     {
       "task_id": "9dabbc9_2",
@@ -571,7 +760,16 @@
       "seconds": 258.9,
       "input_tokens": 288752,
       "output_tokens": 2611,
-      "steps": 26
+      "steps": 26,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match venmo.PaymentRequest, venmo.Transaction,",
+        "obtain added, updated, removed venmo.PaymentRequest records using",
+        "obtain added, updated, removed venmo.Transaction records using",
+        "assert the added transaction's receiver_id is",
+        "assert the added transaction has description public_data.expected_note (ignore",
+        "assert the added transaction has amount"
+      ]
     },
     {
       "task_id": "9dabbc9_3",
@@ -581,7 +779,10 @@
       "seconds": 204.1,
       "input_tokens": 147094,
       "output_tokens": 2305,
-      "steps": 20
+      "steps": 20,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "425a494_1",
@@ -591,7 +792,8 @@
       "seconds": 58.9,
       "input_tokens": 52171,
       "output_tokens": 589,
-      "steps": 8
+      "steps": 8,
+      "failed_checks": []
     },
     {
       "task_id": "425a494_2",
@@ -601,7 +803,10 @@
       "seconds": 59.3,
       "input_tokens": 45903,
       "output_tokens": 605,
-      "steps": 7
+      "steps": 7,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "425a494_3",
@@ -611,7 +816,8 @@
       "seconds": 108.5,
       "input_tokens": 61477,
       "output_tokens": 1215,
-      "steps": 11
+      "steps": 11,
+      "failed_checks": []
     },
     {
       "task_id": "a30375d_1",
@@ -621,7 +827,11 @@
       "seconds": 184.4,
       "input_tokens": 305239,
       "output_tokens": 1063,
-      "steps": 50
+      "steps": 50,
+      "failed_checks": [
+        "assert any one of the private_data.quotes is substring in the predicted_answer",
+        "assert the predicted answer is substring in any one of the private_data.quotes"
+      ]
     },
     {
       "task_id": "a30375d_2",
@@ -631,7 +841,8 @@
       "seconds": 60.3,
       "input_tokens": 47933,
       "output_tokens": 604,
-      "steps": 10
+      "steps": 10,
+      "failed_checks": []
     },
     {
       "task_id": "a30375d_3",
@@ -641,7 +852,8 @@
       "seconds": 79.4,
       "input_tokens": 55342,
       "output_tokens": 757,
-      "steps": 11
+      "steps": 11,
+      "failed_checks": []
     },
     {
       "task_id": "09b0ee6_1",
@@ -651,7 +863,10 @@
       "seconds": 99.6,
       "input_tokens": 29918,
       "output_tokens": 1111,
-      "steps": 7
+      "steps": 7,
+      "failed_checks": [
+        "assert \",\"-split ground_truth_answer and predicted_answer are the same,"
+      ]
     },
     {
       "task_id": "09b0ee6_2",
@@ -661,7 +876,8 @@
       "seconds": 89.1,
       "input_tokens": 36473,
       "output_tokens": 1030,
-      "steps": 8
+      "steps": 8,
+      "failed_checks": []
     },
     {
       "task_id": "09b0ee6_3",
@@ -671,7 +887,8 @@
       "seconds": 69.7,
       "input_tokens": 33455,
       "output_tokens": 913,
-      "steps": 8
+      "steps": 8,
+      "failed_checks": []
     },
     {
       "task_id": "d194965_1",
@@ -681,7 +898,10 @@
       "seconds": 172.1,
       "input_tokens": 144048,
       "output_tokens": 1920,
-      "steps": 18
+      "steps": 18,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "d194965_2",
@@ -691,7 +911,10 @@
       "seconds": 236.2,
       "input_tokens": 309487,
       "output_tokens": 2512,
-      "steps": 27
+      "steps": 27,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "d194965_3",
@@ -701,7 +924,11 @@
       "seconds": 170.4,
       "input_tokens": 194611,
       "output_tokens": 1669,
-      "steps": 19
+      "steps": 19,
+      "failed_checks": [
+        "assert answers match.",
+        "assert the song_ids in this added_playlist match the song_ids in"
+      ]
     },
     {
       "task_id": "7847649_1",
@@ -711,7 +938,10 @@
       "seconds": 56.1,
       "input_tokens": 41850,
       "output_tokens": 499,
-      "steps": 9
+      "steps": 9,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "7847649_2",
@@ -721,7 +951,10 @@
       "seconds": 72.5,
       "input_tokens": 55831,
       "output_tokens": 647,
-      "steps": 11
+      "steps": 11,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "7847649_3",
@@ -731,7 +964,10 @@
       "seconds": 58.0,
       "input_tokens": 41854,
       "output_tokens": 517,
-      "steps": 9
+      "steps": 9,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "552869a_1",
@@ -741,7 +977,10 @@
       "seconds": 206.3,
       "input_tokens": 385537,
       "output_tokens": 1172,
-      "steps": 50
+      "steps": 50,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "552869a_2",
@@ -751,7 +990,8 @@
       "seconds": 133.4,
       "input_tokens": 89245,
       "output_tokens": 1560,
-      "steps": 13
+      "steps": 13,
+      "failed_checks": []
     },
     {
       "task_id": "552869a_3",
@@ -761,7 +1001,10 @@
       "seconds": 53.0,
       "input_tokens": 41595,
       "output_tokens": 563,
-      "steps": 7
+      "steps": 7,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "652485c_1",
@@ -771,7 +1014,10 @@
       "seconds": 226.6,
       "input_tokens": 264870,
       "output_tokens": 2357,
-      "steps": 28
+      "steps": 28,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "652485c_2",
@@ -781,7 +1027,14 @@
       "seconds": 237.9,
       "input_tokens": 250665,
       "output_tokens": 2458,
-      "steps": 27
+      "steps": 27,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match spotify.Playlist, spotify.PlaylistSong,",
+        "assert 1 phone.GlobalTextMessage record is added using models.changed_records.",
+        "assert the added global_text_message's receiver_id is",
+        "assert the added_playlist's shareable_link is present in global_text_message"
+      ]
     },
     {
       "task_id": "652485c_3",
@@ -791,7 +1044,10 @@
       "seconds": 202.5,
       "input_tokens": 218621,
       "output_tokens": 2064,
-      "steps": 24
+      "steps": 24,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "ccf4b82_1",
@@ -801,7 +1057,12 @@
       "seconds": 187.5,
       "input_tokens": 165108,
       "output_tokens": 1928,
-      "steps": 23
+      "steps": 23,
+      "failed_checks": [
+        "assert answers match.",
+        "assert the updated payment requests have ids",
+        "assert the total balance of main_user's updated payment card in the end state"
+      ]
     },
     {
       "task_id": "ccf4b82_2",
@@ -811,7 +1072,16 @@
       "seconds": 923.2,
       "input_tokens": 448213,
       "output_tokens": 12127,
-      "steps": 41
+      "steps": 41,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match venmo.Notification, venmo.PaymentRequest,",
+        "assert the updated payment requests have ids",
+        "assert main_user's venmo balance is 0 in the end state.",
+        "assert 1 admin.PaymentCard record has been updated using models.changed_records,",
+        "assert the last 4 digits of this updated payment_card match exactly to",
+        "assert the total balance of main_user's updated payment card in the end state"
+      ]
     },
     {
       "task_id": "ccf4b82_3",
@@ -821,7 +1091,10 @@
       "seconds": 143.8,
       "input_tokens": 114429,
       "output_tokens": 1608,
-      "steps": 17
+      "steps": 17,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "522e5e5_1",
@@ -831,7 +1104,10 @@
       "seconds": 94.8,
       "input_tokens": 63044,
       "output_tokens": 1204,
-      "steps": 10
+      "steps": 10,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "522e5e5_2",
@@ -841,7 +1117,10 @@
       "seconds": 96.2,
       "input_tokens": 63644,
       "output_tokens": 1001,
-      "steps": 10
+      "steps": 10,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "522e5e5_3",
@@ -851,7 +1130,11 @@
       "seconds": 164.3,
       "input_tokens": 116897,
       "output_tokens": 1732,
-      "steps": 15
+      "steps": 15,
+      "failed_checks": [
+        "assert answers match.",
+        "obtain all new records in venmo.Friendship (obtained via"
+      ]
     },
     {
       "task_id": "0de03ea_1",
@@ -861,7 +1144,12 @@
       "seconds": 143.7,
       "input_tokens": 95535,
       "output_tokens": 1538,
-      "steps": 12
+      "steps": 12,
+      "failed_checks": [
+        "assert answers match.",
+        "assert all song_ids in private_data.downloaded_song_ids are in",
+        "assert no song_id outside of private_data.collection_song_ids are in"
+      ]
     },
     {
       "task_id": "0de03ea_2",
@@ -871,7 +1159,12 @@
       "seconds": 88.4,
       "input_tokens": 29183,
       "output_tokens": 990,
-      "steps": 7
+      "steps": 7,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match spotify.MusicPlayer.",
+        "assert all song_ids in private_data.downloaded_song_ids are in"
+      ]
     },
     {
       "task_id": "0de03ea_3",
@@ -881,7 +1174,11 @@
       "seconds": 169.7,
       "input_tokens": 104826,
       "output_tokens": 1978,
-      "steps": 14
+      "steps": 14,
+      "failed_checks": [
+        "assert model changes match spotify.MusicPlayer.",
+        "assert all song_ids in private_data.downloaded_song_ids are in"
+      ]
     },
     {
       "task_id": "2c544f9_1",
@@ -891,7 +1188,13 @@
       "seconds": 124.6,
       "input_tokens": 131825,
       "output_tokens": 1304,
-      "steps": 19
+      "steps": 19,
+      "failed_checks": [
+        "assert model changes match venmo.Transaction, venmo.Notification,",
+        "obtain added, updated, removed venmo.Transaction records using",
+        "assert the added transaction's receiver_id is private_data.person_venmo_user_id.",
+        "assert the added transaction has amount public_data.amount."
+      ]
     },
     {
       "task_id": "2c544f9_2",
@@ -901,7 +1204,14 @@
       "seconds": 1477.0,
       "input_tokens": 396497,
       "output_tokens": 24311,
-      "steps": 31
+      "steps": 31,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match venmo.Transaction, venmo.Notification,",
+        "obtain added, updated, removed venmo.Transaction records using",
+        "assert the added transaction's receiver_id is private_data.person_venmo_user_id.",
+        "assert the added transaction has amount public_data.amount."
+      ]
     },
     {
       "task_id": "2c544f9_3",
@@ -911,7 +1221,14 @@
       "seconds": 271.1,
       "input_tokens": 245017,
       "output_tokens": 2437,
-      "steps": 28
+      "steps": 28,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match venmo.Transaction, venmo.Notification,",
+        "obtain added, updated, removed venmo.Transaction records using",
+        "assert the added transaction's receiver_id is private_data.person_venmo_user_id.",
+        "assert the added transaction has amount public_data.amount."
+      ]
     },
     {
       "task_id": "270f1ff_1",
@@ -921,7 +1238,16 @@
       "seconds": 411.7,
       "input_tokens": 329937,
       "output_tokens": 3716,
-      "steps": 33
+      "steps": 33,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match venmo.Transaction, phone.GlobalTextMessage,",
+        "obtain added, updated, deleted venmo.Transactions using models.changed_records",
+        "assert the added transaction is from main_user to",
+        "assert the added transaction has description public_data.expected_note",
+        "assert the added transaction has amount private_data.this_year_gift_amount",
+        "assert the added transaction is private"
+      ]
     },
     {
       "task_id": "270f1ff_2",
@@ -931,7 +1257,10 @@
       "seconds": 492.4,
       "input_tokens": 346741,
       "output_tokens": 5659,
-      "steps": 31
+      "steps": 31,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "270f1ff_3",
@@ -941,7 +1270,10 @@
       "seconds": 163.5,
       "input_tokens": 178217,
       "output_tokens": 1606,
-      "steps": 22
+      "steps": 22,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "024c982_1",
@@ -951,7 +1283,10 @@
       "seconds": 48.6,
       "input_tokens": 46002,
       "output_tokens": 538,
-      "steps": 8
+      "steps": 8,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "024c982_2",
@@ -961,7 +1296,10 @@
       "seconds": 107.2,
       "input_tokens": 101322,
       "output_tokens": 1022,
-      "steps": 15
+      "steps": 15,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "024c982_3",
@@ -971,7 +1309,10 @@
       "seconds": 75.9,
       "input_tokens": 73992,
       "output_tokens": 722,
-      "steps": 12
+      "steps": 12,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "9ef798c_1",
@@ -981,7 +1322,14 @@
       "seconds": 99.5,
       "input_tokens": 92659,
       "output_tokens": 1115,
-      "steps": 14
+      "steps": 14,
+      "failed_checks": [
+        "assert model changes match file_system.Directory, file_system.File,",
+        "obtain added, updated, deleted PaymentRequests using models.changed_records",
+        "assert the updated payment request is sender private_data.coworker_email",
+        "assert this payment request has been approved and not denied.",
+        "assert this payment request is of private_data.carpooling_cost amount"
+      ]
     },
     {
       "task_id": "9ef798c_2",
@@ -991,7 +1339,14 @@
       "seconds": 107.0,
       "input_tokens": 100364,
       "output_tokens": 804,
-      "steps": 13
+      "steps": 13,
+      "failed_checks": [
+        "assert model changes match file_system.Directory, file_system.File,",
+        "obtain added, updated, deleted PaymentRequests using models.changed_records",
+        "assert the updated payment request is sender private_data.coworker_email",
+        "assert this payment request has been approved and not denied.",
+        "assert this payment request is of private_data.carpooling_cost amount"
+      ]
     },
     {
       "task_id": "9ef798c_3",
@@ -1001,7 +1356,10 @@
       "seconds": 103.6,
       "input_tokens": 78805,
       "output_tokens": 1153,
-      "steps": 12
+      "steps": 12,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "b9c5c9a_1",
@@ -1011,7 +1369,15 @@
       "seconds": 226.0,
       "input_tokens": 169097,
       "output_tokens": 2681,
-      "steps": 20
+      "steps": 20,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match file_system.File.",
+        "assert 1 file_system.File record was updated.",
+        "assert the updated file's path is private_data.csv_file_path.",
+        "assert the updated file's first line matches the private_data.csv_header",
+        "assert the updated file's rest of the lines matches the private_data.csv_lines"
+      ]
     },
     {
       "task_id": "b9c5c9a_2",
@@ -1021,7 +1387,11 @@
       "seconds": 325.6,
       "input_tokens": 260842,
       "output_tokens": 3975,
-      "steps": 26
+      "steps": 26,
+      "failed_checks": [
+        "assert answers match.",
+        "assert the updated file's rest of the lines matches the private_data.csv_lines"
+      ]
     },
     {
       "task_id": "b9c5c9a_3",
@@ -1031,7 +1401,10 @@
       "seconds": 532.1,
       "input_tokens": 362145,
       "output_tokens": 6248,
-      "steps": 34
+      "steps": 34,
+      "failed_checks": [
+        "assert the updated file's rest of the lines matches the private_data.csv_lines"
+      ]
     },
     {
       "task_id": "90adc3f_1",
@@ -1041,7 +1414,11 @@
       "seconds": 804.3,
       "input_tokens": 474759,
       "output_tokens": 10056,
-      "steps": 40
+      "steps": 40,
+      "failed_checks": [
+        "assert answers match.",
+        "assert receiver_ids from added payment requests match exactly to"
+      ]
     },
     {
       "task_id": "90adc3f_2",
@@ -1051,7 +1428,11 @@
       "seconds": 278.0,
       "input_tokens": 238888,
       "output_tokens": 3150,
-      "steps": 24
+      "steps": 24,
+      "failed_checks": [
+        "assert answers match.",
+        "assert added_payment_requests have description"
+      ]
     },
     {
       "task_id": "90adc3f_3",
@@ -1061,7 +1442,11 @@
       "seconds": 94.9,
       "input_tokens": 123996,
       "output_tokens": 2399,
-      "steps": 17
+      "steps": 17,
+      "failed_checks": [
+        "assert answers match.",
+        "assert added_payment_requests have description"
+      ]
     },
     {
       "task_id": "c77c005_1",
@@ -1071,7 +1456,11 @@
       "seconds": 220.2,
       "input_tokens": 113886,
       "output_tokens": 2485,
-      "steps": 15
+      "steps": 15,
+      "failed_checks": [
+        "assert answers match.",
+        "assert friend_ids from added friendships match exactly to"
+      ]
     },
     {
       "task_id": "c77c005_2",
@@ -1081,7 +1470,10 @@
       "seconds": 148.5,
       "input_tokens": 84224,
       "output_tokens": 1792,
-      "steps": 12
+      "steps": 12,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "c77c005_3",
@@ -1091,7 +1483,10 @@
       "seconds": 151.9,
       "input_tokens": 100838,
       "output_tokens": 1675,
-      "steps": 14
+      "steps": 14,
+      "failed_checks": [
+        "assert friend_ids from added friendships match exactly to"
+      ]
     },
     {
       "task_id": "f323bae_1",
@@ -1101,7 +1496,12 @@
       "seconds": 156.6,
       "input_tokens": 110161,
       "output_tokens": 1843,
-      "steps": 17
+      "steps": 17,
+      "failed_checks": [
+        "assert the body rows match data.private.body_rows (ignoring row and column",
+        "assert the body rows match data.private.body_rows (ignoring row but not column",
+        "assert the body rows match data.private.body_rows (not ignoring row or column"
+      ]
     },
     {
       "task_id": "f323bae_2",
@@ -1111,7 +1511,13 @@
       "seconds": 256.9,
       "input_tokens": 226151,
       "output_tokens": 2729,
-      "steps": 27
+      "steps": 27,
+      "failed_checks": [
+        "assert answers match.",
+        "assert the body rows match data.private.body_rows (ignoring row and column",
+        "assert the body rows match data.private.body_rows (ignoring row but not column",
+        "assert the body rows match data.private.body_rows (not ignoring row or column"
+      ]
     },
     {
       "task_id": "f323bae_3",
@@ -1121,7 +1527,10 @@
       "seconds": 294.2,
       "input_tokens": 279659,
       "output_tokens": 3147,
-      "steps": 29
+      "steps": 29,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "13547f5_1",
@@ -1131,7 +1540,10 @@
       "seconds": 130.0,
       "input_tokens": 115718,
       "output_tokens": 1431,
-      "steps": 19
+      "steps": 19,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "13547f5_2",
@@ -1141,7 +1553,10 @@
       "seconds": 192.1,
       "input_tokens": 110702,
       "output_tokens": 1431,
-      "steps": 18
+      "steps": 18,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "13547f5_3",
@@ -1151,7 +1566,10 @@
       "seconds": 189.5,
       "input_tokens": 93649,
       "output_tokens": 1632,
-      "steps": 16
+      "steps": 16,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "1150ed6_1",
@@ -1161,7 +1579,11 @@
       "seconds": 143.1,
       "input_tokens": 116859,
       "output_tokens": 1711,
-      "steps": 15
+      "steps": 15,
+      "failed_checks": [
+        "assert answers match.",
+        "assert updated_music_player.current_song.id is in private_data.song_ids."
+      ]
     },
     {
       "task_id": "1150ed6_2",
@@ -1171,7 +1593,10 @@
       "seconds": 87.8,
       "input_tokens": 89258,
       "output_tokens": 981,
-      "steps": 12
+      "steps": 12,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "1150ed6_3",
@@ -1181,7 +1606,10 @@
       "seconds": 151.4,
       "input_tokens": 96389,
       "output_tokens": 1671,
-      "steps": 13
+      "steps": 13,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "31dc501_1",
@@ -1191,7 +1619,10 @@
       "seconds": 55.7,
       "input_tokens": 40948,
       "output_tokens": 544,
-      "steps": 8
+      "steps": 8,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "31dc501_2",
@@ -1201,7 +1632,10 @@
       "seconds": 90.4,
       "input_tokens": 75455,
       "output_tokens": 1085,
-      "steps": 14
+      "steps": 14,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "31dc501_3",
@@ -1211,7 +1645,8 @@
       "seconds": 143.2,
       "input_tokens": 54168,
       "output_tokens": 994,
-      "steps": 10
+      "steps": 10,
+      "failed_checks": []
     },
     {
       "task_id": "59fae45_1",
@@ -1221,7 +1656,13 @@
       "seconds": 69.7,
       "input_tokens": 69804,
       "output_tokens": 1855,
-      "steps": 11
+      "steps": 11,
+      "failed_checks": [
+        "assert model changes match spotify.Playlist.",
+        "assert updated playlists' IDs match the keys of",
+        "assert playlist_id_to_title obtained from updated playlist records",
+        "assert none of updated_playlists have been updated in any field ignoring title,"
+      ]
     },
     {
       "task_id": "59fae45_2",
@@ -1231,7 +1672,14 @@
       "seconds": 106.3,
       "input_tokens": 44106,
       "output_tokens": 1317,
-      "steps": 8
+      "steps": 8,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match spotify.Playlist.",
+        "assert updated playlists' IDs match the keys of",
+        "assert playlist_id_to_title obtained from updated playlist records",
+        "assert none of updated_playlists have been updated in any field ignoring title,"
+      ]
     },
     {
       "task_id": "59fae45_3",
@@ -1241,7 +1689,10 @@
       "seconds": 163.3,
       "input_tokens": 70213,
       "output_tokens": 2064,
-      "steps": 13
+      "steps": 13,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "b6d1104_1",
@@ -1251,7 +1702,18 @@
       "seconds": 271.7,
       "input_tokens": 109167,
       "output_tokens": 3369,
-      "steps": 18
+      "steps": 18,
+      "failed_checks": [
+        "assert model changes match simple_note.Note.",
+        "obtain added, updated, deleted simple_note.Note records using",
+        "parse the updated note content to obtain month_to_expense, and",
+        "assert there one of the key-value entry in month_to_expense",
+        "assert set of months in month_to_expense match set of keys in",
+        "assert full month_to_expense dict matches private_data.month_to_expense",
+        "assert the months in month_to_expense are in private_data.month_order order.",
+        "assert The note's content starts with \"# Venmo Expenses\".",
+        "assert updated_note has not changed in title, pinned"
+      ]
     },
     {
       "task_id": "b6d1104_2",
@@ -1261,7 +1723,12 @@
       "seconds": 121.9,
       "input_tokens": 93371,
       "output_tokens": 1429,
-      "steps": 15
+      "steps": 15,
+      "failed_checks": [
+        "assert answers match.",
+        "assert there one of the key-value entry in month_to_expense",
+        "assert full month_to_expense dict matches private_data.month_to_expense"
+      ]
     },
     {
       "task_id": "b6d1104_3",
@@ -1271,7 +1738,15 @@
       "seconds": 112.7,
       "input_tokens": 47056,
       "output_tokens": 1336,
-      "steps": 10
+      "steps": 10,
+      "failed_checks": [
+        "assert answers match.",
+        "parse the updated note content to obtain month_to_expense, and",
+        "assert there one of the key-value entry in month_to_expense",
+        "assert set of months in month_to_expense match set of keys in",
+        "assert full month_to_expense dict matches private_data.month_to_expense",
+        "assert the months in month_to_expense are in private_data.month_order order."
+      ]
     },
     {
       "task_id": "f861c32_1",
@@ -1281,7 +1756,15 @@
       "seconds": 188.2,
       "input_tokens": 184774,
       "output_tokens": 2032,
-      "steps": 24
+      "steps": 24,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match venmo.User, venmo.BankTransfer,",
+        "assert there are same number of added transactions as",
+        "assert the set of receiver_ids of these transactions match set of",
+        "assert all these transactions have amount public_data.payment_amount",
+        "assert all these transactions have note public_data.note."
+      ]
     },
     {
       "task_id": "f861c32_2",
@@ -1291,7 +1774,14 @@
       "seconds": 135.5,
       "input_tokens": 148721,
       "output_tokens": 1534,
-      "steps": 20
+      "steps": 20,
+      "failed_checks": [
+        "assert model changes match venmo.User, venmo.BankTransfer,",
+        "assert there are same number of added transactions as",
+        "assert the set of receiver_ids of these transactions match set of",
+        "assert all these transactions have amount public_data.payment_amount",
+        "assert all these transactions have note public_data.note."
+      ]
     },
     {
       "task_id": "f861c32_3",
@@ -1301,7 +1791,10 @@
       "seconds": 300.1,
       "input_tokens": 384011,
       "output_tokens": 2976,
-      "steps": 32
+      "steps": 32,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "0a9d82a_1",
@@ -1311,7 +1804,8 @@
       "seconds": 190.3,
       "input_tokens": 119598,
       "output_tokens": 2186,
-      "steps": 17
+      "steps": 17,
+      "failed_checks": []
     },
     {
       "task_id": "0a9d82a_2",
@@ -1321,7 +1815,8 @@
       "seconds": 113.5,
       "input_tokens": 75703,
       "output_tokens": 1327,
-      "steps": 11
+      "steps": 11,
+      "failed_checks": []
     },
     {
       "task_id": "0a9d82a_3",
@@ -1331,7 +1826,11 @@
       "seconds": 372.8,
       "input_tokens": 185229,
       "output_tokens": 3828,
-      "steps": 26
+      "steps": 26,
+      "failed_checks": [
+        "assert answers match.",
+        "assert no model changes."
+      ]
     },
     {
       "task_id": "166f4ff_1",
@@ -1341,7 +1840,8 @@
       "seconds": 112.5,
       "input_tokens": 38774,
       "output_tokens": 934,
-      "steps": 7
+      "steps": 7,
+      "failed_checks": []
     },
     {
       "task_id": "166f4ff_2",
@@ -1351,7 +1851,8 @@
       "seconds": 63.3,
       "input_tokens": 44871,
       "output_tokens": 701,
-      "steps": 8
+      "steps": 8,
+      "failed_checks": []
     },
     {
       "task_id": "166f4ff_3",
@@ -1361,7 +1862,8 @@
       "seconds": 56.1,
       "input_tokens": 44665,
       "output_tokens": 638,
-      "steps": 8
+      "steps": 8,
+      "failed_checks": []
     },
     {
       "task_id": "9016950_1",
@@ -1371,7 +1873,10 @@
       "seconds": 174.7,
       "input_tokens": 153777,
       "output_tokens": 1910,
-      "steps": 21
+      "steps": 21,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "9016950_2",
@@ -1381,7 +1886,10 @@
       "seconds": 119.0,
       "input_tokens": 249285,
       "output_tokens": 2659,
-      "steps": 30
+      "steps": 30,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "9016950_3",
@@ -1391,7 +1899,10 @@
       "seconds": 278.0,
       "input_tokens": 277066,
       "output_tokens": 3609,
-      "steps": 25
+      "steps": 25,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "dac78d9_1",
@@ -1401,7 +1912,10 @@
       "seconds": 77.2,
       "input_tokens": 54263,
       "output_tokens": 997,
-      "steps": 9
+      "steps": 9,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "dac78d9_2",
@@ -1411,7 +1925,10 @@
       "seconds": 83.9,
       "input_tokens": 54551,
       "output_tokens": 1050,
-      "steps": 9
+      "steps": 9,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "dac78d9_3",
@@ -1421,7 +1938,10 @@
       "seconds": 196.8,
       "input_tokens": 104075,
       "output_tokens": 1811,
-      "steps": 15
+      "steps": 15,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "f3f60f0_1",
@@ -1431,7 +1951,8 @@
       "seconds": 127.0,
       "input_tokens": 129580,
       "output_tokens": 1372,
-      "steps": 16
+      "steps": 16,
+      "failed_checks": []
     },
     {
       "task_id": "f3f60f0_2",
@@ -1441,7 +1962,8 @@
       "seconds": 188.9,
       "input_tokens": 163106,
       "output_tokens": 1445,
-      "steps": 18
+      "steps": 18,
+      "failed_checks": []
     },
     {
       "task_id": "f3f60f0_3",
@@ -1451,7 +1973,8 @@
       "seconds": 160.5,
       "input_tokens": 191222,
       "output_tokens": 2085,
-      "steps": 21
+      "steps": 21,
+      "failed_checks": []
     },
     {
       "task_id": "ffe6d5e_1",
@@ -1461,7 +1984,10 @@
       "seconds": 113.4,
       "input_tokens": 122208,
       "output_tokens": 1198,
-      "steps": 19
+      "steps": 19,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "ffe6d5e_2",
@@ -1471,7 +1997,10 @@
       "seconds": 94.5,
       "input_tokens": 107222,
       "output_tokens": 852,
-      "steps": 17
+      "steps": 17,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "ffe6d5e_3",
@@ -1481,7 +2010,16 @@
       "seconds": 276.8,
       "input_tokens": 430812,
       "output_tokens": 1338,
-      "steps": 50
+      "steps": 50,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match phone.GlobalTextMessage, phone.UserTextMessage.",
+        "assert 1 phone.GlobalTextMessage record was added using models.changed_records,",
+        "assert any one of the private_data.favorite_recipe_names is in the added",
+        "assert the number of recipe names from favorite_recipe_names in the added",
+        "assert none of the private_data.non_favorite_recipe_names is in the added",
+        "assert the added message's receiver_id is private_data.relative_phone_user_id"
+      ]
     },
     {
       "task_id": "8ce6779_1",
@@ -1491,7 +2029,16 @@
       "seconds": 138.2,
       "input_tokens": 76688,
       "output_tokens": 1621,
-      "steps": 11
+      "steps": 11,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match todoist.Task, todoist.TaskComment.",
+        "assert the keys of the updated_tasks match the set of task_ids in",
+        "assert updated_task_ids have only updated in assigner_id, assignee_id",
+        "assert the task_id_to_assignee_id obtained from the updated_tasks matches the",
+        "assert the set of added task comment task_ids matches the",
+        "assert the task_id_to_comment_text obtained from the added_task_comments matches"
+      ]
     },
     {
       "task_id": "8ce6779_2",
@@ -1501,7 +2048,8 @@
       "seconds": 214.5,
       "input_tokens": 134545,
       "output_tokens": 2401,
-      "steps": 15
+      "steps": 15,
+      "failed_checks": []
     },
     {
       "task_id": "8ce6779_3",
@@ -1511,7 +2059,16 @@
       "seconds": 96.4,
       "input_tokens": 76499,
       "output_tokens": 995,
-      "steps": 11
+      "steps": 11,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match todoist.Task, todoist.TaskComment.",
+        "assert the keys of the updated_tasks match the set of task_ids in",
+        "assert updated_task_ids have only updated in assigner_id, assignee_id",
+        "assert the task_id_to_assignee_id obtained from the updated_tasks matches the",
+        "assert the set of added task comment task_ids matches the",
+        "assert the task_id_to_comment_text obtained from the added_task_comments matches"
+      ]
     },
     {
       "task_id": "83a7951_1",
@@ -1521,7 +2078,10 @@
       "seconds": 288.3,
       "input_tokens": 403294,
       "output_tokens": 6841,
-      "steps": 32
+      "steps": 32,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "83a7951_2",
@@ -1531,7 +2091,10 @@
       "seconds": 330.8,
       "input_tokens": 251835,
       "output_tokens": 4251,
-      "steps": 20
+      "steps": 20,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "83a7951_3",
@@ -1541,7 +2104,10 @@
       "seconds": 261.9,
       "input_tokens": 499789,
       "output_tokens": 7583,
-      "steps": 36
+      "steps": 36,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "3aa1a22_1",
@@ -1551,7 +2117,14 @@
       "seconds": 136.5,
       "input_tokens": 214699,
       "output_tokens": 2033,
-      "steps": 24
+      "steps": 24,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match splitwise.GroupMember, splitwise.Notification,",
+        "assert set of group_ids from the added records matches",
+        "assert set of user_ids from the added records matches private_data.user_id.",
+        "assert the set of message_ids from removed phone.UserTextMessage or"
+      ]
     },
     {
       "task_id": "3aa1a22_2",
@@ -1561,7 +2134,14 @@
       "seconds": 168.5,
       "input_tokens": 111000,
       "output_tokens": 3138,
-      "steps": 15
+      "steps": 15,
+      "failed_checks": [
+        "assert answers match.",
+        "assert model changes match splitwise.GroupMember, splitwise.Notification,",
+        "assert set of group_ids from the added records matches",
+        "assert set of user_ids from the added records matches private_data.user_id.",
+        "assert the set of message_ids from removed phone.UserTextMessage or"
+      ]
     },
     {
       "task_id": "3aa1a22_3",
@@ -1571,7 +2151,10 @@
       "seconds": 236.3,
       "input_tokens": 363004,
       "output_tokens": 3800,
-      "steps": 27
+      "steps": 27,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "32616b5_1",
@@ -1581,7 +2164,14 @@
       "seconds": 648.3,
       "input_tokens": 531903,
       "output_tokens": 8338,
-      "steps": 41
+      "steps": 41,
+      "failed_checks": [
+        "assert the group_id_to_expense_amounts from added expenses match",
+        "assert the group_id_to_payer_ids from added expenses match",
+        "assert the group_id_to_debtor_ids from the added expense shares match",
+        "assert the group_id_to_payer_to_debtor_ids from the added expense shares match",
+        "assert the group_id_to_debtor_id_to_amounts from the added expense shares match"
+      ]
     },
     {
       "task_id": "32616b5_2",
@@ -1591,7 +2181,14 @@
       "seconds": 585.0,
       "input_tokens": 420922,
       "output_tokens": 7458,
-      "steps": 33
+      "steps": 33,
+      "failed_checks": [
+        "assert the group_id_to_expense_amounts from added expenses match",
+        "assert the group_id_to_payer_ids from added expenses match",
+        "assert the group_id_to_debtor_ids from the added expense shares match",
+        "assert the group_id_to_payer_to_debtor_ids from the added expense shares match",
+        "assert the group_id_to_debtor_id_to_amounts from the added expense shares match"
+      ]
     },
     {
       "task_id": "32616b5_3",
@@ -1601,7 +2198,15 @@
       "seconds": 643.8,
       "input_tokens": 600201,
       "output_tokens": 7880,
-      "steps": 42
+      "steps": 42,
+      "failed_checks": [
+        "assert answers match.",
+        "assert the group_id_to_expense_amounts from added expenses match",
+        "assert the group_id_to_payer_ids from added expenses match",
+        "assert the group_id_to_debtor_ids from the added expense shares match",
+        "assert the group_id_to_payer_to_debtor_ids from the added expense shares match",
+        "assert the group_id_to_debtor_id_to_amounts from the added expense shares match"
+      ]
     },
     {
       "task_id": "986aa4e_1",
@@ -1611,7 +2216,8 @@
       "seconds": 139.9,
       "input_tokens": 306532,
       "output_tokens": 2362,
-      "steps": 25
+      "steps": 25,
+      "failed_checks": []
     },
     {
       "task_id": "986aa4e_2",
@@ -1621,7 +2227,8 @@
       "seconds": 249.8,
       "input_tokens": 486952,
       "output_tokens": 2792,
-      "steps": 35
+      "steps": 35,
+      "failed_checks": []
     },
     {
       "task_id": "986aa4e_3",
@@ -1631,7 +2238,10 @@
       "seconds": 207.7,
       "input_tokens": 405889,
       "output_tokens": 2452,
-      "steps": 28
+      "steps": 28,
+      "failed_checks": [
+        "assert answers match."
+      ]
     },
     {
       "task_id": "6b6ca61_1",
@@ -1641,7 +2251,15 @@
       "seconds": 321.0,
       "input_tokens": 583019,
       "output_tokens": 3368,
-      "steps": 43
+      "steps": 43,
+      "failed_checks": [
+        "assert the debtor_ids of the added expense shares match the",
+        "assert the splitwise_user_id_to_amount (expense.amount) from expenses match",
+        "assert the splitwise_user_id_to_amount (share_amount) from expense shares match",
+        "assert the splitwise_user_id_to_description from expenses match",
+        "assert the attached files of these expenses match the",
+        "assert the splitwise_user_id_to_amount from added splitwise expenses match"
+      ]
     },
     {
       "task_id": "6b6ca61_2",
@@ -1651,7 +2269,16 @@
       "seconds": 382.0,
       "input_tokens": 593163,
       "output_tokens": 4829,
-      "steps": 50
+      "steps": 50,
+      "failed_checks": [
+        "assert answers match.",
+        "assert the debtor_ids of the added expense shares match the",
+        "assert the splitwise_user_id_to_amount (expense.amount) from expenses match",
+        "assert the splitwise_user_id_to_amount (share_amount) from expense shares match",
+        "assert the splitwise_user_id_to_description from expenses match",
+        "assert the attached files of these expenses match the",
+        "assert the splitwise_user_id_to_amount from added splitwise expenses match"
+      ]
     },
     {
       "task_id": "6b6ca61_3",
@@ -1661,7 +2288,16 @@
       "seconds": 416.5,
       "input_tokens": 644174,
       "output_tokens": 4974,
-      "steps": 41
+      "steps": 41,
+      "failed_checks": [
+        "assert answers match.",
+        "assert the debtor_ids of the added expense shares match the",
+        "assert the splitwise_user_id_to_amount (expense.amount) from expenses match",
+        "assert the splitwise_user_id_to_amount (share_amount) from expense shares match",
+        "assert the splitwise_user_id_to_description from expenses match",
+        "assert the attached files of these expenses match the",
+        "assert the splitwise_user_id_to_amount from added splitwise expenses match"
+      ]
     },
     {
       "task_id": "bde252e_1",
@@ -1671,7 +2307,13 @@
       "seconds": 326.3,
       "input_tokens": 193475,
       "output_tokens": 4190,
-      "steps": 20
+      "steps": 20,
+      "failed_checks": [
+        "assert answers match.",
+        "assert the removed tasks' IDs match",
+        "assert the task_title_to_descriptions obtained from the added tasks match",
+        "assert the task_title_to_minutes obtained from the added tasks match"
+      ]
     },
     {
       "task_id": "bde252e_2",
@@ -1681,7 +2323,13 @@
       "seconds": 161.0,
       "input_tokens": 288547,
       "output_tokens": 3848,
-      "steps": 27
+      "steps": 27,
+      "failed_checks": [
+        "assert answers match.",
+        "assert the removed tasks' IDs match",
+        "assert the task_title_to_descriptions obtained from the added tasks match",
+        "assert the task_title_to_minutes obtained from the added tasks match"
+      ]
     },
     {
       "task_id": "bde252e_3",
@@ -1691,7 +2339,13 @@
       "seconds": 220.3,
       "input_tokens": 167677,
       "output_tokens": 4491,
-      "steps": 16
+      "steps": 16,
+      "failed_checks": [
+        "assert answers match.",
+        "assert the removed tasks' IDs match",
+        "assert the task_title_to_descriptions obtained from the added tasks match",
+        "assert the task_title_to_minutes obtained from the added tasks match"
+      ]
     }
   ]
 }

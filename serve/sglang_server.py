@@ -45,6 +45,13 @@ SOLVERS = {
         "app": "autoharness-sglang-9b-64k",
         "context": 65536,
     },
+    "qwen3.5-27b-64k": {
+        "model": "Qwen/Qwen3.5-27B",
+        "revision": "fc05daec18b0a78c049392ed2e771dde82bdf654",
+        "gpu": "H100",
+        "app": "autoharness-sglang-27b-64k",
+        "context": 65536,
+    },
 }
 SOLVER = os.environ.get("SOLVER", "qwen3.5-4b")
 MODEL_NAME = SOLVERS[SOLVER]["model"]

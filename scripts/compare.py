@@ -1,6 +1,7 @@
 """Compare two finished runs on the same AppWorld tasks.
 
     python scripts/compare.py 27b_test_react 27b_test_auto
+    python scripts/compare.py --embed 27b_test_auto   # store failed checks in the summary (see below)
 
 Prints pass@1, scenario goal completion (SGC), unit tests, tokens and steps for both runs, then
 the paired comparison: tasks solved by only one run, the exact McNemar test, 95% bootstrap CIs for
@@ -36,8 +37,21 @@ def failed_checks(experiment: str, task_id: str) -> list[str]:
     return [m.group(1).strip() for m in re.finditer(r">> Failed Requirement\n(.+)", fails)]
 
 
-def answer_only(experiment: str, task_id: str) -> bool:
-    return failed_checks(experiment, task_id) == ["assert answers match."]
+def answer_only(rows: dict[str, dict], experiment: str, task_id: str) -> bool:
+    # Summaries with embedded failed checks work without AppWorld's (gitignored) task outputs.
+    checks = rows[task_id].get("failed_checks")
+    if checks is None:
+        checks = failed_checks(experiment, task_id)
+    return checks == ["assert answers match."]
+
+
+def embed_failed_checks(experiment: str) -> None:
+    path = PROJECT_ROOT / "results" / experiment / "summary.json"
+    summary = json.loads(path.read_text())
+    for row in summary["tasks"]:
+        row["failed_checks"] = [] if row["passed"] else failed_checks(experiment, row["task_id"])
+    path.write_text(json.dumps(summary, indent=2))
+    print(f"{experiment}: failed checks stored for {len(summary['tasks'])} tasks")
 
 
 def sgc(rows: dict[str, dict]) -> float:
@@ -65,18 +79,31 @@ def bootstrap_ci(diffs: dict[str, int], by_scenario: bool, n: int = 10000, seed:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("base")
-    parser.add_argument("new")
+    parser.add_argument("base", nargs="?")
+    parser.add_argument("new", nargs="?")
+    parser.add_argument("--embed", nargs="+", metavar="EXPERIMENT",
+                        help="store each task's failed checks in these runs' summaries, then exit")
     args = parser.parse_args()
+    if args.embed:
+        for experiment in args.embed:
+            embed_failed_checks(experiment)
+        return
+    if not (args.base and args.new):
+        parser.error("give two runs to compare, or --embed")
     base, new = load(args.base), load(args.new)
-    assert set(base) == set(new), "runs cover different tasks"
+    common = set(base) & set(new)
+    full = len(common) == len(base) == len(new)
+    if not full:  # e.g. a run stopped early by a budget guard: compare on the tasks both runs have
+        print(f"Comparing on the {len(common)} tasks both runs cover (SGC needs whole scenarios, so it is omitted).\n")
+        base, new = {t: base[t] for t in common}, {t: new[t] for t in common}
     n = len(base)
 
     print(f"{'':28}{'pass@1':>16}{'SGC':>8}{'tests':>8}{'input tok':>11}{'steps':>7}")
     for name, rows in [(args.base, base), (args.new, new)]:
         passed = sum(r["passed"] for r in rows.values())
         tests = 100 * sum(r["tests_passed"] for r in rows.values()) / sum(r["tests_total"] for r in rows.values())
-        print(f"{name:28}{100 * passed / n:>7.1f}% ({passed:>3}/{n}){sgc(rows):>7.1f}%{tests:>7.1f}%"
+        scenarios = f"{sgc(rows):>7.1f}%" if full else f"{'–':>8}"
+        print(f"{name:28}{100 * passed / n:>7.1f}% ({passed:>3}/{n}){scenarios}{tests:>7.1f}%"
               f"{sum(r['input_tokens'] for r in rows.values()) / n:>11,.0f}"
               f"{sum(r['steps'] for r in rows.values()) / n:>7.1f}")
 
@@ -93,9 +120,9 @@ def main() -> None:
 
     for name, rows in [(args.base, base), (args.new, new)]:
         failed = [t for t in rows if not rows[t]["passed"]]
-        print(f"  {name}: {sum(answer_only(name, t) for t in failed)} of {len(failed)} failures are answer-only")
+        print(f"  {name}: {sum(answer_only(rows, name, t) for t in failed)} of {len(failed)} failures are answer-only")
     print(f"  gains that were answer-only failures in {args.base}: "
-          f"{sum(answer_only(args.base, t) for t in only_new)} of {len(only_new)}")
+          f"{sum(answer_only(base, args.base, t) for t in only_new)} of {len(only_new)}")
 
 
 if __name__ == "__main__":
