@@ -242,3 +242,7 @@ clock, grading. v2 adapter: predicted APIs as direct tools + `api_docs__show_api
 v2 on a random 99-task subset of test_normal: OpenCode 29.3% vs v1 22.2%, ReAct 17.2%, AutoHarness 48.5%
 on the same tasks. AutoHarness vs OpenCode v2: 28 vs 9 discordant, p = 0.0026; OpenCode v2 vs ReAct p = 0.029.
 Budget: after this run roughly $1–2 of Modal credit remains (estimate from GPU time; check the dashboard).
+Completion run (2026-09-29 morning): 45 more tasks before the user stopped it → OpenCode v2 on 144/168 tasks:
+ReAct 18.8%, OpenCode v1 20.8%, OpenCode v2 29.2%, AutoHarness 49.3% on the same 144. AutoHarness vs OpenCode v2:
+42 vs 13 discordant, +20.1 pts (95% CI +11.1 to +29.9), p ≈ 1e-4. 24 tasks not run
+(`results/9b_test_opencode_v2_not_run_ids.txt`); parts merged with `scripts/merge_summaries.py`.
