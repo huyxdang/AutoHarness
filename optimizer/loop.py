@@ -39,7 +39,8 @@ def eval_dev(experiment: str, args: argparse.Namespace) -> dict:
     run([sys.executable, "scripts/run_eval.py", "--experiment", experiment, "--dataset", "dev",
          "--task-ids-file", str(args.dev_ids), "--workers", str(args.workers),
          "--model", args.model, "--agent-type", "autoharness_react_code_agent",
-         "--prompt-file", str(PROJECT_ROOT / "harness/prompt.txt")])
+         "--prompt-file", str(PROJECT_ROOT / args.harness_dir / "prompt.txt"),
+         "--harness-dir", str(PROJECT_ROOT / args.harness_dir)])
     return json.loads((RESULTS / experiment / "summary.json").read_text())
 
 
@@ -68,6 +69,8 @@ def main() -> None:
     parser.add_argument("--dev-ids", type=Path, default=RESULTS / "dev20_task_ids.txt")
     parser.add_argument("--train-n", type=int, default=15)
     parser.add_argument("--workers", type=int, default=10)
+    parser.add_argument("--harness-dir", default="harness",
+                        help="harness being optimized, e.g. harnesses/27b (one per model, so runs never collide)")
     args = parser.parse_args()
     HISTORY = history_path(args.tag)
 
@@ -83,7 +86,8 @@ def main() -> None:
     for k in range(args.start_round, args.start_round + args.rounds):
         head_before = git_head()
         run([sys.executable, "optimizer/round.py", "--round", str(k), "--n", str(args.train_n),
-             "--seed", str(k), "--workers", str(args.workers), "--model", args.model, "--tag", args.tag])
+             "--seed", str(k), "--workers", str(args.workers), "--model", args.model, "--tag", args.tag,
+             "--harness-dir", args.harness_dir])
         if git_head() == head_before:
             print(f"Round {k}: no harness change; stopping.")
             break
@@ -101,7 +105,8 @@ def main() -> None:
         with HISTORY.open("a") as f:
             f.write(f"\n### Round {k} — {verdict} ({reason})\n- Edit: {rationale}\n- Dev after edit: {fmt(new)}\n"
                     f"- Best dev so far: {fmt(best)}\n")
-        run(["git", "add", str(HISTORY), str(RESULTS)])
+        # Only this run's results, so concurrent experiments never end up in this commit.
+        run(["git", "add", str(HISTORY), *[str(p) for p in sorted(RESULTS.glob(f"{args.tag}*"))]])
         run(["git", "commit", "-m", f"round {k} {verdict.lower()}: dev {fmt(new)}"])
 
     print(f"\nFinal best dev: {fmt(best)}")

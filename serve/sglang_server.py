@@ -29,6 +29,13 @@ SOLVERS = {
         "gpu": "L40S",  # 48 GB, ~$1.95/h
         "app": "autoharness-sglang-9b",
     },
+    # 3x the 9B, same generation (the next dense Qwen3.5 size): ~56 GB bf16 weights -> H100 80 GB.
+    "qwen3.5-27b": {
+        "model": "Qwen/Qwen3.5-27B",
+        "revision": "fc05daec18b0a78c049392ed2e771dde82bdf654",
+        "gpu": "H100",  # 80 GB, ~$3.95/h
+        "app": "autoharness-sglang-27b",
+    },
     # Same model with a 64k context, for external harnesses (OpenCode, Prime Agent) whose own system
     # prompts and tool schemas need more room. Separate app so the 32k setup behind our results is untouched.
     "qwen3.5-9b-64k": {

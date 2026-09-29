@@ -26,7 +26,7 @@ MODAL_WORKSPACE = "dangxhwee2003"
 ENDPOINTS = {  # one Modal app per solver, see serve/sglang_server.py
     solver: f"https://{MODAL_WORKSPACE}--{app}-sglang.us-east.modal.direct/v1"
     for solver, app in [("qwen3.5-4b", "autoharness-sglang"), ("qwen3.5-9b", "autoharness-sglang-9b"),
-                        ("qwen3.5-9b-64k", "autoharness-sglang-9b-64k")]
+                        ("qwen3.5-9b-64k", "autoharness-sglang-9b-64k"), ("qwen3.5-27b", "autoharness-sglang-27b")]
 }
 DEFAULT_MODEL = "qwen3.5-9b"
 

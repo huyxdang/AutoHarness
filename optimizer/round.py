@@ -33,8 +33,8 @@ You are optimizing the harness of a small LLM agent ({model}) on the AppWorld be
 The agent solves tasks by writing Python code that calls app APIs (ReAct style).
 
 Harness files you may edit (and ONLY these):
-- harness/prompt.txt       the instructions + few-shot demo given to the model
-- harness/react_agent.py   the agent loop: prompt construction, output parsing, history handling
+- {harness}/prompt.txt       the instructions + few-shot demo given to the model
+- {harness}/react_agent.py   the agent loop: prompt construction, output parsing, history handling
 
 Evidence: {workspace} contains, for round {round}:
 - summary.json             pass/fail, tokens, steps per train task
@@ -93,7 +93,10 @@ def main() -> None:
     # Pinned so a change to the global Claude Code default never silently changes the optimizer.
     parser.add_argument("--optimizer-model", default="claude-opus-4-8[1m]")
     parser.add_argument("--tag", default="", help="prefix for experiment names, e.g. 9b_")
+    parser.add_argument("--harness-dir", default="harness",
+                        help="harness being optimized (relative to the project), e.g. harnesses/27b")
     args = parser.parse_args()
+    harness = args.harness_dir.rstrip("/")
 
     experiment = f"{args.tag}round{args.round}_train"
     python = sys.executable
@@ -103,7 +106,8 @@ def main() -> None:
         run([python, "scripts/run_eval.py", "--experiment", experiment, "--dataset", "train",
              "--n", str(args.n), "--seed", str(args.seed), "--workers", str(args.workers),
              "--model", args.model, "--agent-type", "autoharness_react_code_agent",
-             "--prompt-file", str(PROJECT_ROOT / "harness/prompt.txt")])
+             "--prompt-file", str(PROJECT_ROOT / harness / "prompt.txt"),
+             "--harness-dir", str(PROJECT_ROOT / harness)])
 
     # 2. Build the optimizer's workspace from failed train tasks only.
     sys.path.insert(0, str(PROJECT_ROOT / "scripts"))
@@ -124,14 +128,14 @@ def main() -> None:
 
     # 3. Let Claude Code edit the harness (headless, restricted tools).
     before = snapshot_files()
-    prompt = OPTIMIZER_PROMPT.format(history=history_path(args.tag).relative_to(PROJECT_ROOT),
+    prompt = OPTIMIZER_PROMPT.format(harness=harness, history=history_path(args.tag).relative_to(PROJECT_ROOT),
                                      workspace=workspace.relative_to(PROJECT_ROOT),
                                      round=args.round, model=args.model)
     result = run(["claude", "-p", prompt,
                   "--model", args.optimizer_model,
                   "--output-format", "json",
                   "--allowedTools", "Read", "Grep", "Glob",
-                  "Edit(harness/**)", "Write(harness/**)",
+                  f"Edit({harness}/**)", f"Write({harness}/**)",
                   "--disallowedTools", "Bash", "WebFetch", "WebSearch"],
                  capture_output=True)
     reply = json.loads(result.stdout).get("result", "")
@@ -143,21 +147,21 @@ def main() -> None:
     #    before the optimizer ran, so uncommitted edits made by us are never touched.
     after = snapshot_files()
     touched = [p for p in set(before) | set(after)
-               if before.get(p) != after.get(p) and not p.startswith(("harness/", "optimizer/workspace/"))]
+               if before.get(p) != after.get(p) and not p.startswith((harness + "/", "optimizer/workspace/"))]
     for path in touched:
-        print(f"Reverting optimizer edit outside harness/: {path}")
+        print(f"Reverting optimizer edit outside {harness}/: {path}")
         if path in before:
             (PROJECT_ROOT / path).write_bytes(before[path])
         else:
             (PROJECT_ROOT / path).unlink(missing_ok=True)
 
-    harness_diff = run(["git", "diff", "--stat", "--", "harness/"], capture_output=True).stdout
+    harness_diff = run(["git", "diff", "--stat", "--", harness + "/"], capture_output=True).stdout
     if not harness_diff.strip():
         print("Optimizer made no harness change.")
         return
     print(harness_diff)
     (workspace / "rationale.txt").write_text(rationale + "\n")
-    run(["git", "add", "harness/", str(workspace.relative_to(PROJECT_ROOT) / "rationale.txt"),
+    run(["git", "add", harness + "/", str(workspace.relative_to(PROJECT_ROOT) / "rationale.txt"),
          str(workspace.relative_to(PROJECT_ROOT) / "optimizer_reply.md")])
     run(["git", "commit", "-m", f"harness round {args.round}: {rationale}"])
     print(f"Committed. RATIONALE: {rationale}")
