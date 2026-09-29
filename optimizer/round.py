@@ -144,10 +144,12 @@ def main() -> None:
                       if "RATIONALE:" in line), "no rationale given")
 
     # 4. Enforce the guardrail: only harness/ may change. Compare against the snapshot taken just
-    #    before the optimizer ran, so uncommitted edits made by us are never touched.
+    #    before the optimizer ran, so uncommitted edits made by us are never touched. results/ is
+    #    skipped: eval runs write there concurrently (e.g. a test run alongside the loop).
     after = snapshot_files()
     touched = [p for p in set(before) | set(after)
-               if before.get(p) != after.get(p) and not p.startswith((harness + "/", "optimizer/workspace/"))]
+               if before.get(p) != after.get(p)
+               and not p.startswith((harness + "/", "optimizer/workspace/", "results/"))]
     for path in touched:
         print(f"Reverting optimizer edit outside {harness}/: {path}")
         if path in before:
