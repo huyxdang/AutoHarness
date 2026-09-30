@@ -10,5 +10,5 @@ experiments/outputs/
 runs/
 results_*.log
 # optimizer inputs (train trajectories) are regenerated each round
-optimizer/workspace/*/failures/
-optimizer/workspace/*/summary.json
+optimizer/workspace/**/failures/
+optimizer/workspace/**/summary.json

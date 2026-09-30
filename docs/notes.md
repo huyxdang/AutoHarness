@@ -1,6 +1,7 @@
 # Auto-Harness — Project Plan & Resources
 
 Last updated: 2026-09-28. Living document — update as decisions change.
+Runs mentioned here that are not in `results/` (pilots, partial runs, the MVP) are in `results/archive/`.
 
 ## 1. Purpose
 

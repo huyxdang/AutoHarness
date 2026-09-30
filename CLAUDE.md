@@ -1,7 +1,7 @@
 # Auto-Harness
 
 Automated harness optimization for small open models on AppWorld. Full plan, decisions, and
-resource links: see [PLAN.md](PLAN.md) — read it at the start of every session.
+resource links: see [docs/notes.md](docs/notes.md) — read it at the start of every session.
 
 ## Rules
 - Git commits: do NOT add Claude as co-author (no `Co-Authored-By` lines).
